@@ -9,7 +9,7 @@ nlp = spacy.load("en_core_web_sm")
 class NLP_Handler:
 	"""Manages NLP tasks"""
 
-	def __init__(self, nlp):
+	def __init__(self, nlp=nlp):
 		self.nlp = nlp
 
 
@@ -64,4 +64,4 @@ def test_2():
 	for i in NLP_mod.tokenize(req):
 		print(i)
 
-test_2()
+#test_2()

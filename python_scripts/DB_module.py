@@ -1,11 +1,13 @@
 # Database-Handler for BiT-ReNU
 
+################################## Import #################################
 # Import libraries:
 import sqlite3 
 import os
 import pandas as pd
 
 
+################################## Classes #################################
 # Database Handler class:
 class DB_Handler:
 	"""
@@ -33,6 +35,7 @@ class DB_Handler:
 
 	def __init__(self):
 		self.curr_project = None
+		self.root_folder = os.getcwd()
 
 	def connect_to_db(self,db_path=None):
 		"""
@@ -74,7 +77,7 @@ class DB_Handler:
 
 		"""
 		# Check if project already exists:
-		db_path = os.path.dirname(os.getcwd())+"\\project_databases\\"+ project_name +".db"
+		db_path = self.root_folder+"\\project_databases\\"+ project_name +".db"
 		if os.path.isfile(db_path) is True:
 			print("Project already exists!")
 			return False
@@ -142,7 +145,7 @@ class DB_Handler:
 		True -> Project exists
 		False -> Project does not exist
 		"""
-		db_path = os.path.dirname(os.getcwd())+"\\project_databases\\"+ project_name +".db"
+		db_path = self.root_folder+"\\project_databases\\"+ project_name +".db"
 		if os.path.isfile(db_path) is False:
 			print("Project does not exist!")
 			return False
