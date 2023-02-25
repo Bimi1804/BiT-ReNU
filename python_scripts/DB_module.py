@@ -34,7 +34,7 @@ class DB_Handler:
 	def __init__(self):
 		self.curr_project = None
 
-	def connect_to_db(self,path=None):
+	def connect_to_db(self,db_path=None):
 		"""
 		Connect to database with defined settings.
 
@@ -50,9 +50,9 @@ class DB_Handler:
 		conn : sqlite3.connection
 			The sqlite connection object for the database.
 		"""
-		if path is None:
-			path = self.curr_project
-		conn = sqlite3.connect(path)
+		if db_path is None:
+			db_path = self.curr_project
+		conn = sqlite3.connect(db_path)
 		curs = conn.cursor()
 		# Enable foreign keys:
 		curs.execute("""PRAGMA foreign_keys = 1""")
@@ -74,13 +74,13 @@ class DB_Handler:
 
 		"""
 		# Check if project already exists:
-		path = os.getcwd() + "\\projects\\" + project_name + ".db"
-		if os.path.isfile(path) is True:
+		db_path = os.path.dirname(os.getcwd())+"\\project_databases\\"+ project_name +".db"
+		if os.path.isfile(db_path) is True:
 			print("Project already exists!")
 			return False
 
 		# Connect to DB:
-		curs,conn = self.connect_to_db(path)
+		curs,conn = self.connect_to_db(db_path)
 
 		# Create DB-structure:
 		curs.execute("""CREATE TABLE requirements
@@ -142,12 +142,12 @@ class DB_Handler:
 		True -> Project exists
 		False -> Project does not exist
 		"""
-		path = os.getcwd() + "\\projects\\" + project_name + ".db"
-		if os.path.isfile(path) is False:
+		db_path = os.path.dirname(os.getcwd())+"\\project_databases\\"+ project_name +".db"
+		if os.path.isfile(db_path) is False:
 			print("Project does not exist!")
 			return False
 		else:
-			self.curr_project = path
+			self.curr_project = db_path
 			return True
 
 	def write_to_db(self,sql_statements):
@@ -202,7 +202,7 @@ class DB_Handler:
 		if self.curr_project is None:
 			print("No active project selected!")
 			return False
-		curs,conn = self.connect_to_db(path)
+		curs,conn = self.connect_to_db()
 		# Read requirements table:----------------------------------------
 		curs.execute("""
 			SELECT * FROM requirements
@@ -250,12 +250,13 @@ class DB_Handler:
 print("TEST 2:-----------------")
 print("")
 
+
 #----Test-Setup----#
 #Delete previous db:
 test2_db = "test2_db"
-path = os.getcwd() + "\\projects\\" + test2_db + ".db"
-if os.path.isfile(path):
-	os.remove(path)
+db_path = os.path.dirname(os.getcwd())+"\\project_databases\\"+ test2_db +".db"
+if os.path.isfile(db_path):
+	os.remove(db_path)
 #---------------#
 
 
