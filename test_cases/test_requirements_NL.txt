@@ -1,0 +1,40 @@
+A person has a name.
+A person has an age.
+A person has an E-Mail address.
+A person can send an E-Mail.
+A person can receive an E-Mail.
+An E-Mail has a title.
+An E-Mail has an attachment.
+An E-Mail has a content.
+An E-Mail must be sent by a person.
+An E-Mail can be received by a person.
+An university employee is a person.
+An university employee has an employee ID.
+An university employee can receive payment.
+A payment must be received by a university employee.
+A payment has an amount.
+A university employee is part of a department.
+A department has a name.
+A student is a person.
+A student has a matriculation number.
+A student can visit a lecture.
+A student can attend a course.
+A student can take an exam.
+A lecture can be visited by a student.
+A course can be attended by a student.
+An exam can be taken by a student.
+A research assistant is an university employee.
+A research assistant must assist a professor.
+A research assistant can check an exam.
+An exam must be checked by a research assistant.
+A professor can be assisted by a research assistant.
+A professor is an university employee.
+A professor has a research field.
+A professor can hold a lecture.
+A professor can maintain a course.
+A professor can grade an exam.
+A lecture must be held by a professor.
+A course must be maintained by a professor.
+An exam must be graded by a professor.
+A lecture is part of a course.
+An exam is part of a course.
