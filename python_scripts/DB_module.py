@@ -246,38 +246,41 @@ class DB_Handler:
 
 #-----------------------------------------------------------
 
-#---- Test_2-----
-print("TEST 2:-----------------")
-print("")
 
 
-#----Test-Setup----#
-#Delete previous db:
-test2_db = "test2_db"
-db_path = os.path.dirname(os.getcwd())+"\\project_databases\\"+ test2_db +".db"
-if os.path.isfile(db_path):
-	os.remove(db_path)
-#---------------#
-
-
-test2 = DB_Handler()
-test2.create_new_project(test2_db)
-test2.set_curr_project(test2_db)
-
-req1 = ["""INSERT INTO classes (class_name) VALUES("user"),("report")""",
-		"""INSERT INTO requirements (req_id) VALUES("req.1")""",
-		"""INSERT INTO req_and_classes (req_id,class_name) 
-			VALUES("req.1","user"),("req.1","report")""",
-		"""INSERT INTO associations (asc_id,asc_name,asc_type,
-			req_id,class_a,class_b) VALUES ("asc.1","create","basic",
-			"req.1","user","report")""",
-		"""INSERT INTO opperations (opp_id,opp_name,class_name,req_id) VALUES (
-			"opp.1","create","user","req.1")"""]
-
-test2.write_to_db(req1)
-
-for df in test2.read_all_db():
-	print(df)
+def test_function():
+	#---- Test_2-----
+	print("TEST 2:-----------------")
 	print("")
 
+	#----Test-Setup----#
+	#Delete previous db:
+	test2_db = "test2_db"
+	db_path = os.path.dirname(os.getcwd())+"\\project_databases\\"+ test2_db +".db"
+	if os.path.isfile(db_path):
+		os.remove(db_path)
+	#---------------#
 
+	test2 = DB_Handler()
+	test2.create_new_project(test2_db)
+	test2.set_curr_project(test2_db)
+
+	req1 = ["""INSERT INTO classes (class_name) VALUES("user"),("report")""",
+			"""INSERT INTO requirements (req_id) VALUES("req.1")""",
+			"""INSERT INTO req_and_classes (req_id,class_name) 
+				VALUES("req.1","user"),("req.1","report")""",
+			"""INSERT INTO associations (asc_id,asc_name,asc_type,
+				req_id,class_a,class_b) VALUES ("asc.1","create","basic",
+				"req.1","user","report")""",
+			"""INSERT INTO opperations (opp_id,opp_name,class_name,req_id) VALUES (
+				"opp.1","create","user","req.1")"""]
+
+	test2.write_to_db(req1)
+
+	for df in test2.read_all_db():
+		print(df)
+		print("")
+	return
+
+
+#test_function()
