@@ -9,7 +9,7 @@ An email has a content.
 An email must be sent by a person.
 An email can be received by a person.
 University employees are persons.
-A university employee has an employee ID.
+University employees have an employee ID.
 A university employee can receive payment.
 A payment must be received by a university employee.
 A payment has an amount.

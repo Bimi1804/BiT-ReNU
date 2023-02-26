@@ -29,7 +29,8 @@ class DB_Handler:
 		Write to the current database.
 	read_all_db() : list of pandas.Dataframe
 		Read the whole database into pandas dataframes.
-
+	delete_db_file(str) : 
+		Delete a database file.
 	"""
 
 	def __init__(self):
@@ -85,44 +86,34 @@ class DB_Handler:
 		curs,conn = self.connect_to_db(db_path)
 
 		# Create DB-structure:
-		curs.execute("""CREATE TABLE requirements
-						(req_id VARCHAR PRIMARY KEY)""")
 		curs.execute("""CREATE TABLE classes
-						(class_name VARCHAR PRIMARY KEY)""")
-		curs.execute("""CREATE TABLE req_and_classes
-						(req_id VARCHAR,
-						class_name VARCHAR,
-						FOREIGN KEY(req_id) REFERENCES requirements(req_id),
+						(class_name VARCHAR NOT NULL PRIMARY KEY)""")
+		curs.execute("""CREATE TABLE attributes
+						(attr_name VARCHAR NOT NULL, 
+						class_name VARCHAR NOT NULL,
+						PRIMARY KEY(attr_name,class_name),
 						FOREIGN KEY(class_name) REFERENCES classes(class_name))
 						""")
-		curs.execute("""CREATE TABLE attributes
-						(attr_id VARCHAR PRIMARY KEY,
-						attr_name VARCHAR, 
-						class_name VARCHAR,
-						req_id VARCHAR, 
+		curs.execute("""CREATE TABLE operations
+						(op_name VARCHAR NOT NULL,
+						class_name VARCHAR NOT NULL,
+						class_b VARCHAR,
+						asc_name VARCHAR,
+						PRIMARY KEY(op_name,class_name),
 						FOREIGN KEY(class_name) REFERENCES classes(class_name),
-						FOREIGN KEY(req_id) REFERENCES requirements(req_id))
-						""")
-		curs.execute("""CREATE TABLE opperations
-						(opp_id VARCHAR PRIMARY KEY,
-						opp_name VARCHAR,
-						class_name VARCHAR,
-						req_id VARCHAR,
-						FOREIGN KEY(class_name) REFERENCES classes(class_name),
-						FOREIGN KEY(req_id) REFERENCES requirements(req_id))
+						FOREIGN KEY(class_b) REFERENCES associations(class_b),
+						FOREIGN KEY(asc_name) REFERENCES associations(asc_name))
 						""")
 		curs.execute("""CREATE TABLE associations
-						(asc_id VARCHAR PRIMARY KEY,
-						asc_name VARCHAR,
+						(asc_name VARCHAR NOT NULL,
 						asc_type VARCHAR,
-						req_id VARCHAR,
-						class_a VARCHAR,
-						class_b VARCHAR,
+						class_a VARCHAR NOT NULL,
+						class_b VARCHAR NOT NULL,
 						mult_a_1 VARCHAR,
 						mult_a_2 VARCHAR,
 						mult_b_1 VARCHAR,
 						mult_b_2 VARCHAR,
-						FOREIGN KEY(req_id) REFERENCES requirements(req_id),
+						PRIMARY KEY(asc_name,class_a,class_b)
 						FOREIGN KEY(class_a) REFERENCES classes(class_name),
 						FOREIGN KEY(class_b) REFERENCES classes(class_name))
 						""")
@@ -187,16 +178,12 @@ class DB_Handler:
 
 		Returns
 		-------
-		df_req : pandas.DataFrame
-			The requirements table
 		df_class : pandas.DataFrame
 			The classes table
-		df_re_and_class : pandas.DataFrame
-			The requirements_and_classes table
 		df_attr : pandas.DataFrame
 			The attribute table
-		df_opp : pandas.DataFrame
-			The opperations table
+		df_op : pandas.DataFrame
+			The operations table
 		df_asc : pandas.DataFrame
 			The associations table
 
@@ -206,83 +193,52 @@ class DB_Handler:
 			return False
 		curs,conn = self.connect_to_db()
 		# Read requirements table:----------------------------------------
-		curs.execute("""
-			SELECT * FROM requirements
-			""")
-		df_req = pd.DataFrame(curs.fetchall(),columns=["req_id"])
 		# Read classes tables:--------------------------------------------
 		curs.execute("""
 			SELECT * FROM classes
 			""")
 		df_class = pd.DataFrame(curs.fetchall(),columns=["class_name"])
 		# Read requirements_and_clases table:------------------------------
-		curs.execute("""
-			SELECT * FROM req_and_classes
-			""")
-		df_re_and_class = pd.DataFrame(curs.fetchall(),columns=["req_id", "class_name"])
 		# Read attributes table:-------------------------------------------
 		curs.execute("""
 			SELECT * FROM attributes
 			""")
 		df_attr = pd.DataFrame(
 							curs.fetchall(),
-							columns=["attr_id","attr_name","class", "req_id"])
-		# Read ooperations table:------------------------------------------
+							columns=["attr_name","class_name"])
+		# Read operations table:------------------------------------------
 		curs.execute("""
-			SELECT * FROM opperations
+			SELECT * FROM operations
 			""")
-		df_opp = pd.DataFrame(
+		df_op = pd.DataFrame(
 							curs.fetchall(),
-							columns=["opp_id","opp_name","class","req_id"])
+							columns=["op_name","class_name","class_b", "asc_name"])
 		# Read associations table:-----------------------------------------
 		curs.execute("""
 			SELECT * FROM associations
 			""")
 		df_asc = pd.DataFrame(
 							curs.fetchall(),
-							columns=["asc_id", "asc_name", "asc_type",
-							"req_id", "class_a", "class_b", "mult_a_1",
-							"mult_a_2", "mult_b_1", "mult_b_2"])
+							columns=["asc_name", "asc_type","class_a", 
+							"class_b", "mult_a_1","mult_a_2", "mult_b_1", 
+							"mult_b_2"])
 		conn.close()
-		return df_req,df_class,df_re_and_class,df_attr,df_opp,df_asc
+		return df_class,df_attr,df_op,df_asc
 
-#-----------------------------------------------------------
+	def delete_db_file(self, project_name):
+		"""
+		Delete a database file.
 
+		Parameters
+		----------
+		project_name : str
+			The name of the project that should be deleted.
 
-
-def test_function():
-	#---- Test_2-----
-	print("TEST 2:-----------------")
-	print("")
-
-	#----Test-Setup----#
-	#Delete previous db:
-	test2_db = "test2_db"
-	db_path = os.path.dirname(os.getcwd())+"\\project_databases\\"+ test2_db +".db"
-	if os.path.isfile(db_path):
+		Returns
+		-------
+		None
+		"""
+		db_path = self.root_folder+"\\project_databases\\"+ project_name +".db"
 		os.remove(db_path)
-	#---------------#
+		return 
 
-	test2 = DB_Handler()
-	test2.create_new_project(test2_db)
-	test2.set_curr_project(test2_db)
-
-	req1 = ["""INSERT INTO classes (class_name) VALUES("user"),("report")""",
-			"""INSERT INTO requirements (req_id) VALUES("req.1")""",
-			"""INSERT INTO req_and_classes (req_id,class_name) 
-				VALUES("req.1","user"),("req.1","report")""",
-			"""INSERT INTO associations (asc_id,asc_name,asc_type,
-				req_id,class_a,class_b) VALUES ("asc.1","create","basic",
-				"req.1","user","report")""",
-			"""INSERT INTO opperations (opp_id,opp_name,class_name,req_id) VALUES (
-				"opp.1","create","user","req.1")"""]
-
-	test2.write_to_db(req1)
-
-	for df in test2.read_all_db():
-		print(df)
-		print("")
-	return
-
-
-#test_function()

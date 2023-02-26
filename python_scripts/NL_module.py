@@ -199,16 +199,46 @@ class NL_SQL_Transformer():
 		pass
 
 	def attr_to_sql (self, lines_attr):
-		print("NL_SQL_Transformer:")
-		print("\nAttributes:-----------------------")
-		for i in lines_attr:
-			line_pos = []
-			for token in i:
-				line_pos.append(token.dep_)
-			print(i)
-			print(line_pos)
-			print("")
-
+		sql_queue = []
+		for line in lines_attr:
+			subj = ""
+			attr = ""
+			for token in line:
+				if token.dep_ == "compound":
+					if "subj" in token.head.dep_:
+						if token.text.isupper() is False:
+							subj = subj + token.lemma_.capitalize()
+						else:
+							subj = subj + token.lemma_.upper()
+						if token.head.text.isupper() is False:
+							subj = subj + token.head.lemma_.capitalize()
+						else:
+							subj = subj + token.head.lemma_.upper()
+					if "obj" in token.head.dep_:
+						if token.text.isupper() is False:
+							attr = attr + token.lemma_.lower()
+						else:
+							attr = attr + token.lemma_.upper()
+						if token.head.text.isupper() is False:
+							attr = attr + token.head.lemma_.capitalize()
+						else:
+							attr = attr + token.head.lemma_.upper()
+			for token in line:
+				if "subj" in token.dep_:
+					if token.lemma_.lower() not in subj.lower():
+						if token.text.isupper() is False:
+							subj = token.lemma_.capitalize()
+						else:
+							subj = token.lemma_.upper()
+				if "obj" in token.dep_:
+					if token.lemma_.lower() not in attr.lower():
+						if token.text.isupper() is False:
+							attr = token.lemma_.lower()
+						else:
+							attr = token.lemma_.upper()
+			sql_queue.append(f"""INSERT OR IGNORE INTO classes(class_name) VALUES ('{subj}')""")
+			sql_queue.append(f"""INSERT OR IGNORE INTO attributes(attr_name,class_name) VALUES ('{attr}','{subj}')""")
+		return sql_queue
 		 
 
 	def gen_to_sql(self,lines_gen):
