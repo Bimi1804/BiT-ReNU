@@ -102,3 +102,29 @@ for line in lines_clean4:
 #for df in db_mod.read_all_db():
 #	print(df)
 #	print("")
+
+"""
+print("original:---------------------------")
+for i in lines_clean:
+	print(i)
+
+print("\nAttributes:-----------------------")
+for i in lines_attr:
+	print(i)
+
+print("\nGeneralization:--------------------")
+for i in lines_gen:
+	print(i)
+
+print("\nComposition:-----------------------")
+for i in lines_comp:
+	print(i)
+
+print("\nActive Association:----------------")
+for i in lines_act:
+	print(i)
+
+print("\nPassive Association:---------------")
+for i in lines_pass:
+	print(i)
+"""
