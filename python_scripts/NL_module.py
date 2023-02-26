@@ -55,6 +55,10 @@ class NL_Filter():
 			lines_nopunctdet.append(line)
 		return lines_nopunctdet 
 
+	def combine_tokens (self,lines_nopunctdet):
+		lines_combined_nopunct_det = []
+		return lines_combined_nopunct_det
+
 	def filter_attr(self,lines_nopunctdet):
 		"""
 		Filter sentences that contain attributes.
@@ -190,3 +194,51 @@ class NL_Filter():
 		lines_act, lines_pass=self.filter_active_passive(lines_noattr_nogencomp)
 		output = [lines_attr,lines_gen,lines_comp,lines_act,lines_pass]
 		return output
+
+
+class NL_SQL_Transformer():
+	"""docstring for"""
+
+	def __init__(self):
+		pass
+
+	def attr_to_sql (self, lines_attr):
+		print("NL_SQL_Transformer:")
+		print("\nAttributes:-----------------------")
+		for i in lines_attr:
+			line_pos = []
+			for token in i:
+				line_pos.append(token.dep_)
+			print(i)
+			print(line_pos)
+			print("")
+
+		 
+
+	def gen_to_sql(self,lines_gen):
+		pass 
+
+	def comp_to_sql (self,lines_comp):
+		pass 
+
+	def act_asc_to_sql (self,lines_act):
+		pass 
+
+	def pass_acc_to_sql (self,lines_pass):
+		pass 
+
+	def transform_nl_sql (self,lines_attr=None,lines_gen=None,lines_comp=None,
+		lines_act=None,lines_pass=None):
+		pass
+
+
+
+
+
+
+
+class SQL_NL_Transformer():
+	"""docstring for SQL_NL_Transformer"""
+	def __init__(self, ):
+		#self.arg = arg
+		pass
