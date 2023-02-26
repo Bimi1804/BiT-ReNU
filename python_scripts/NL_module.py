@@ -236,8 +236,10 @@ class NL_SQL_Transformer():
 							attr = token.lemma_.lower()
 						else:
 							attr = token.lemma_.upper()
-			sql_queue.append(f"""INSERT OR IGNORE INTO classes(class_name) VALUES ('{subj}')""")
-			sql_queue.append(f"""INSERT OR IGNORE INTO attributes(attr_name,class_name) VALUES ('{attr}','{subj}')""")
+			sql_queue.append(f"""INSERT OR IGNORE INTO classes(class_name) 
+								VALUES ('{subj}')""")
+			sql_queue.append(f"""INSERT OR IGNORE INTO attributes(attr_name,
+								class_name) VALUES ('{attr}','{subj}')""")
 		return sql_queue
 		 
 

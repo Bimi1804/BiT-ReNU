@@ -22,71 +22,31 @@ with open(os.getcwd()+"\\test_cases\\test_requirements_NL.txt") as file:
 
 #--------------------------------------------------------
 output = NL_filter.filter_nl(lines_clean)
-sql_attr = NL_SQL_transformer.attr_to_sql(output[0])
+lines_attr = output[0]
+lines_gen = output[1]
+lines_comp = output[2]
+lines_act = output[3]
+lines_pass = output[4]
+sql_attr = NL_SQL_transformer.attr_to_sql(lines_attr)
 db_mod.write_to_db(sql_attr)
 
 
 
 #Read DB
 for df in db_mod.read_all_db():
-	print(df)
+	#print(df)
 	print("")
 
+
+for i in lines_gen:
+	print(i)
+
+
+
+
+# ----- Test Clean-up-------#
 db_mod.delete_db_file("test_req1")
 
 
 
 
-
-
-
-
-#print("original:---------------------------")
-#for i in lines_clean:
-#	print(i)
-"""
-print("\nAttributes:-----------------------")
-for i in output[0]:
-	line = []
-	print(i)
-	for token in i:
-		line.append(token.dep_)
-	print(line)
-	print("")
-
-print("\nGeneralization:--------------------")
-for i in output[1]:
-	line = []
-	print(i)
-	for token in i:
-		line.append(token.dep_)
-	print(line)
-	print("")
-
-print("\nComposition:-----------------------")
-for i in output[2]:
-	line = []
-	print(i)
-	for token in i:
-		line.append(token.dep_)
-	print(line)
-	print("")
-
-print("\nActive Association:----------------")
-for i in output[3]:
-	line = []
-	print(i)
-	for token in i:
-		line.append(token.dep_)
-	print(line)
-	print("")
-
-print("\nPassive Association:---------------")
-for i in output[4]:
-	line = []
-	print(i)
-	for token in i:
-		line.append(token.dep_)
-	print(line)
-	print("")
-"""
