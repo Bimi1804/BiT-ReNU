@@ -1,13 +1,10 @@
 # NL-Filter
 
-
 ################################## Import #################################
 # Import libraries:
 import spacy
 # Load the "en_core_web_sm" pipeline
 nlp = spacy.load("en_core_web_sm")
-
-
 
 ################################## Classes #################################
 
