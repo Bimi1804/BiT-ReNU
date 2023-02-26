@@ -34,7 +34,7 @@ db_mod.write_to_db(sql_attr)
 
 #Read DB
 for df in db_mod.read_all_db():
-	#print(df)
+	print(df)
 	print("")
 
 
