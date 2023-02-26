@@ -42,27 +42,52 @@ output = NL_filter.filter_nl(lines_clean)
 #print("original:---------------------------")
 #for i in lines_clean:
 #	print(i)
+"""
+print("\nAttributes:-----------------------")
+for i in output[0]:
+	line = []
+	print(i)
+	for token in i:
+		line.append(token.dep_)
+	print(line)
+	print("")
 
-#print("\nAttributes:-----------------------")
-#for i in output[0]:
-#	print(i)
+print("\nGeneralization:--------------------")
+for i in output[1]:
+	line = []
+	print(i)
+	for token in i:
+		line.append(token.dep_)
+	print(line)
+	print("")
 
-#print("\nGeneralization:--------------------")
-#for i in output[1]:
-#	print(i)
+print("\nComposition:-----------------------")
+for i in output[2]:
+	line = []
+	print(i)
+	for token in i:
+		line.append(token.dep_)
+	print(line)
+	print("")
 
-#print("\nComposition:-----------------------")
-#for i in output[2]:
-#	print(i)
+print("\nActive Association:----------------")
+for i in output[3]:
+	line = []
+	print(i)
+	for token in i:
+		line.append(token.dep_)
+	print(line)
+	print("")
 
-#print("\nActive Association:----------------")
-#for i in output[3]:
-#	print(i)
-
-#print("\nPassive Association:---------------")
-#for i in output[4]:
-#	print(i)
-
+print("\nPassive Association:---------------")
+for i in output[4]:
+	line = []
+	print(i)
+	for token in i:
+		line.append(token.dep_)
+	print(line)
+	print("")
+"""
 
 import spacy
 # Load the "en_core_web_sm" pipeline
@@ -77,11 +102,31 @@ for token in doc:
 	if token.pos_ != "DET" and token.pos_ != "PUNCT":
 		doc_no_punctdet.append(token)
 print(doc_no_punctdet)
+
+
 doc_nlp = []
+nsubj_comp = []
+dobj_comp = []
 for token in doc_no_punctdet:
 	if token.dep_ == "compound":
-		combination = token.text + token.head.text
-		doc_nlp.append(combination)
-print(doc_nlp)
+		if  "subj" in token.head.dep_:
+			nsubj_comp.append(token)
+			nsubj_comp.append(token.head)
+		if "obj" in token.head.dep_:
+			dobj_comp.append(token)
+			dobj_comp.append(token.head)
+		
+	doc_nlp.append(token.head.dep_)
 
+print(doc_nlp)
+print(nsubj_comp)
+print(dobj_comp)
+subj = ""
+for token in nsubj_comp:
+	subj = subj + token.lemma_.lower()
+print(subj)
+obj = ""
+for token in dobj_comp:
+	obj = obj + token.lemma_.lower()
+print(obj)
 

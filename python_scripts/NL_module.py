@@ -55,10 +55,6 @@ class NL_Filter():
 			lines_nopunctdet.append(line)
 		return lines_nopunctdet 
 
-	def combine_tokens (self,lines_nopunctdet):
-		lines_combined_nopunct_det = []
-		return lines_combined_nopunct_det
-
 	def filter_attr(self,lines_nopunctdet):
 		"""
 		Filter sentences that contain attributes.
