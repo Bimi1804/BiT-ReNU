@@ -196,7 +196,29 @@ class NL_SQL_Transformer():
 	"""docstring for"""
 
 	def __init__(self):
-		pass
+		self.__sql_insert_class = """INSERT OR IGNORE INTO classes(
+									class_name) VALUES"""
+		self.__sql_insert_attr = """INSERT OR IGNORE INTO attributes(
+									attr_name,class_name) VALUES"""
+
+	def __get_compound_class_name(self,token):
+		if token.text.isupper() is False:
+			class_name = token.lemma_.capitalize()
+		else:
+			class_name = token.lemma_.upper()
+		if token.head.text.isupper() is False:
+			class_name = class_name + token.head.lemma_.capitalize()
+		else:
+			class_name = class_name + token.head.lemma_.upper()
+		return class_name
+
+	def __get_class_name(self,token,class_name):
+		if token.lemma_.lower() not in class_name.lower():
+			if token.text.isupper() is False:
+				class_name = token.lemma_.capitalize()
+			else:
+				class_name = token.lemma_.upper()
+		return class_name
 
 	def attr_to_sql (self, lines_attr):
 		sql_queue = []
@@ -206,45 +228,37 @@ class NL_SQL_Transformer():
 			for token in line:
 				if token.dep_ == "compound":
 					if "subj" in token.head.dep_:
-						if token.text.isupper() is False:
-							subj = subj + token.lemma_.capitalize()
-						else:
-							subj = subj + token.lemma_.upper()
-						if token.head.text.isupper() is False:
-							subj = subj + token.head.lemma_.capitalize()
-						else:
-							subj = subj + token.head.lemma_.upper()
+						subj = self.__get_compound_class_name(token)
 					if "obj" in token.head.dep_:
 						if token.text.isupper() is False:
-							attr = attr + token.lemma_.lower()
+							attr = token.lemma_.lower()
 						else:
-							attr = attr + token.lemma_.upper()
+							attr = token.lemma_.upper()
 						if token.head.text.isupper() is False:
 							attr = attr + token.head.lemma_.capitalize()
 						else:
 							attr = attr + token.head.lemma_.upper()
 			for token in line:
 				if "subj" in token.dep_:
-					if token.lemma_.lower() not in subj.lower():
-						if token.text.isupper() is False:
-							subj = token.lemma_.capitalize()
-						else:
-							subj = token.lemma_.upper()
+					subj = self.__get_class_name(token,subj)
+
 				if "obj" in token.dep_:
 					if token.lemma_.lower() not in attr.lower():
 						if token.text.isupper() is False:
 							attr = token.lemma_.lower()
 						else:
 							attr = token.lemma_.upper()
-			sql_queue.append(f"""INSERT OR IGNORE INTO classes(class_name) 
-								VALUES ('{subj}')""")
-			sql_queue.append(f"""INSERT OR IGNORE INTO attributes(attr_name,
-								class_name) VALUES ('{attr}','{subj}')""")
+			sql_queue.extend((f"{self.__sql_insert_class} ('{subj}')",
+								f"""{self.__sql_insert_attr} 
+								('{attr}','{subj}')"""))
 		return sql_queue
 		 
 
 	def gen_to_sql(self,lines_gen):
-		pass 
+		sql_queue = []
+		subj = ""
+		obj = ""
+		return sql_queue
 
 	def comp_to_sql (self,lines_comp):
 		pass 
