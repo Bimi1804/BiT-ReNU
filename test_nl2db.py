@@ -4,6 +4,7 @@ import pandas as pd
 
 from python_scripts.DB_module import *
 from python_scripts.NLP_module import *
+from python_scripts.NL_filter import *
 
 db_mod = DB_Handler()
 NLP_mod = NLP_Handler()
@@ -25,7 +26,7 @@ import pandas as pd
 # Load the "en_core_web_sm" pipeline
 nlp = spacy.load("en_core_web_sm")
 
-test_line = nlp(lines_clean[10])
+#test_line = nlp(lines_clean[10])
 
 # Remove determiniter and punctuation:--------------------
 lines_clean2 = []
@@ -103,28 +104,34 @@ for line in lines_clean4:
 #	print(df)
 #	print("")
 
-"""
+
+NL_filter = NL_Filter()
+
+output = NL_filter.filter_nl(lines_clean)
+
+
+
+
 print("original:---------------------------")
 for i in lines_clean:
 	print(i)
 
 print("\nAttributes:-----------------------")
-for i in lines_attr:
+for i in output[0]:
 	print(i)
 
 print("\nGeneralization:--------------------")
-for i in lines_gen:
+for i in output[1]:
 	print(i)
 
 print("\nComposition:-----------------------")
-for i in lines_comp:
+for i in output[2]:
 	print(i)
 
 print("\nActive Association:----------------")
-for i in lines_act:
+for i in output[3]:
 	print(i)
 
 print("\nPassive Association:---------------")
-for i in lines_pass:
+for i in output[4]:
 	print(i)
-"""

@@ -12,10 +12,25 @@ nlp = spacy.load("en_core_web_sm")
 ################################## Classes #################################
 
 class NL_Filter():
-	"""docstring for NL_Filter"""
+	"""
+	Filters natural language into sentences that contain certain UML 
+	elements.
+
+	Methods
+	-------
+	rmv_det_punct(list(str)) : list(spacy.doc)
+		Removes determiners (DET) and punctuation (PUNCT).
+	filter_attr(list(spacy.doc)) : list(spacy.doc),list(spacy.doc)
+		Filter sentences that contain attributes.
+	filter_gen_comp(list(spacy.doc)) : list(spacy.doc),list(spacy.doc),list(spacy.doc)
+		Filters sentences that contain generalization or composition.
+	filter_active_passive(list(spacy.doc)) : list(spacy.doc),list(spacy.doc)
+		Filter active associations and passive associations.
+	filter_nl(list(str)) : list(list(spacy.doc))
+		Filters a list of sentences into sentences with UML elements.
+	"""
 
 	def __init__(self):
-		#self.arg = arg
 		return
 
 	def rmv_det_punct(self,lines):
@@ -142,12 +157,39 @@ class NL_Filter():
 
 	def filter_nl(self,raw_lines):
 		"""
-		
+		Filters a list of sentences into sentences with:
+			attributes, 
+			generalization,
+			composition,
+			active associations,
+			passive associations.
+
+		Parameters
+		----------
+		raw_lines : list(str)
+			A list of sentences. Each element is a sentence as a string
+
+		Returns
+		-------
+		output : list
+			Each element is a list of spacy.doc objects:
+			lines_attr : list(spacy.doc)
+				List of spacy.doc objects that have attributes.
+			lines_gen : list(spacy.doc)
+				List of spacy.doc objects that contain generalizations.
+			lines_comp : list(spacy.doc)
+				List of spacy.doc objects that contain compositions.
+			lines_act : list(spacy.doc)
+				List of spacy.doc objects that contain an active 
+				association.
+			lines_pass : list(spacy.doc)
+				List of spacy.doc objects that contain a passive 
+				association.
 		"""
 		lines_nopunctdet = self.rmv_det_punct(raw_lines)
 		lines_attr,lines_noattr = self.filter_attr(lines_nopunctdet)
 		lines_gen,lines_comp,lines_noattr_nogencomp=self.filter_gen_comp(
 			lines_noattr)
 		lines_act, lines_pass=self.filter_active_passive(lines_noattr_nogencomp)
-		output = [lines_attr,lines_gen,lines_comp,lines_act,lines_pass ]
+		output = [lines_attr,lines_gen,lines_comp,lines_act,lines_pass]
 		return output

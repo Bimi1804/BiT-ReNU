@@ -8,7 +8,6 @@ import pandas as pd
 
 
 ################################## Classes #################################
-# Database Handler class:
 class DB_Handler:
 	"""
 	Manages the database connection.
