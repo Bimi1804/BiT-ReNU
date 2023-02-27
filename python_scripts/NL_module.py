@@ -200,6 +200,9 @@ class NL_SQL_Transformer():
 									class_name) VALUES"""
 		self.__sql_insert_attr = """INSERT OR IGNORE INTO attributes(
 									attr_name,class_name) VALUES"""
+		self.__sql_insert_gen = """INSERT OR IGNORE INTO associations
+									(asc_name,asc_type,class_a,class_b) 
+									VALUES ('inherits','generalization',"""
 
 	def __get_compound_class_name(self,token):
 		if token.text.isupper() is False:
@@ -253,11 +256,29 @@ class NL_SQL_Transformer():
 								('{attr}','{subj}')"""))
 		return sql_queue
 		 
-
-	def gen_to_sql(self,lines_gen):
+	def gen_to_sql (self, lines_gen):
 		sql_queue = []
-		subj = ""
-		obj = ""
+		for line in lines_gen:
+			child = ""
+			parent = ""
+			for token in line:
+				print(token)
+				print(token.dep_)
+				print("")
+				if token.dep_ == "compound":
+					if "subj" in token.head.dep_:
+						child = self.__get_compound_class_name(token)
+					if "attr" in token.head.dep_:
+						parent = self.__get_compound_class_name(token)
+			for token in line:
+				if "subj" in token.dep_:
+					child = self.__get_class_name(token,child)
+				if "attr" in token.dep_:
+					parent = self.__get_class_name(token,parent)
+			sql_queue.extend((
+				f"{self.__sql_insert_class} ('{child}')",
+				f"{self.__sql_insert_class} ('{parent}')",
+				f"{self.__sql_insert_gen}'{child}','{parent}')"))
 		return sql_queue
 
 	def comp_to_sql (self,lines_comp):
