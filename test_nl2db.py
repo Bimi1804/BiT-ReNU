@@ -37,6 +37,8 @@ db_mod.write_to_db(sql_gen)
 sql_comp = NL_SQL_transformer.comp_to_sql(lines_comp)
 db_mod.write_to_db(sql_comp)
 
+sql_act = NL_SQL_transformer.act_asc_to_sql(lines_act)
+db_mod.write_to_db(sql_act)
 
 #Read DB
 dataframes = db_mod.read_all_db()

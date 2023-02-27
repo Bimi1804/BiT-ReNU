@@ -98,11 +98,9 @@ class DB_Handler:
 						(op_name VARCHAR NOT NULL,
 						class_name VARCHAR NOT NULL,
 						class_b VARCHAR,
-						asc_name VARCHAR,
 						PRIMARY KEY(op_name,class_name),
 						FOREIGN KEY(class_name) REFERENCES classes(class_name),
-						FOREIGN KEY(class_b) REFERENCES associations(class_b),
-						FOREIGN KEY(asc_name) REFERENCES associations(asc_name))
+						FOREIGN KEY(class_b) REFERENCES classes(class_name),
 						""")
 		curs.execute("""CREATE TABLE associations
 						(asc_name VARCHAR NOT NULL,
@@ -163,6 +161,7 @@ class DB_Handler:
 		# Connect to active project
 		curs,conn = self.connect_to_db()
 		for statement in sql_statements:
+			print(statement)
 			curs.execute(statement)
 		conn.commit()
 		conn.close()
@@ -212,7 +211,7 @@ class DB_Handler:
 			""")
 		df_op = pd.DataFrame(
 							curs.fetchall(),
-							columns=["op_name","class_name","class_b", "asc_name"])
+							columns=["op_name","class_name","class_b"])
 		# Read associations table:-----------------------------------------
 		curs.execute("""
 			SELECT * FROM associations
