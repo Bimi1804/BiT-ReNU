@@ -196,14 +196,14 @@ class NL_SQL_Transformer():
 	"""docstring for"""
 
 	def __init__(self):
-		self.__sql_insert_class = """INSERT OR IGNORE INTO classes(
+		self.__sql_ins_class = """INSERT OR IGNORE INTO classes(
 									class_name) VALUES"""
-		self.__sql_insert_attr = """INSERT OR IGNORE INTO attributes(
+		self.__sql_ins_attr = """INSERT OR IGNORE INTO attributes(
 									attr_name,class_name) VALUES"""
-		self.__sql_insert_gen = """INSERT OR IGNORE INTO associations
+		self.__sql_ins_gen = """INSERT OR IGNORE INTO associations
 									(asc_name,asc_type,class_a,class_b) 
 									VALUES ('inherits','generalization',"""
-		self.__sql_insert_comp = """INSERT OR IGNORE INTO associations
+		self.__sql_ins_comp = """INSERT OR IGNORE INTO associations
 									(asc_name,asc_type,
 										mult_a_1,mult_a_2,mult_b_1,mult_b_2,
 										class_a,class_b) 
@@ -258,9 +258,8 @@ class NL_SQL_Transformer():
 							attr = token.lemma_.lower()
 						else:
 							attr = token.lemma_.upper()
-			sql_queue.extend((f"{self.__sql_insert_class} ('{subj}')",
-								f"""{self.__sql_insert_attr} 
-								('{attr}','{subj}')"""))
+			sql_queue.extend((f"{self.__sql_ins_class} ('{subj}')",
+								f"{self.__sql_ins_attr} ('{attr}','{subj}')"))
 		return sql_queue
 		 
 	def gen_to_sql (self, lines_gen):
@@ -280,9 +279,8 @@ class NL_SQL_Transformer():
 				if "attr" in token.dep_:
 					parent = self.__get_class_name(token,parent)
 			sql_queue.extend((
-				f"{self.__sql_insert_class} ('{child}')",
-				f"{self.__sql_insert_class} ('{parent}')",
-				f"{self.__sql_insert_gen}'{child}','{parent}')"))
+				f"{self.__sql_ins_class} ('{child}'),('{parent}')",
+				f"{self.__sql_ins_gen}'{child}','{parent}')"))
 		return sql_queue
 
 	def comp_to_sql (self,lines_comp):
@@ -302,12 +300,10 @@ class NL_SQL_Transformer():
 				if "obj" in token.dep_:
 					parent = self.__get_class_name(token,parent)
 			sql_queue.extend((
-				f"{self.__sql_insert_class} ('{child}')",
-				f"{self.__sql_insert_class} ('{parent}')",
-				f"{self.__sql_insert_comp}'{child}','{parent}')"))
+				f"{self.__sql_ins_class} ('{child}'),('{parent}')",
+				f"{self.__sql_ins_comp}'{child}','{parent}')"))
 		return sql_queue
  
-
 	def act_asc_to_sql (self,lines_act):
 		pass 
 
