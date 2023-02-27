@@ -262,9 +262,6 @@ class NL_SQL_Transformer():
 			child = ""
 			parent = ""
 			for token in line:
-				print(token)
-				print(token.dep_)
-				print("")
 				if token.dep_ == "compound":
 					if "subj" in token.head.dep_:
 						child = self.__get_compound_class_name(token)
