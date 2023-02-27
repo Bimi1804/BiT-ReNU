@@ -100,7 +100,7 @@ class DB_Handler:
 						class_b VARCHAR,
 						PRIMARY KEY(op_name,class_name),
 						FOREIGN KEY(class_name) REFERENCES classes(class_name),
-						FOREIGN KEY(class_b) REFERENCES classes(class_name),
+						FOREIGN KEY(class_b) REFERENCES classes(class_name))
 						""")
 		curs.execute("""CREATE TABLE associations
 						(asc_name VARCHAR NOT NULL,
@@ -161,7 +161,6 @@ class DB_Handler:
 		# Connect to active project
 		curs,conn = self.connect_to_db()
 		for statement in sql_statements:
-			print(statement)
 			curs.execute(statement)
 		conn.commit()
 		conn.close()
