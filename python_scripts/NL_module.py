@@ -253,7 +253,6 @@ class NL_SQL_Transformer():
 							attr = attr + token.head.lemma_.capitalize()
 						else:
 							attr = attr + token.head.lemma_.upper()
-			for token in line:
 				if "subj" in token.dep_:
 					subj = self.__get_class_name(token,subj)
 
@@ -278,7 +277,6 @@ class NL_SQL_Transformer():
 						child = self.__get_compound_class_name(token)
 					if "attr" in token.head.dep_:
 						parent = self.__get_compound_class_name(token)
-			for token in line:
 				if "subj" in token.dep_:
 					child = self.__get_class_name(token,child)
 				if "attr" in token.dep_:
@@ -299,7 +297,6 @@ class NL_SQL_Transformer():
 						child = self.__get_compound_class_name(token)
 					if "obj" in token.head.dep_:
 						parent = self.__get_compound_class_name(token)
-			for token in line:
 				if "subj" in token.dep_:
 					child = self.__get_class_name(token,child)
 				if "obj" in token.dep_:
