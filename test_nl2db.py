@@ -28,17 +28,9 @@ lines_comp = output[2]
 lines_act = output[3]
 lines_pass = output[4]
 
-sql_attr = NL_SQL_transformer.attr_to_sql(lines_attr)
-db_mod.write_to_db(sql_attr)
+sql_queue = NL_SQL_transformer.transform_nl_sql(lines_attr,lines_gen,lines_comp,lines_act,lines_pass)
+db_mod.write_to_db(sql_queue)
 
-sql_gen = NL_SQL_transformer.gen_to_sql(lines_gen)
-db_mod.write_to_db(sql_gen)
-
-sql_comp = NL_SQL_transformer.comp_to_sql(lines_comp)
-db_mod.write_to_db(sql_comp)
-
-sql_act = NL_SQL_transformer.act_asc_to_sql(lines_act)
-db_mod.write_to_db(sql_act)
 
 #Read DB
 dataframes = db_mod.read_all_db()

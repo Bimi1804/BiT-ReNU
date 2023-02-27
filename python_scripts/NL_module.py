@@ -191,7 +191,6 @@ class NL_Filter():
 		output = [lines_attr,lines_gen,lines_comp,lines_act,lines_pass]
 		return output
 
-
 class NL_SQL_Transformer():
 	"""docstring for"""
 
@@ -214,7 +213,6 @@ class NL_SQL_Transformer():
 									VALUES ('association',"""
 		self.__sql_ins_op = """INSERT OR IGNORE INTO operations(op_name,
 									class_name,class_b) VALUES """
-
 
 	def __get_compound_class_name(self,token):
 		if token.text.isupper() is False:
@@ -342,15 +340,60 @@ class NL_SQL_Transformer():
 
 				f"""{self.__sql_ins_op} ('{op_name}','{act_class}',
 				'{pass_class}')"""))
-
 		return sql_queue
 
-	def pass_acc_to_sql (self,lines_pass):
-		pass 
+	def pass_asc_to_sql (self,lines_pass):
+		sql_queue = []
+		for line in lines_pass:
+			act_class = ""
+			pass_class = ""
+			asc_name = ""
+			for token in line:
+				if token.dep_ == "compound":
+					if "subj" in token.head.dep_:
+						pass_class = self.__get_compound_class_name(token)
+					if "obj" in token.head.dep_:
+						act_class = self.__get_compound_class_name(token)
+				if "subj" in token.dep_:
+					pass_class = self.__get_class_name(token,pass_class)
+				if "obj" in token.dep_:
+					act_class = self.__get_class_name(token,act_class)
+				if token.dep_ == "ROOT":
+					asc_name = token.lemma_
+				if token.dep_ == "aux":
+					if token.lemma_ == "can":
+						mult_act = ["0","*"]
+					if token.lemma_ == "must":
+						mult_act = ["1","1"]
+			op_name = asc_name + pass_class + "()"
+			sql_queue.extend((
+				f"{self.__sql_ins_class} ('{act_class}'),('{pass_class}')",
 
-	def transform_nl_sql (self,lines_attr=None,lines_gen=None,lines_comp=None,
-		lines_act=None,lines_pass=None):
-		pass
+				f"""{self.__sql_ins_act_asc} '{asc_name}','{act_class}',
+				'{pass_class}')""",
+
+				f"""UPDATE associations SET mult_a_1 = '{mult_act[0]}',
+				mult_a_2 = '{mult_act[1]}' WHERE asc_name = '{asc_name}' AND
+				class_a = '{act_class}' AND class_b = '{pass_class}'""",
+
+				f"""{self.__sql_ins_op} ('{op_name}','{act_class}',
+				'{pass_class}')"""))
+		return sql_queue
+
+	def transform_nl_sql (self,lines_attr=[],lines_gen=[],lines_comp=[],
+		lines_act=[],lines_pass=[]):
+		sql_queue = []
+		for statement in self.attr_to_sql(lines_attr):
+			sql_queue.append(statement)
+		for statement in self.gen_to_sql(lines_gen):
+			sql_queue.append(statement)
+		for statement in self.comp_to_sql(lines_comp):
+			sql_queue.append(statement)
+		for statement in self.act_asc_to_sql(lines_act):
+			sql_queue.append(statement)
+		for statement in self.pass_asc_to_sql(lines_pass):
+			sql_queue.append(statement)
+		return sql_queue
 
 
 
