@@ -382,6 +382,9 @@ class NL_SQL_Transformer():
 
 	def transform_nl_sql (self,lines_attr=[],lines_gen=[],lines_comp=[],
 		lines_act=[],lines_pass=[]):
+		"""
+		
+		"""
 		sql_queue = []
 		for statement in self.attr_to_sql(lines_attr):
 			sql_queue.append(statement)
