@@ -383,7 +383,7 @@ class NL_SQL_Transformer():
 	def transform_nl_sql (self,lines_attr=[],lines_gen=[],lines_comp=[],
 		lines_act=[],lines_pass=[]):
 		"""
-		
+
 		"""
 		sql_queue = []
 		for statement in self.attr_to_sql(lines_attr):
@@ -398,14 +398,19 @@ class NL_SQL_Transformer():
 			sql_queue.append(statement)
 		return sql_queue
 
-
-
-
-
-
-
 class SQL_NL_Transformer():
 	"""docstring for SQL_NL_Transformer"""
 	def __init__(self, ):
 		#self.arg = arg
+		pass
+
+	def attr_to_nl(self,attr_df):
+		# Attributes "has a"
+		pass
+
+	def asc_to_nl(self,asc_df):
+		# Generalization "is a"
+		# Composition "is part of"
+		# Active association/operation "can/must, ROOT-active"
+		# Passive association/operation "can/must, ROOT-passive"
 		pass
