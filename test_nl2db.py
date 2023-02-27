@@ -27,20 +27,27 @@ lines_gen = output[1]
 lines_comp = output[2]
 lines_act = output[3]
 lines_pass = output[4]
+
 sql_attr = NL_SQL_transformer.attr_to_sql(lines_attr)
 db_mod.write_to_db(sql_attr)
+
 sql_gen = NL_SQL_transformer.gen_to_sql(lines_gen)
 db_mod.write_to_db(sql_gen)
 
+sql_comp = NL_SQL_transformer.comp_to_sql(lines_comp)
+db_mod.write_to_db(sql_comp)
+
 
 #Read DB
-for df in db_mod.read_all_db():
-	print(df)
-	print("")
-
 dataframes = db_mod.read_all_db()
-print("Associations")
-print(dataframes[3].iloc[:,0:5])
+print("Classes:-------------------")
+print(dataframes[0])
+print("\nAttrbutes:-------------------")
+print(dataframes[1])
+print("\nOperations:-------------------")
+print(dataframes[2])
+print("\nAssociations:-------------------")
+print(dataframes[3].iloc[:,:4])
 
 # ----- Test Clean-up-------#
 db_mod.delete_db_file("test_req1")

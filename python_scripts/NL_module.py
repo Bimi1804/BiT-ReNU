@@ -203,6 +203,13 @@ class NL_SQL_Transformer():
 		self.__sql_insert_gen = """INSERT OR IGNORE INTO associations
 									(asc_name,asc_type,class_a,class_b) 
 									VALUES ('inherits','generalization',"""
+		self.__sql_insert_comp = """INSERT OR IGNORE INTO associations
+									(asc_name,asc_type,
+										mult_a_1,mult_a_2,mult_b_1,mult_b_2,
+										class_a,class_b) 
+									VALUES ('is part of','composition',
+										'0','*','1','1',"""
+
 
 	def __get_compound_class_name(self,token):
 		if token.text.isupper() is False:
@@ -279,7 +286,27 @@ class NL_SQL_Transformer():
 		return sql_queue
 
 	def comp_to_sql (self,lines_comp):
-		pass 
+		sql_queue = []
+		for line in lines_comp:
+			child = ""
+			parent = ""
+			for token in line:
+				if token.dep_ == "compound":
+					if "subj" in token.head.dep_:
+						child = self.__get_compound_class_name(token)
+					if "obj" in token.head.dep_:
+						parent = self.__get_compound_class_name(token)
+			for token in line:
+				if "subj" in token.dep_:
+					child = self.__get_class_name(token,child)
+				if "obj" in token.dep_:
+					parent = self.__get_class_name(token,parent)
+			sql_queue.extend((
+				f"{self.__sql_insert_class} ('{child}')",
+				f"{self.__sql_insert_class} ('{parent}')",
+				f"{self.__sql_insert_comp}'{child}','{parent}')"))
+		return sql_queue
+ 
 
 	def act_asc_to_sql (self,lines_act):
 		pass 
