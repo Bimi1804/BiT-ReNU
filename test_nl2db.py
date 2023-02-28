@@ -81,13 +81,21 @@ for index, row in dataframes[1].iterrows():
 					obj = f"{obj} {row[0][upper_ind[i]:upper_ind[i]+1].lower()}"
 				if i == len(upper_ind)-1:
 					obj = f"{obj} {row[0][upper_ind[i]:].lower()}"
-	subj_det = ""
-	obj_det = ""
+	subj_det = "A"
+	obj_det = "a"
 	vowels = ["a","e","i","o","u"]
-	print(f"A {subj} has a {obj}.")
+	if subj[0] in vowels:
+		subj_det = "An"
+	if obj[0] in vowels:
+		obj_det = "an"
+	print(f"{subj_det} {subj} has {obj_det} {obj}.")
 	print("")
 
 
 
 
 
+# Test inflect libraries
+from lemminflect import getInflection
+token_infl = getInflection("send", tag="VBD")
+print(token_infl[0])
