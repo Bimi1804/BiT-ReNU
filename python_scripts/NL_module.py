@@ -8,8 +8,6 @@ import spacy
 # Load the "en_core_web_sm" pipeline
 nlp = spacy.load("en_core_web_sm")
 
-
-
 ################################## Classes #################################
 
 class NL_Filter():
@@ -32,7 +30,7 @@ class NL_Filter():
 	"""
 
 	def __init__(self):
-		return
+		pass
 
 	def rmv_det_punct(self,lines):
 		"""
@@ -196,7 +194,51 @@ class NL_Filter():
 		return output
 
 class NL_SQL_Transformer():
-	"""docstring for"""
+	"""
+	Holds the functions to transform filtered NL sentences into sql statements.
+
+	Attributes
+	----------
+	__sql_ins_class : str
+		Static part of the sql statement to insert classes.
+	__sql_ins_attr : str
+		Static part of the sql statement to insert attributes.
+	__sql_ins_gen : str
+		Static part of the sql statement to insert generalizations.
+	__sql_ins_comp : str
+		Static part of the sql statement to insert compositions.
+	__sql_ins_act_asc : str
+		Static part of the sql statement to insert active associations.
+	__sql_ins_op : str
+		Static part of the sql statement to insert operations.
+
+
+	Methods
+	-------
+	__get_compound_class_name(spacy.doc) : str
+		Combine compound words and their head to a single class-name-string.
+	__get_class_name(spacy.doc, str) : str
+		Transform a single spacy.doc object into a class-name-string.
+	attr_to_sql ( list(list(spacy.doc))) : list(str)
+		Creates sql-statements from a list of tokenized attribute-sentences.
+	gen_to_sql ( list(list(spacy.doc))) : list(str)
+		Creates sql-statements from a list of tokenized 
+		generalization-sentences.
+	comp_to_sql (list(list(spacy.doc))) : list(str)
+		Creates sql-statements from a list of tokenized composition-sentences.
+	act_asc_to_sql (list(list(spacy.doc))) : list(str)
+		Creates sql-statements from a list of tokenized active 
+		association-sentences.
+	pass_asc_to_sql (list(list(spacy.doc))) : list(str)
+		Creates sql-statements from a list of tokenized passive 
+		association-sentences.
+	transform_nl_sql (list(list(spacy.doc)),list(list(spacy.doc)),
+					  list(list(spacy.doc)),list(list(spacy.doc)),
+					  list(list(spacy.doc))) 
+					  : list(str)
+		Uses all other X_to_sql methods to create sql-statements for 
+		everything.
+	"""
 
 	def __init__(self):
 		self.__sql_ins_class = """INSERT OR IGNORE INTO classes(
@@ -219,6 +261,20 @@ class NL_SQL_Transformer():
 									class_name,class_b) VALUES """
 
 	def __get_compound_class_name(self,token):
+		"""
+		Combine compound words and their head to a single class-name-string.
+
+		Parameters
+		----------
+		token : spacy.doc
+			A token of a sentence as a spacy.doc object.
+
+		Returns
+		-------
+		class_name : str
+			A single string in the format of a class name.
+
+		"""
 		if token.text.isupper() is False:
 			class_name = token.lemma_.capitalize()
 		else:
@@ -230,6 +286,22 @@ class NL_SQL_Transformer():
 		return class_name
 
 	def __get_class_name(self,token,class_name):
+		"""
+		Transform a single spacy.doc object into a class-name-string.
+
+		Parameters
+		----------
+		token : spacy.doc
+			A token of a sentence as a spacy.doc object.
+		class_name : str
+			A current class name, that might not be the right class name-
+
+		Returns
+		-------
+		class_name : str
+			A single string in the format of a class name.
+
+		"""
 		if token.lemma_.lower() not in class_name.lower():
 			if token.text.isupper() is False:
 				class_name = token.lemma_.capitalize()
@@ -238,6 +310,21 @@ class NL_SQL_Transformer():
 		return class_name
 
 	def attr_to_sql (self, lines_attr):
+		"""
+		Creates sql-statements from a list of tokenized attribute-sentences.
+
+		Parameters
+		----------
+		lines_attr : list(list(spacy.doc))
+			A list of tokenized attribute sentences. The tokens are spacy.doc 
+			objects.
+
+		Returns
+		-------
+		sql_queue : list(str)
+			A list of sql statements for the given sentences.
+
+		"""
 		sql_queue = []
 		for line in lines_attr:
 			subj = ""
@@ -269,6 +356,22 @@ class NL_SQL_Transformer():
 		return sql_queue
 		 
 	def gen_to_sql (self, lines_gen):
+		"""
+		Creates sql-statements from a list of tokenized 
+		generalization-sentences.
+
+		Parameters
+		----------
+		lines_gen : list(list(spacy.doc))
+			A list of tokenized generalization sentences. 
+			The tokens are spacy.doc objects.
+
+		Returns
+		-------
+		sql_queue : list(str)
+			A list of sql statements for the given sentences.
+
+		"""
 		sql_queue = []
 		for line in lines_gen:
 			child = ""
@@ -289,6 +392,22 @@ class NL_SQL_Transformer():
 		return sql_queue
 
 	def comp_to_sql (self,lines_comp):
+		"""
+		Creates sql-statements from a list of tokenized composition-sentences.
+
+		Parameters
+		----------
+		lines_comp : list(list(spacy.doc))
+			A list of tokenized composition sentences. The tokens are spacy.doc 
+			objects.
+
+		Returns
+		-------
+		sql_queue : list(str)
+			A list of sql statements for the given sentences.
+
+		"""
+
 		sql_queue = []
 		for line in lines_comp:
 			child = ""
@@ -309,6 +428,23 @@ class NL_SQL_Transformer():
 		return sql_queue
  
 	def act_asc_to_sql (self,lines_act):
+		"""
+		Creates sql-statements from a list of tokenized active 
+		association-sentences.
+
+		Parameters
+		----------
+		lines_act : list(list(spacy.doc))
+			A list of tokenized active association sentences. The tokens are 
+			spacy.doc objects.
+
+		Returns
+		-------
+		sql_queue : list(str)
+			A list of sql statements for the given sentences.
+
+		"""
+
 		sql_queue = []
 		for line in lines_act:
 			act_class = ""
@@ -347,6 +483,23 @@ class NL_SQL_Transformer():
 		return sql_queue
 
 	def pass_asc_to_sql (self,lines_pass):
+		"""
+		Creates sql-statements from a list of tokenized passive 
+		association-sentences.
+
+		Parameters
+		----------
+		lines_pass : list(list(spacy.doc))
+			A list of tokenized passive association sentences. The tokens are 
+			spacy.doc objects.
+
+		Returns
+		-------
+		sql_queue : list(str)
+			A list of sql statements for the given sentences.
+
+		"""
+
 		sql_queue = []
 		for line in lines_pass:
 			act_class = ""
@@ -387,8 +540,33 @@ class NL_SQL_Transformer():
 	def transform_nl_sql (self,lines_attr=[],lines_gen=[],lines_comp=[],
 		lines_act=[],lines_pass=[]):
 		"""
+		Uses all other X_to_sql methods to create sql-statements for 
+		everything.
 
+		Parameters
+		----------
+		lines_attr : list(list(spacy.doc))
+			A list of tokenized attribute sentences. The tokens are spacy.doc 
+			objects.
+		lines_gen : list(list(spacy.doc))
+			A list of tokenized generalization sentences. The tokens are 
+			spacy.doc objects.
+		lines_comp : list(list(spacy.doc))
+			A list of tokenized composition sentences. The tokens are spacy.doc 
+			objects.
+		lines_act : list(list(spacy.doc))
+			A list of tokenized active association sentences. The tokens are 
+			spacy.doc objects.
+		lines_pass : list(list(spacy.doc))
+			A list of tokenized passive association sentences. The tokens are 
+			spacy.doc objects.
+
+		Returns
+		-------
+		sql_queue : list(str)
+			A list of sql statements for the given sentences.
 		"""
+
 		sql_queue = []
 		for statement in self.attr_to_sql(lines_attr):
 			sql_queue.append(statement)
@@ -403,13 +581,39 @@ class NL_SQL_Transformer():
 		return sql_queue
 
 class SQL_NL_Transformer():
-	"""docstring for SQL_NL_Transformer"""
+	"""
+	Holds the functions to transform pandas dataframes into sentences.
+
+	Methods
+	-------
+	__separate_noun(str) : str
+		Separates concatenated class or attribute names.
+	attr_to_nl(pandas.DataFrame) : list(str)
+		Creates sentences from the attributes table.
+	asc_to_nl(pandas.DataFrame) : list(str),list(str),list(str)
+		Creates sentences from the association table.
+	"""
 	def __init__(self, ):
 		#self.arg = arg
 		pass
 
 
 	def __separate_noun(self, noun):
+		"""
+		Separates concatenated class or attribute names.
+
+		Parameters
+		----------
+		noun : str
+			A class or attribute name
+
+		Returns
+		-------
+		noun : str
+			The given class or attribute name. If the name was a combination of
+			multiple words, the returned string contains the single words 
+			separated by " ".
+		"""
 		up_count = sum(1 for letter in noun if letter.isupper())
 		if up_count < 2:
 			noun = noun.lower()
@@ -424,6 +628,19 @@ class SQL_NL_Transformer():
 		return noun
 
 	def attr_to_nl(self,attr_df):
+		"""
+		Creates sentences from the attributes table.
+
+		Parameters
+		----------
+		attr_df : pandas.DataFrame
+			The attribute table from the sql database as a pandas Dataframe.
+
+		Returns
+		-------
+		attr_sentences : list(str)
+			A list of the generated sentences.
+		"""
 		attr_sentences = []
 		for index, row in attr_df.iterrows():
 			subj =""
@@ -471,6 +688,27 @@ class SQL_NL_Transformer():
 		return attr_sentences
 
 	def asc_to_nl(self,asc_df):
+		"""
+		Creates sentences from the association table.
+
+		Parameters
+		----------
+		asc_df : pandas.DataFrame
+			The association table from the sql database as a pandas Dataframe.
+
+		Returns
+		-------
+		gen_sent : list(str)
+			A list of the generated generalization sentences.
+		comp_sent : list(str)
+			A list of the generated composition sentences
+		asc_sent : list(list(str))
+			A list of the generated association sentences. Each inner list 
+			contains two elements: 
+				[0] = Active sentence
+				[1] = Passive sentence
+		"""
+
 		gen_sent = []
 		comp_sent = []
 		asc_sent = []
