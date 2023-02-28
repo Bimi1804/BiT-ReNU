@@ -2,9 +2,13 @@
 
 ################################## Import #################################
 # Import libraries:
+import re
+from lemminflect import getInflection
 import spacy
 # Load the "en_core_web_sm" pipeline
 nlp = spacy.load("en_core_web_sm")
+
+
 
 ################################## Classes #################################
 
@@ -404,13 +408,109 @@ class SQL_NL_Transformer():
 		#self.arg = arg
 		pass
 
+
+	def __separate_noun(self, noun):
+		up_count = sum(1 for letter in noun if letter.isupper())
+		if up_count < 2:
+			noun = noun.lower()
+		if up_count > 1:
+			noun_parts = re.findall('[A-Z][^A-Z]*',noun)
+			noun = ""
+			for word in noun_parts:
+				if noun == "":
+					noun = word.lower()
+				elif noun != "":
+					noun = f"{noun} {word.lower()}"
+		return noun
+
 	def attr_to_nl(self,attr_df):
-		# Attributes "has a"
-		pass
+		attr_sentences = []
+		for index, row in attr_df.iterrows():
+			subj =""
+			obj = ""
+			if row[1].isupper() is True:
+				subj = row[1]
+			if row[1].isupper() is False:
+				up_count = sum(1 for letter in row[1] if letter.isupper())
+				if up_count < 2:
+					subj = row[1].lower()
+				if up_count > 1:
+					subj_parts = re.findall('[A-Z][^A-Z]*',row[1])
+					for word in subj_parts:
+						if subj == "":
+							subj = word.lower()
+						elif subj != "":
+							subj = f"{subj} {word.lower()}"
+			if row[0].isupper() is True:
+				obj = row[0]
+			if row[0].isupper() is False:
+				up_count = sum(1 for letter in row[0] if letter.isupper()) 
+				if up_count == 0:
+					obj = row[0]
+				upper_ind = []
+				for index in range(len(row[0])):
+					if row[0][index].isupper() is True:
+						upper_ind.append(index)
+				if upper_ind != []:
+					for i in range(len(upper_ind)):
+						if i == 0:
+							obj = row[0][0:upper_ind[i]].lower()
+						if i < len(upper_ind)-1:
+							obj = f"{obj} {row[0][upper_ind[i]:upper_ind[i]+1].lower()}"
+						if i == len(upper_ind)-1:
+							obj = f"{obj} {row[0][upper_ind[i]:].lower()}"
+			subj_det = "a"
+			obj_det = "a"
+			vowels = ["a","e","i","o","u"]
+			if subj[0].lower() in vowels:
+				subj_det = "an"
+			if obj[0].lower() in vowels:
+				obj_det = "an"
+			#print(f"{subj_det} {subj} has {obj_det} {obj}.")
+			attr_sentences.append(f"{subj_det.capitalize()} {subj} has {obj_det} {obj}.")
+		return attr_sentences
 
 	def asc_to_nl(self,asc_df):
-		# Generalization "is a"
-		# Composition "is part of"
-		# Active association/operation "can/must, ROOT-active"
-		# Passive association/operation "can/must, ROOT-passive"
-		pass
+		gen_sent = []
+		comp_sent = []
+		asc_sent = []
+		for index, row in asc_df.iterrows():
+			asc_type = row[1]
+			subj = row[2]
+			obj = row[3]
+			verb = row[0]
+			mult_subj = row[6]
+			mult_obj = row[4]
+			if subj.isupper() is False:
+				subj = self.__separate_noun(subj)
+			if obj.isupper() is False:
+				obj = self.__separate_noun(obj)
+			subj_det = "a"
+			obj_det = "a"
+			vowels = ["a","e","i","o","u"]
+			if subj[0].lower() in vowels:
+				subj_det = "an"
+			if obj[0].lower() in vowels:
+				obj_det = "an"
+			# Generalization
+			if asc_type == "generalization":
+				gen_sent.append(f"{subj_det.capitalize()} {subj} is {obj_det} {obj}.")
+
+			# Composition
+			if asc_type == "composition":
+				comp_sent.append(f"{subj_det.capitalize()} {subj} is part of {obj_det} {obj}.")
+
+			# Active/Passive Association
+			if asc_type == "association":
+				if mult_subj == "0":
+					modal_act = "can"
+				if mult_subj == "1":
+					modal_act = "must"
+				if mult_obj == "0":
+					modal_pass = "can"
+				if mult_obj == "1":
+					modal_pass = "must"
+				verb_pass = getInflection(verb,tag="VBD")
+				asc_sent.append([f"""{subj_det.capitalize()} {subj} {modal_act} {verb} {obj_det} {obj}.""",
+								f"""{obj_det.capitalize()} {obj} {modal_pass} be {verb_pass[0]} by {subj_det} {subj}."""])
+		return gen_sent, comp_sent, asc_sent

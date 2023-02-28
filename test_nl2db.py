@@ -8,6 +8,7 @@ from python_scripts.NL_module import *
 db_mod = DB_Handler()
 NL_filter = NL_Filter()
 NL_SQL_transformer = NL_SQL_Transformer()
+SQL_NL_morph = SQL_NL_Transformer()
 
 db_mod.create_new_project("test_req1")
 db_mod.set_curr_project("test_req1")
@@ -37,65 +38,30 @@ dataframes = db_mod.read_all_db()
 print("Classes:-------------------")
 #print(dataframes[0])
 print("\nAttrbutes:-------------------")
-#print(dataframes[1])
+print(dataframes[1])
 print("\nOperations:-------------------")
 #print(dataframes[2])
 print("\nAssociations:-------------------")
 #print(dataframes[3].iloc[:,[0,2,4,5,6,7]])
 
+
 # ----- Test Clean-up-------#
 db_mod.delete_db_file("test_req1")
 
-import re
-for index, row in dataframes[1].iterrows():
-	subj =""
-	obj = ""
-	if row[1].isupper() is True:
-		subj = row[1]
-	if row[1].isupper() is False:
-		up_count = sum(1 for letter in row[1] if letter.isupper())
-		if up_count < 2:
-			subj = row[1].lower()
-		if up_count > 1:
-			subj_parts = re.findall('[A-Z][^A-Z]*',row[1])
-			for word in subj_parts:
-				if subj == "":
-					subj = word.lower()
-				elif subj != "":
-					subj = f"{subj} {word.lower()}"
-	if row[0].isupper() is True:
-		obj = row[0]
-	if row[0].isupper() is False:
-		up_count = sum(1 for letter in row[0] if letter.isupper()) 
-		if up_count == 0:
-			obj = row[0]
-		upper_ind = []
-		for index in range(len(row[0])):
-			if row[0][index].isupper() is True:
-				upper_ind.append(index)
-		if upper_ind != []:
-			for i in range(len(upper_ind)):
-				if i == 0:
-					obj = row[0][0:upper_ind[i]].lower()
-				if i < len(upper_ind)-1:
-					obj = f"{obj} {row[0][upper_ind[i]:upper_ind[i]+1].lower()}"
-				if i == len(upper_ind)-1:
-					obj = f"{obj} {row[0][upper_ind[i]:].lower()}"
-	subj_det = "A"
-	obj_det = "a"
-	vowels = ["a","e","i","o","u"]
-	if subj[0] in vowels:
-		subj_det = "An"
-	if obj[0] in vowels:
-		obj_det = "an"
-	print(f"{subj_det} {subj} has {obj_det} {obj}.")
-	print("")
+counter = 1
+for i in SQL_NL_morph.attr_to_nl(dataframes[1]):
+	print(f"{counter}: {i}")
+	counter = counter +1
 
-
-
-
-
-# Test inflect libraries
-from lemminflect import getInflection
-token_infl = getInflection("send", tag="VBD")
-print(token_infl[0])
+gen_sent, comp_sent, asc_sent = SQL_NL_morph.asc_to_nl(dataframes[3])
+for i in gen_sent:
+	print(f"{counter}: {i}")
+	counter = counter +1
+for i in comp_sent:
+	print(f"{counter}: {i}")
+	counter = counter +1
+for i in asc_sent:
+	print(f"{counter}: {i[0]}")
+	counter = counter +1
+	print(f"{counter}: {i[1]}")
+	counter = counter +1
