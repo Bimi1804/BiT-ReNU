@@ -1,0 +1,45 @@
+@startuml
+
+skin rose
+
+title Relationships - Class Diagram
+
+
+
+class Email{
+  + title
+  + attachment
+  + content
+}
+
+class Person{
+  + name
+  + age
+  + emailAdress
+  + sendEmail()
+  + receiveEmail()
+}
+
+Email "*" -- "1" Person: send
+Email "*" -- "*" Person: receive
+
+class UniversityEmployee {
+  + employeeID
+  + receivePayment()
+}
+Person <|-down- UniversityEmployee
+
+
+class Payment{
+  + amount
+}
+
+Payment "*" -- "1" UniversityEmployee: receive
+
+class Department{
+  + name
+}
+
+Department *-up- UniversityEmployee
+
+@enduml
