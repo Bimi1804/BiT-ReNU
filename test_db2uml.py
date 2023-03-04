@@ -102,11 +102,23 @@ for line in plant_asc_lines:
 		plantuml = plantuml.replace(line,"")
 
 print("generalization:")
+gen = []
 for i in generalization:
+	arrow = i.find("<|--")
+	gen.append([i[:arrow-1],i[arrow+5:]])
+for i in gen:
 	print(i)
+
+
 print("\ncomposition:")
+comp = []
 for i in composition:
+	arrow = i.find("*--")
+	comp.append([i[:arrow-1],i[arrow+4:]])
+for i in comp:
 	print(i)
+
+
 
 plant_asc_lines = plantuml.splitlines()
 associations = []
@@ -117,6 +129,7 @@ for line in plant_asc_lines:
 print("\nAssociations:")
 for i in associations:
 	print(i)
+	print(i[i.find('"'):i.find('"')+5])
 
 
 

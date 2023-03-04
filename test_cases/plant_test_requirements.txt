@@ -68,16 +68,16 @@ Department *-- UniversityEmployee
 Course *-- Lecture
 Course *-- Exam
 
-Email "*" -- "1" Person: send
-Email "*" -- "*" Person: receive
-Payment "*" -- "1" UniversityEmployee: receive
-ResearchAssistant "*" -- "1" Professor: assist
-ResearchAssistant "1" -- "*" Exam: check
-Professor "1" -- "*" Lecture: hold
-Professor "1" -- "*" Course: maintain
-Professor "1" -- "*" Exam: grade
-Student "*" -- "*" Lecture: visit
-Student "*" -- "*" Course: attend
-Student "*" -- "*" Exam: take
+Email "0..*" -- "1..1" Person: send
+Email "0..*" -- "0..*" Person: receive
+Payment "0..*" -- "1..1" UniversityEmployee: receive
+ResearchAssistant "0..*" -- "1..1" Professor: assist
+ResearchAssistant "1..1" -- "0..*" Exam: check
+Professor "1..1" -- "0..*" Lecture: hold
+Professor "1..1" -- "0..*" Course: maintain
+Professor "1..1" -- "0..*" Exam: grade
+Student "0..*" -- "0..*" Lecture: visit
+Student "0..*" -- "0..*" Course: attend
+Student "0..*" -- "0..*" Exam: take
 
 @enduml
