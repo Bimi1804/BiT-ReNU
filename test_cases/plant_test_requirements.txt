@@ -1,9 +1,5 @@
 @startuml
 
-skin rose
-
-title Relationships - Class Diagram
-
 class Email{
   + title
   + attachment
@@ -83,11 +79,5 @@ Professor "1" -- "*" Exam: grade
 Student "*" -- "*" Lecture: visit
 Student "*" -- "*" Course: attend
 Student "*" -- "*" Exam: take
-
-
-
-
-
-
 
 @enduml
