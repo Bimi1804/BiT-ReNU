@@ -46,7 +46,7 @@ print("\nAssociations:-------------------")
 
 
 # ----- Test Clean-up-------#
-db_mod.delete_db_file("test_req1")
+#db_mod.delete_db_file("test_req1")
 
 counter = 1
 for i in SQL_NL_morph.attr_to_nl(dataframes[1]):
