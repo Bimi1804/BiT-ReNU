@@ -39,10 +39,9 @@ while "class" in plantuml:
 	class_start = plantuml.find("class")
 	class_content_start = plantuml.find("{")
 	class_content_end = plantuml.find("}")
-	class_name ={plantuml[class_start+6:class_content_start]}
+	class_name = plantuml[class_start+6:class_content_start]
 	class_content = plantuml[class_content_start+1:class_content_end]
 	plantuml = plantuml[class_content_end+1:]
-	 
 	class_attr = []
 	class_op = []
 	while "+" in class_content:
@@ -63,14 +62,61 @@ while "class" in plantuml:
 			class_content = ""
 	classes.append(class_name)
 	attributes.append([class_name,class_attr])
+	op_name_class_b = []
+	for op in class_op:
+		upper = []
+		for i in range(len(op)):
+			if op[i].isupper() is True:
+				upper.append(i)
+		op_name = op[:upper[0]]
+		op_class_b = op[upper[0]:].replace("()","")
+		op_name_class_b.append([op_name,op_class_b])
 
 
-print(classes)
+	operations.append([class_name,op_name_class_b])
 
-print("-------------------")
-print(attributes)
+print("CLASSES:")
+for i in classes:
+	print(i)
 
+print("\nATTRIBUTES:")
+for i in attributes:
+	if i[1] != []:
+		print(f"{i[0]}: {i[1]}")
 
+print("\nOPERATIONS:")
+for i in operations:
+	if i[1] != []:
+		print(f"{i[0]}: {i[1]}")
+print("")
+#print(plantuml)
+generalization = []
+composition = []
+plant_asc_lines = plantuml.splitlines()
+for line in plant_asc_lines:
+	if "<|--" in line:
+		generalization.append(line)
+		plantuml = plantuml.replace(line,"")
+	if "*--" in line:
+		composition.append(line)
+		plantuml = plantuml.replace(line,"")
+
+print("generalization:")
+for i in generalization:
+	print(i)
+print("\ncomposition:")
+for i in composition:
+	print(i)
+
+plant_asc_lines = plantuml.splitlines()
+associations = []
+for line in plant_asc_lines:
+	if line != "" and line != "@enduml":
+		associations.append(line)
+
+print("\nAssociations:")
+for i in associations:
+	print(i)
 
 
 
