@@ -74,7 +74,7 @@ while "class" in plantuml:
 
 
 	operations.append([class_name,op_name_class_b])
-
+#--------------------------------------------------
 print("CLASSES:")
 for i in classes:
 	print(i)
@@ -89,7 +89,8 @@ for i in operations:
 	if i[1] != []:
 		print(f"{i[0]}: {i[1]}")
 print("")
-#print(plantuml)
+#-----------------------------------------------------
+
 generalization = []
 composition = []
 plant_asc_lines = plantuml.splitlines()
@@ -126,17 +127,17 @@ for line in plant_asc_lines:
 	if line != "" and line != "@enduml":
 		associations.append(line)
 
+
 print("\nAssociations:")
 for i in associations:
 	line = i.replace(" ","")
-	asc_name = ""
-	class_a = ""
-	class_b = ""
-	mult_a_1 = ""
-	mult_a_2 = ""
-	mult_b_1 = ""
-	mult_b_2 = ""
-	print(line)
+	#asc_name = ""
+	#class_a = ""
+	#class_b = ""
+	#mult_a_1 = ""
+	#mult_a_2 = ""
+	#mult_b_1 = ""
+	#mult_b_2 = ""
 	pointer = line.find('"')
 	class_a = line[:pointer]
 	line = line[pointer:]
@@ -156,14 +157,6 @@ for i in associations:
 	pointer = line.find(":")
 	class_b = line[:pointer]
 	asc_name = line[pointer+1:]
-	print(class_a)
-	print(mult_a_1)
-	print(mult_a_2)
-	print(mult_b_1)
-	print(mult_b_2)
-	print(class_b)
-	print(asc_name)
-	print("")
 
 
 
