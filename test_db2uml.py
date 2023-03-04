@@ -128,8 +128,42 @@ for line in plant_asc_lines:
 
 print("\nAssociations:")
 for i in associations:
-	print(i)
-	print(i[i.find('"'):i.find('"')+5])
+	line = i.replace(" ","")
+	asc_name = ""
+	class_a = ""
+	class_b = ""
+	mult_a_1 = ""
+	mult_a_2 = ""
+	mult_b_1 = ""
+	mult_b_2 = ""
+	print(line)
+	pointer = line.find('"')
+	class_a = line[:pointer]
+	line = line[pointer:]
+	pointer = line.find("..")
+	mult_a_1 = line[:pointer].replace('"',"")
+	line = line[pointer+2:]
+	pointer = line.find('"')
+	mult_a_2 = line[:pointer].replace('"',"")
+	line = line[pointer+1:]
+	line = line[line.find('"')+1:]
+	pointer = line.find("..")
+	mult_b_1 = line[:pointer]
+	line = line[pointer:]
+	pointer = line.find('"')
+	mult_b_2 = line[:pointer].replace("..","")
+	line = line[pointer+1:]
+	pointer = line.find(":")
+	class_b = line[:pointer]
+	asc_name = line[pointer+1:]
+	print(class_a)
+	print(mult_a_1)
+	print(mult_a_2)
+	print(mult_b_1)
+	print(mult_b_2)
+	print(class_b)
+	print(asc_name)
+	print("")
 
 
 
