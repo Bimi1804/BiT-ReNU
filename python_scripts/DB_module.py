@@ -190,13 +190,11 @@ class DB_Handler:
 			print("No active project selected!")
 			return False
 		curs,conn = self.connect_to_db()
-		# Read requirements table:----------------------------------------
 		# Read classes tables:--------------------------------------------
 		curs.execute("""
 			SELECT * FROM classes
 			""")
 		df_class = pd.DataFrame(curs.fetchall(),columns=["class_name"])
-		# Read requirements_and_clases table:------------------------------
 		# Read attributes table:-------------------------------------------
 		curs.execute("""
 			SELECT * FROM attributes
@@ -240,3 +238,30 @@ class DB_Handler:
 		os.remove(db_path)
 		return 
 
+	def truncate_tables(self):
+		""" Truncate all tables """
+		if self.curr_project is None:
+			print("No active project selected!")
+			return False
+		curs,conn = self.connect_to_db()
+		# Truncate attributes table:-------------------------------------------
+		curs.execute("""
+			DELETE from attributes;
+			""")
+		# Truncate operations table:------------------------------------------
+		curs.execute("""
+			DELETE from operations;
+			""")
+		# Truncate associations table:-----------------------------------------
+		curs.execute("""
+			DELETE from associations;
+			""")
+		# Truncate classes tables:--------------------------------------------
+		curs.execute("""
+			DELETE from classes;
+			""")
+		conn.commit()
+		conn.close()
+		return 
+
+		

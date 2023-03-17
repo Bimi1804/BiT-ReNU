@@ -541,7 +541,7 @@ class NL_SQL_Transformer():
 				'{pass_class}')"""))
 		return sql_queue
 
-	def transform_nl_sql (self,lines_attr=[],lines_gen=[],lines_comp=[],
+	def transform_nl_sql (self,output=[],lines_attr=[],lines_gen=[],lines_comp=[],
 		lines_act=[],lines_pass=[]):
 		"""
 		Uses all other X_to_sql methods to create sql-statements for 
@@ -570,7 +570,12 @@ class NL_SQL_Transformer():
 		sql_queue : list(str)
 			A list of sql statements for the given sentences.
 		"""
-
+		if output != []:
+			lines_attr = output[0]
+			lines_gen = output[1]
+			lines_comp = output[2]
+			lines_act = output[3]
+			lines_pass = output[4]
 		sql_queue = []
 		for statement in self.attr_to_sql(lines_attr):
 			sql_queue.append(statement)
