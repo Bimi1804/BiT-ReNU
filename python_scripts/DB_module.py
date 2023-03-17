@@ -219,7 +219,8 @@ class DB_Handler:
 							"class_b", "mult_a_1","mult_a_2", "mult_b_1", 
 							"mult_b_2"])
 		conn.close()
-		return df_class,df_attr,df_op,df_asc
+		output = [df_class,df_attr,df_op,df_asc]
+		return output
 
 	def delete_db_file(self, project_name):
 		"""

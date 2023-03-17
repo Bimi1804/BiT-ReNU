@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 
-# UML -> DB
+
 class SQL_UML_Transformer():
 	"""docstring for DB_to_UML"""
 	def __init__(self):
@@ -55,7 +55,7 @@ class SQL_UML_Transformer():
 		return plantuml
 
 
-# DB -> UML
+
 class UML_SQL_Transformer():
 	def __init__(self):
 		pass 

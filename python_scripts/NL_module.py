@@ -742,3 +742,24 @@ class SQL_NL_Transformer():
 				asc_sent.append([(f"""{inf.a(subj)} {modal_act} {verb} {inf.a(obj)}.""").capitalize(),
 								(f"""{inf.a(obj)} {modal_pass} be {verb_pass[0]} by {inf.a(subj)}.""").capitalize()])
 		return gen_sent, comp_sent, asc_sent
+
+
+	def transform_sql_nl(self,dataframes):
+		"""doc"""
+		df_class = dataframes[0]
+		df_attr = dataframes[1]
+		df_op = dataframes[2]
+		df_asc = dataframes[3]
+		attr_sentences = self.attr_to_nl(df_attr)
+		gen_sent, comp_sent, asc_sent = self.asc_to_nl(df_asc)
+		sentences = []
+		for sen in attr_sentences:
+			sentences.append(sen)
+		for sen in gen_sent:
+			sentences.append(sen)
+		for sen in comp_sent:
+			sentences.append(sen)
+		for sen_pair in asc_sent:
+			for sen in sen_pair:
+				sentences.append(sen)
+		return sentences
