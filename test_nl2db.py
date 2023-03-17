@@ -42,7 +42,7 @@ print("\nAttrbutes:-------------------")
 print("\nOperations:-------------------")
 #print(dataframes[2])
 print("\nAssociations:-------------------")
-#print(dataframes[3].iloc[:,[0,2,4,5,6,7]])
+print(dataframes[3].iloc[:,[0,2,4,5,6,7]])
 
 
 # ----- Test Clean-up-------#
