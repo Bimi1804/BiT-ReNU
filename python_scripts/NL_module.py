@@ -3,7 +3,11 @@
 ################################## Import #################################
 # Import libraries:
 import re
-from lemminflect import getInflection
+
+from lemminflect import getInflection # for Verbs
+import inflect  # for nouns
+inf = inflect.engine()
+
 import spacy
 # Load the "en_core_web_sm" pipeline
 nlp = spacy.load("en_core_web_sm")
@@ -594,9 +598,7 @@ class SQL_NL_Transformer():
 		Creates sentences from the association table.
 	"""
 	def __init__(self, ):
-		#self.arg = arg
 		pass
-
 
 	def __separate_noun(self, noun):
 		"""
@@ -676,15 +678,7 @@ class SQL_NL_Transformer():
 							obj = f"{obj} {row[0][upper_ind[i]:upper_ind[i]+1].lower()}"
 						if i == len(upper_ind)-1:
 							obj = f"{obj} {row[0][upper_ind[i]:].lower()}"
-			subj_det = "a"
-			obj_det = "a"
-			vowels = ["a","e","i","o","u"]
-			if subj[0].lower() in vowels:
-				subj_det = "an"
-			if obj[0].lower() in vowels:
-				obj_det = "an"
-			#print(f"{subj_det} {subj} has {obj_det} {obj}.")
-			attr_sentences.append(f"{subj_det.capitalize()} {subj} has {obj_det} {obj}.")
+			attr_sentences.append((f"{inf.a(subj)} has {inf.a(obj)}.").capitalize())
 		return attr_sentences
 
 	def asc_to_nl(self,asc_df):
@@ -723,21 +717,12 @@ class SQL_NL_Transformer():
 				subj = self.__separate_noun(subj)
 			if obj.isupper() is False:
 				obj = self.__separate_noun(obj)
-			subj_det = "a"
-			obj_det = "a"
-			vowels = ["a","e","i","o","u"]
-			if subj[0].lower() in vowels:
-				subj_det = "an"
-			if obj[0].lower() in vowels:
-				obj_det = "an"
 			# Generalization
 			if asc_type == "generalization":
-				gen_sent.append(f"{subj_det.capitalize()} {subj} is {obj_det} {obj}.")
-
+				gen_sent.append((f"{inf.a(subj)} is {inf.a(obj)}.").capitalize())
 			# Composition
 			if asc_type == "composition":
-				comp_sent.append(f"{subj_det.capitalize()} {subj} is part of {obj_det} {obj}.")
-
+				comp_sent.append((f"{inf.a(subj)} is part of {inf.a(obj)}.").capitalize())
 			# Active/Passive Association
 			if asc_type == "association":
 				if mult_subj == "0":
@@ -749,6 +734,6 @@ class SQL_NL_Transformer():
 				if mult_obj == "1":
 					modal_pass = "must"
 				verb_pass = getInflection(verb,tag="VBD")
-				asc_sent.append([f"""{subj_det.capitalize()} {subj} {modal_act} {verb} {obj_det} {obj}.""",
-								f"""{obj_det.capitalize()} {obj} {modal_pass} be {verb_pass[0]} by {subj_det} {subj}."""])
+				asc_sent.append([(f"""{inf.a(subj)} {modal_act} {verb} {inf.a(obj)}.""").capitalize(),
+								(f"""{inf.a(obj)} {modal_pass} be {verb_pass[0]} by {inf.a(subj)}.""").capitalize()])
 		return gen_sent, comp_sent, asc_sent
