@@ -105,7 +105,7 @@ nl_013 = test_uml_nl(plant_013,"test_013",original_nl)
 
 # Test_02:
 nl_02 = test_uml_nl(original_uml,"test_02")
-with open(os.getcwd()+"\\evaluation\\text_02.txt","w") as file:
+with open(os.getcwd()+"\\evaluation\\text_020.txt","w") as file:
 	for line in nl_02:
 		file.write(f"{line}\n")
 
