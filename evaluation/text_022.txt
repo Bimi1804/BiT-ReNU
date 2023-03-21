@@ -23,8 +23,8 @@ An email must send a person.
 A person can be sent by an email.
 An email can receive a person.
 A person can be received by an email.
-A payment must receive a university employee.
-A university employee can be received by a payment.
+A university employee can receive a payment.
+A payment must be received by a university employee.
 A research assistant must assist a professor.
 A professor can be assisted by a research assistant.
 A research assistant can check an exam.

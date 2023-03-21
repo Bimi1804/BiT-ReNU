@@ -131,7 +131,6 @@ uml_022 = test_nl_uml(nl_022,"test_022",original_uml)
 
 
 # Test_023 (Delete requirement):
-# If Association is deleted - both associations have to be deleted (active + passive)
 with open(os.getcwd()+"\\evaluation\\text_023.txt") as file:
 	lines = file.readlines()
 	nl_023 = []
@@ -139,4 +138,4 @@ with open(os.getcwd()+"\\evaluation\\text_023.txt") as file:
 		l = l.replace("\n","")
 		nl_023.append(l)
 uml_023 = test_nl_uml(nl_023,"test_023",original_uml)
-print(uml_023)
+#print(uml_023)
