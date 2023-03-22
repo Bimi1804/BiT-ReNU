@@ -19,10 +19,10 @@ A student is a person.
 A university employee is part of a department.
 A lecture is part of a course.
 An exam is part of a course.
-An email must send a person.
-A person can be sent by an email.
-An email can receive a person.
-A person can be received by an email.
+A person can send an email.
+An email must be sent by a person.
+A person can receive an email.
+An email can be received by a person.
 A university employee must receive a payment.
 A payment can be received by a university employee.
 A research assistant must assist a professor.

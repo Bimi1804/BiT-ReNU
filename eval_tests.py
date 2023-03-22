@@ -138,4 +138,4 @@ with open(os.getcwd()+"\\evaluation\\text_023.txt") as file:
 		l = l.replace("\n","")
 		nl_023.append(l)
 uml_023 = test_nl_uml(nl_023,"test_023",original_uml)
-#print(uml_023)
+print(uml_023)

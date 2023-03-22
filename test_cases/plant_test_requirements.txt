@@ -68,8 +68,8 @@ Department *-- UniversityEmployee
 Course *-- Lecture
 Course *-- Exam
 
-Email "0..*" -- "1..1" Person: send
-Email "0..*" -- "0..*" Person: receive
+Person "1..1" -- "0..*" Email: send
+Person "0..*" -- "0..*" Email: receive
 UniversityEmployee "0..*" -- "1..1" Payment: receive
 ResearchAssistant "0..*" -- "1..1" Professor: assist
 ResearchAssistant "1..1" -- "0..*" Exam: check
