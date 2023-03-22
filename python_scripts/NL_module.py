@@ -601,6 +601,8 @@ class SQL_NL_Transformer():
 		Creates sentences from the attributes table.
 	asc_to_nl(pandas.DataFrame) : list(str),list(str),list(str)
 		Creates sentences from the association table.
+	transform_sql_nl(list(pandas.Dataframe)) : list(str)
+		Transform dataframes into sentences.
 	"""
 	def __init__(self, ):
 		pass
@@ -743,9 +745,25 @@ class SQL_NL_Transformer():
 								(f"""{inf.a(obj)} {modal_pass} be {verb_pass[0]} by {inf.a(subj)}.""").capitalize()])
 		return gen_sent, comp_sent, asc_sent
 
-
 	def transform_sql_nl(self,dataframes):
-		"""doc"""
+		"""
+		Transform dataframes into sentences.
+
+		Parameters
+		----------
+		dataframes : list(pandas.DataFrame)
+			List with dataframes of the DB-tables. Elements of the list have to
+			be in the following order:
+				0 = classes table
+				1 = attributes table
+				2 = operations table
+				3 = associations table
+
+		Returns
+		-------
+		sentences : list(str)
+			List with sentences.
+		"""
 		df_class = dataframes[0]
 		df_attr = dataframes[1]
 		df_op = dataframes[2]

@@ -31,6 +31,8 @@ class DB_Handler:
 		Read the whole database into pandas dataframes.
 	delete_db_file(str) : 
 		Delete a database file.
+	truncate_tables() :
+		Truncate all tables.
 	"""
 
 	def __init__(self):
@@ -240,24 +242,34 @@ class DB_Handler:
 		return 
 
 	def truncate_tables(self):
-		""" Truncate all tables """
+		""" 
+		Truncate all tables. 
+
+		Parameters
+		----------
+		None
+
+		Returns
+		-------
+		None
+		"""
 		if self.curr_project is None:
 			print("No active project selected!")
 			return False
 		curs,conn = self.connect_to_db()
-		# Truncate attributes table:-------------------------------------------
+		# Truncate attributes table:
 		curs.execute("""
 			DELETE from attributes;
 			""")
-		# Truncate operations table:------------------------------------------
+		# Truncate operations table:
 		curs.execute("""
 			DELETE from operations;
 			""")
-		# Truncate associations table:-----------------------------------------
+		# Truncate associations table:
 		curs.execute("""
 			DELETE from associations;
 			""")
-		# Truncate classes tables:--------------------------------------------
+		# Truncate classes tables:
 		curs.execute("""
 			DELETE from classes;
 			""")

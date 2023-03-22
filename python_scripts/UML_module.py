@@ -1,15 +1,45 @@
 # UML Module
+
+################################## Import #################################
+
 import pandas as pd
 import os
 
-
+################################## Classes #################################
 
 class SQL_UML_Transformer():
-	"""docstring for DB_to_UML"""
+
+	"""
+	Transform SQL into UML.
+
+	Methods
+	-------
+	sql_to_plantuml(list(pandas.Dataframe)) : str
+		Transform dataframes into a string for plantuml. 
+	"""
+
+
 	def __init__(self):
 		pass 
 
 	def sql_to_plantuml(self,dataframes):
+		"""
+		Transform dataframes into a string for plantuml.
+
+		Parameters
+		----------
+		dataframes : list(pandas.Dataframe)
+			Tables as dataframes. List elements in the following order:
+				0 = classes table
+				1 = attributes table
+				2 = operations table
+				3 = associations table
+		
+		Returns
+		-------
+		plantuml : str
+			UML class model in plantUML notation.
+		"""
 		classes = []
 		for index, row in dataframes[0].iterrows():
 			classes.append(row[0])
@@ -54,13 +84,33 @@ class SQL_UML_Transformer():
 		plantuml = f"@startuml\n\n{plant_class}{plant_asc}\n@enduml"
 		return plantuml
 
-
-
 class UML_SQL_Transformer():
+	"""
+	Transform UML to SQL.
+
+	Methods
+	--------
+	plantuml_to_sql (str) : list(str)
+		Transform UML class model in plantUML into SQL statements.
+	"""
 	def __init__(self):
 		pass 
 
 	def plantuml_to_sql(self,plant_txt):
+		"""
+		Transform UML class model in plantUML into SQL statements.
+
+		Parameters
+		----------
+		plant_txt : str
+			UML class model in plantUML notation.
+
+		Returns
+		-------
+		sql_statemens : list(str)
+			List of SQL-statements.
+		"""
+
 		plant_txt = plant_txt.replace(" ","")
 		#-------------------------
 		sql_statemens = []
@@ -130,10 +180,6 @@ class UML_SQL_Transformer():
 									mult_a_1,mult_a_2,mult_b_1,mult_b_2,class_a,class_b) 
 									VALUES ('is part of','composition','0','*','1','1',
 									'{comp[arrow+3:]}','{comp[:arrow]}')""")
-
-
-
-
 		plant_asc_lines = plant_txt.splitlines()
 		associations = []
 		for line in plant_asc_lines:
