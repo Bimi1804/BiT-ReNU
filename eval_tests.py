@@ -19,7 +19,7 @@ sql_uml = SQL_UML_Transformer()
 uml_sql = UML_SQL_Transformer()
 
 # Original NL-Text:
-with open(os.getcwd()+"\\test_cases\\test_requirements_NL.txt") as file:
+with open(os.getcwd()+"\\Manually_transformed_Tests\\test_requirements_NL.txt") as file:
 	lines = file.readlines()
 	original_nl = []
 	for l in lines:
@@ -27,7 +27,7 @@ with open(os.getcwd()+"\\test_cases\\test_requirements_NL.txt") as file:
 		original_nl.append(l)
 
 # Orginal UML:
-with open(os.getcwd()+"\\test_cases\\plant_test_requirements.txt") as file:
+with open(os.getcwd()+"\\Manually_transformed_Tests\\plant_test_requirements.txt") as file:
 	original_uml = file.read()
 
 
@@ -80,23 +80,23 @@ def test_uml_nl(plant_uml,project_name,nl_text=None):
 
 # Test_01:
 plant_01 = test_nl_uml(original_nl,"test_01")
-with open(os.getcwd()+"\\evaluation\\plant_01.txt","w") as file:
+with open(os.getcwd()+"\\Validation_Tests\\plant_01.txt","w") as file:
 	file.write(plant_01)
 
 # Test_011 (Change element)
-with open(os.getcwd()+ "\\evaluation\\plant_011.txt") as file:
+with open(os.getcwd()+ "\\Validation_Tests\\plant_011.txt") as file:
 	plant_011 = file.read()
 nl_011 = test_uml_nl(plant_011,"test_011",original_nl)
 #for line in nl_011: print(line)
 
 # Test_012 (Add element)
-with open(os.getcwd()+ "\\evaluation\\plant_012.txt") as file:
+with open(os.getcwd()+ "\\Validation_Tests\\plant_012.txt") as file:
 	plant_012 = file.read()
 nl_012 = test_uml_nl(plant_012,"test_012",original_nl)
 #for line in nl_012: print(line)
 
 # Test_013 (Delete element)
-with open(os.getcwd()+ "\\evaluation\\plant_013.txt") as file:
+with open(os.getcwd()+ "\\Validation_Tests\\plant_013.txt") as file:
 	plant_013 = file.read()
 nl_013 = test_uml_nl(plant_013,"test_013",original_nl)
 #for line in nl_013: print(line)
@@ -105,12 +105,12 @@ nl_013 = test_uml_nl(plant_013,"test_013",original_nl)
 
 # Test_02:
 nl_02 = test_uml_nl(original_uml,"test_02")
-with open(os.getcwd()+"\\evaluation\\text_020.txt","w") as file:
+with open(os.getcwd()+"\\Validation_Tests\\text_020.txt","w") as file:
 	for line in nl_02:
 		file.write(f"{line}\n")
 
 # Test_021 (Change requirement):
-with open(os.getcwd()+"\\evaluation\\text_021.txt") as file:
+with open(os.getcwd()+"\\Validation_Tests\\text_021.txt") as file:
 	lines = file.readlines()
 	nl_021 = []
 	for l in lines:
@@ -120,7 +120,7 @@ uml_021 = test_nl_uml(nl_021,"test_021",original_uml)
 #print(uml_021)
 
 # Test_022 (Add requirement):
-with open(os.getcwd()+"\\evaluation\\text_022.txt") as file:
+with open(os.getcwd()+"\\Validation_Tests\\text_022.txt") as file:
 	lines = file.readlines()
 	nl_022 = []
 	for l in lines:
@@ -131,7 +131,7 @@ uml_022 = test_nl_uml(nl_022,"test_022",original_uml)
 
 
 # Test_023 (Delete requirement):
-with open(os.getcwd()+"\\evaluation\\text_023.txt") as file:
+with open(os.getcwd()+"\\Validation_Tests\\text_023.txt") as file:
 	lines = file.readlines()
 	nl_023 = []
 	for l in lines:
