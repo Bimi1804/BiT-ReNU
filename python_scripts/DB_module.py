@@ -3,8 +3,14 @@
 ################################## Import #################################
 # Import libraries:
 import sqlite3 
-import os
 import pandas as pd
+import os
+script_path = os.path.abspath(__file__)
+script_dir = os.path.dirname(script_path)
+root_dir = os.path.dirname(script_dir)
+
+
+
 
 
 ################################## Classes #################################
@@ -37,7 +43,7 @@ class DB_Handler:
 
 	def __init__(self):
 		self.curr_project = None
-		self.root_folder = os.getcwd()
+		self.root_folder = root_dir
 
 	def connect_to_db(self,db_path=None):
 		"""
@@ -79,7 +85,7 @@ class DB_Handler:
 
 		"""
 		# Check if project already exists:
-		db_path = self.root_folder+"\\project_databases\\"+ project_name +".db"
+		db_path = self.root_folder +"\\project_databases\\"+ project_name +".db"
 		if os.path.isfile(db_path) is True:
 			print("Project already exists!")
 			return False
