@@ -58,6 +58,18 @@ The python script that was used to conduct the validation tests.
 How to install and run the tool:
 --------------------------------------------------------------------------------------
 
+Dependencies can be found in the requirements.txt file.
+
+Additional steps might be needed to install the used ML-model for spacy:
+(code taken from https://spacy.io/usage)
+
+pip install -U pip setuptools wheel
+pip install -U spacy
+python -m spacy download en_core_web_sm
+
+
+----------
+
 The functions from the python files can simply be imported and used. However, some libraries are needed for each script:
 
 DB_module.py:
@@ -74,7 +86,6 @@ NL_module.py:
 UML_module.py:
 - os
 - pandas
-
 
 
 
