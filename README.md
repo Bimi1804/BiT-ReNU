@@ -1,5 +1,5 @@
 BiT-ReNU - BIdirectional Transformation of Requirements in Natural Language and UML class models
-----------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
 DOI: [![DOI](https://zenodo.org/badge/606422705.svg)](https://zenodo.org/badge/latestdoi/606422705)
 
 
