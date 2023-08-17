@@ -64,7 +64,9 @@ Additional steps might be needed to install the used ML-model for spacy:
 (code taken from https://spacy.io/usage)
 
 pip install -U pip setuptools wheel
+
 pip install -U spacy
+
 python -m spacy download en_core_web_sm
 
 
