@@ -32,7 +32,7 @@ class SQL_UML_Transformer():
 			Tables as dataframes. List elements in the following order:
 				0 = classes table
 				1 = attributes table
-				2 = operations table
+				2 = generalization table
 				3 = associations table
 		
 		Returns
@@ -43,40 +43,39 @@ class SQL_UML_Transformer():
 		classes = []
 		for index, row in dataframes[0].iterrows():
 			classes.append(row[0])
+
 		attributes = []
 		for index,row in dataframes[1].iterrows():
 			attributes.append([row[0],row[1]])
-		operations = []
-		for index,row in dataframes[2].iterrows():
-			operations.append([row[0],row[1]])
+
 		generalization = []
-		for index, row in dataframes[3].iterrows():
-			if row[1] == "generalization":
-				generalization.append([row[2],row[3]])
+		for index, row in dataframes[2].iterrows():
+				generalization.append([row[0],row[1]])
+
 		composition = []
 		for index, row in dataframes[3].iterrows():
-			if row[1] == "composition":
-				composition.append([row[2], row[3]])
+			if row[1] == "composite":
+				composition.append([row[0],row[2],row[3],row[4],row[5],row[6],row[7]])
+
 		associations = []
 		for index, row in dataframes[3].iterrows():
-			if row[1] == "association":
+			if row[1] == "none":
 				associations.append([row[0],row[2],row[3],row[4],row[5],row[6],row[7]])
+
 		plant_class = ""
 		for i in classes:
 			plant_class = plant_class + f"class {i}" + " {\n"
 			for attr in attributes:
 				if attr[1] == i:
 					plant_class = plant_class +f"+ {attr[0]}\n"
-			for opr in operations:
-				if opr[1] == i:
-					plant_class = plant_class + f"+ {opr[0]}\n"
 			plant_class = plant_class + "}\n\n"
+
 		plant_asc = ""
 		for i in generalization:
 			plant_asc = plant_asc + f"{i[1]} <|-- {i[0]}\n"
 
 		for i in composition:
-			plant_asc = plant_asc + f"{i[1]} *-- {i[0]}\n"
+			plant_asc = plant_asc + f"{i[1]} \"{i[3]}..{i[4]}\" *-- \"{i[5]}..{i[6]}\" {i[2]}\n"
 
 		for i in associations:
 			plant_asc = plant_asc + f"{i[1]} \"{i[3]}..{i[4]}\" -- \"{i[5]}..{i[6]}\" {i[2]}: {i[0]}\n"
@@ -107,13 +106,13 @@ class UML_SQL_Transformer():
 
 		Returns
 		-------
-		sql_statemens : list(str)
+		sql_statements : list(str)
 			List of SQL-statements.
 		"""
 
 		plant_txt = plant_txt.replace(" ","")
 		#-------------------------
-		sql_statemens = []
+		sql_statements = []
 		while "class" in plant_txt:
 			class_start = plant_txt.find("class")
 			class_content_start = plant_txt.find("{")
@@ -140,21 +139,10 @@ class UML_SQL_Transformer():
 					class_op.append(item)
 				if "()" not in item:
 					class_attr.append(item)
-			sql_statemens.append(f"""INSERT OR IGNORE INTO classes(class_name) VALUES ('{class_name.replace(" ","")}')""")
+			sql_statements.append(f"""INSERT OR IGNORE INTO classes(class_name) VALUES ('{class_name.replace(" ","")}')""")
 			for attr in class_attr:
 				if attr != "":
-					sql_statemens.append(f"""INSERT OR IGNORE INTO attributes(attr_name,class_name) VALUES ('{attr.replace(" ","")}','{class_name.replace(" ","")}')""")
-			op_name_class_b = []
-			for op in class_op:
-				upper = []
-				for i in range(len(op)):
-					if op[i].isupper() is True:
-						upper.append(i)
-				op_name = op[:upper[0]]
-				op_class_b = op[upper[0]:].replace("()","")
-				sql_statemens.append(f"""INSERT OR IGNORE INTO classes(class_name) VALUES ('{op_class_b.replace(" ","")}')""")
-				sql_statemens.append(f"""INSERT OR IGNORE INTO operations(op_name,class_name,class_b) 
-					VALUES ('{op}','{class_name.replace(" ","")}','{op_class_b.replace(" ","")}')""")
+					sql_statements.append(f"""INSERT OR IGNORE INTO attributes(attr_name,class_name) VALUES ('{attr.replace(" ","")}','{class_name.replace(" ","")}')""")
 
 
 		#-----------------------------------------------------
@@ -171,15 +159,29 @@ class UML_SQL_Transformer():
 
 		for gen in generalization:
 			arrow = gen.find("<|--")
-			sql_statemens.append(f"""INSERT OR IGNORE INTO associations(asc_name,asc_type,class_a,class_b) 
-											VALUES ('inherits','generalization', '{gen[arrow+4:]}','{gen[:arrow]}')""")
-
-		for comp in composition:
-			arrow = comp.find("*--")
-			sql_statemens.append(f"""INSERT OR IGNORE INTO associations(asc_name,asc_type,
-									mult_a_1,mult_a_2,mult_b_1,mult_b_2,class_a,class_b) 
-									VALUES ('is part of','composition','0','*','1','1',
-									'{comp[arrow+3:]}','{comp[:arrow]}')""")
+			sql_statements.append(f"""INSERT OR IGNORE INTO generalizations(super_class,sub_class) 
+													VALUES ('{gen[:arrow]}','{gen[arrow+4:]}')""")
+		for line in composition:
+			pointer = line.find('"')
+			class_a = line[:pointer]
+			line = line[pointer:]
+			pointer = line.find("..")
+			low_a = line[:pointer].replace('"',"")
+			line = line[pointer+2:]
+			pointer = line.find('"')
+			up_a = line[:pointer].replace('"',"")
+			line = line[pointer+1:]
+			line = line[line.find('"')+1:]
+			pointer = line.find("..")
+			low_b = line[:pointer]
+			line = line[pointer:]
+			pointer = line.find('"')
+			up_b = line[:pointer].replace("..","")
+			line = line[pointer+1:]
+			class_b = line
+			sql_statements.append(f"""INSERT OR IGNORE INTO associations(asc_name,agg_kind,
+									class_name_a,class_name_b,lower_a,upper_a,lower_b,upper_b) 
+									VALUES ('is part of','composite','{class_a}','{class_b}','{low_a}','{up_a}','{low_b}','{up_b}')""")
 		plant_asc_lines = plant_txt.splitlines()
 		associations = []
 		for line in plant_asc_lines:
@@ -190,23 +192,23 @@ class UML_SQL_Transformer():
 			class_a = line[:pointer]
 			line = line[pointer:]
 			pointer = line.find("..")
-			mult_a_1 = line[:pointer].replace('"',"")
+			lower_a = line[:pointer].replace('"',"")
 			line = line[pointer+2:]
 			pointer = line.find('"')
-			mult_a_2 = line[:pointer].replace('"',"")
+			upper_a = line[:pointer].replace('"',"")
 			line = line[pointer+1:]
 			line = line[line.find('"')+1:]
 			pointer = line.find("..")
-			mult_b_1 = line[:pointer]
+			lower_b = line[:pointer]
 			line = line[pointer:]
 			pointer = line.find('"')
-			mult_b_2 = line[:pointer].replace("..","")
+			upper_b = line[:pointer].replace("..","")
 			line = line[pointer+1:]
 			pointer = line.find(":")
 			class_b = line[:pointer]
 			asc_name = line[pointer+1:]
-			sql_statemens.append(f"""INSERT OR IGNORE INTO associations
-									(asc_type,asc_name,class_a,class_b,mult_a_1,mult_a_2,mult_b_1,mult_b_2) 
-									VALUES ('association','{asc_name}','{class_a}','{class_b}','{mult_a_1}','{mult_a_2}','{mult_b_1}','{mult_b_2}')""")
-		return sql_statemens
+			sql_statements.append(f"""INSERT OR IGNORE INTO associations
+									(agg_kind,asc_name,class_name_a,class_name_b,lower_a,upper_a,lower_b,upper_b) 
+									VALUES ('none','{asc_name}','{class_a}','{class_b}','{lower_a}','{upper_a}','{lower_b}','{upper_b}')""")
+		return sql_statements
 

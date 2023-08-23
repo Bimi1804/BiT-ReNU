@@ -82,8 +82,10 @@ class NL_Filter():
 		for line in lines_nopunctdet:
 			for token in line:
 				if token.lemma_ == "have":
-					lines_attr.append(line)
-					break
+					if previous_token.lemma_ != "must" and previous_token.lemma_ != "can":
+						lines_attr.append(line)
+						break
+				previous_token = token
 			else:
 				lines_noattr.append(line)
 		return lines_attr, lines_noattr
@@ -116,14 +118,18 @@ class NL_Filter():
 					if token.lemma_ == "be":
 						lines_gen_comp.append(line)
 						break
+				if token.lemma_ == "have":
+					lines_gen_comp.append(line)
+					break
 			else:
 				lines_noattr_nogencomp.append(line)
+
 		# Separate Gen from Comp:
 		lines_gen = []
 		lines_comp = []
 		for line in lines_gen_comp:
 			for token in line:
-				if token.tag_ == "IN":
+				if token.tag_ == "IN" or token.lemma_ == "have":
 					lines_comp.append(line)
 					break
 			else:
@@ -247,22 +253,21 @@ class NL_SQL_Transformer():
 	def __init__(self):
 		self.__sql_ins_class = """INSERT OR IGNORE INTO classes(
 									class_name) VALUES"""
+
 		self.__sql_ins_attr = """INSERT OR IGNORE INTO attributes(
 									attr_name,class_name) VALUES"""
-		self.__sql_ins_gen = """INSERT OR IGNORE INTO associations
-									(asc_name,asc_type,class_a,class_b) 
-									VALUES ('inherits','generalization',"""
+
+		self.__sql_ins_gen = """INSERT OR IGNORE INTO generalizations
+									(super_class, sub_class) 
+									VALUES"""
+
 		self.__sql_ins_comp = """INSERT OR IGNORE INTO associations
-									(asc_name,asc_type,
-										mult_a_1,mult_a_2,mult_b_1,mult_b_2,
-										class_a,class_b) 
-									VALUES ('is part of','composition',
-										'0','*','1','1',"""
+									(agg_kind,asc_name,lower_a,upper_a,class_name_a,class_name_b) 
+									VALUES ('composite','is part of','1','*',"""
+
 		self.__sql_ins_act_asc = """INSERT OR IGNORE INTO associations
-									(asc_type,asc_name,class_a, class_b) 
-									VALUES ('association',"""
-		self.__sql_ins_op = """INSERT OR IGNORE INTO operations(op_name,
-									class_name,class_b) VALUES """
+									(agg_kind,asc_name,class_name_a, class_name_b) 
+									VALUES ('none',"""
 
 	def __get_compound_class_name(self,token):
 		"""
@@ -378,21 +383,21 @@ class NL_SQL_Transformer():
 		"""
 		sql_queue = []
 		for line in lines_gen:
-			child = ""
 			parent = ""
+			child = ""
 			for token in line:
 				if token.dep_ == "compound":
 					if "subj" in token.head.dep_:
-						child = self.__get_compound_class_name(token)
-					if "attr" in token.head.dep_:
 						parent = self.__get_compound_class_name(token)
+					if "attr" in token.head.dep_:
+						child = self.__get_compound_class_name(token)
 				if "subj" in token.dep_:
-					child = self.__get_class_name(token,child)
-				if "attr" in token.dep_:
 					parent = self.__get_class_name(token,parent)
+				if "attr" in token.dep_:
+					child = self.__get_class_name(token,child)
 			sql_queue.extend((
 				f"{self.__sql_ins_class} ('{child}'),('{parent}')",
-				f"{self.__sql_ins_gen}'{child}','{parent}')"))
+				f"{self.__sql_ins_gen}('{parent}','{child}')"))
 		return sql_queue
 
 	def comp_to_sql (self,lines_comp):
@@ -413,23 +418,72 @@ class NL_SQL_Transformer():
 		"""
 
 		sql_queue = []
+		lines_comp_act = []
+		lines_comp_pass = []
 		for line in lines_comp:
-			child = ""
-			parent = ""
+			for token in line:
+				if token.dep_ == "aux":
+					lines_comp_pass.append(line)
+					break
+				lines_comp_act.append(line)
+				
+		for line in lines_comp_act:
+			class_name_a = ""
+			class_name_b = ""
+
 			for token in line:
 				if token.dep_ == "compound":
 					if "subj" in token.head.dep_:
-						child = self.__get_compound_class_name(token)
+						class_name_a = self.__get_compound_class_name(token)
 					if "obj" in token.head.dep_:
-						parent = self.__get_compound_class_name(token)
+						class_name_b = self.__get_compound_class_name(token)
 				if "subj" in token.dep_:
-					child = self.__get_class_name(token,child)
+					class_name_a = self.__get_class_name(token,class_name_a)
 				if "obj" in token.dep_:
-					parent = self.__get_class_name(token,parent)
+					class_name_b = self.__get_class_name(token,class_name_b)
 			sql_queue.extend((
-				f"{self.__sql_ins_class} ('{child}'),('{parent}')",
-				f"{self.__sql_ins_comp}'{child}','{parent}')"))
+				f"{self.__sql_ins_class} ('{class_name_a}'),('{class_name_b}')",
+
+				f"{self.__sql_ins_comp}'{class_name_a}','{class_name_b}')",
+
+				f"""UPDATE associations SET lower_b = '{mult_comp[0]}',
+				upper_b = '{mult_comp[1]}' WHERE asc_name = 'is part of' AND
+				class_name_a = '{class_name_a}' AND class_name_b = '{class_name_b}'"""))
+
+###############################################################################################################
+# Problem: Multiplicity leer lassen, wenn kein "can|must have" Satz vorhanden ist!
+# Dieses Konzept dann überall durchführen -> Auch eine Möglichkeit finden, dass man bei Association keine Multi haben kann wenn ein Satz fehlt.
+
+		for line in lines_comp_pass:
+			class_name_a = ""
+			class_name_b = ""
+			mult_comp = ["0","*"]
+			for token in line:
+				if token.dep_ == "compound":
+					if "subj" in token.head.dep_:
+						class_name_b = self.__get_compound_class_name(token)
+					if "obj" in token.head.dep_:
+						class_name_a = self.__get_compound_class_name(token)
+				if "subj" in token.dep_:
+					class_name_b = self.__get_class_name(token,class_name_b)
+				if "obj" in token.dep_:
+					class_name_a = self.__get_class_name(token,class_name_a)
+				
+				if token.dep_ == "aux":						
+					if token.lemma_ == "must":
+						mult_comp = ["1","*"]
+			sql_queue.extend((
+				f"{self.__sql_ins_class} ('{class_name_a}'),('{class_name_b}')",
+
+				f"{self.__sql_ins_comp}'{class_name_a}','{class_name_b}')",
+
+				f"""UPDATE associations SET lower_b = '{mult_comp[0]}',
+				upper_b = '{mult_comp[1]}' WHERE asc_name = 'is part of' AND
+				class_name_a = '{class_name_a}' AND class_name_b = '{class_name_b}'"""))
+
 		return sql_queue
+
+###############################################################################################################
  
 	def act_asc_to_sql (self,lines_act):
 		"""
@@ -469,8 +523,7 @@ class NL_SQL_Transformer():
 					if token.lemma_ == "can":
 						mult_pass = ["0","*"]
 					if token.lemma_ == "must":
-						mult_pass = ["1","1"]
-			op_name = asc_name + pass_class + "()"
+						mult_pass = ["1","*"]
 
 			sql_queue.extend((
 				f"{self.__sql_ins_class} ('{act_class}'),('{pass_class}')",
@@ -478,12 +531,9 @@ class NL_SQL_Transformer():
 				f"""{self.__sql_ins_act_asc} '{asc_name}','{act_class}',
 				'{pass_class}')""",
 
-				f"""UPDATE associations SET mult_b_1 = '{mult_pass[0]}',
-				mult_b_2 = '{mult_pass[1]}' WHERE asc_name = '{asc_name}' AND
-				class_a = '{act_class}' AND class_b = '{pass_class}'""",
-
-				f"""{self.__sql_ins_op} ('{op_name}','{act_class}',
-				'{pass_class}')"""))
+				f"""UPDATE associations SET lower_b = '{mult_pass[0]}',
+				upper_b = '{mult_pass[1]}' WHERE asc_name = '{asc_name}' AND
+				class_name_a = '{act_class}' AND class_name_b = '{pass_class}'"""))
 		return sql_queue
 
 	def pass_asc_to_sql (self,lines_pass):
@@ -526,19 +576,16 @@ class NL_SQL_Transformer():
 						mult_act = ["0","*"]
 					if token.lemma_ == "must":
 						mult_act = ["1","1"]
-			op_name = asc_name + pass_class + "()"
 			sql_queue.extend((
 				f"{self.__sql_ins_class} ('{act_class}'),('{pass_class}')",
 
 				f"""{self.__sql_ins_act_asc} '{asc_name}','{act_class}',
 				'{pass_class}')""",
 
-				f"""UPDATE associations SET mult_a_1 = '{mult_act[0]}',
-				mult_a_2 = '{mult_act[1]}' WHERE asc_name = '{asc_name}' AND
-				class_a = '{act_class}' AND class_b = '{pass_class}'""",
+				f"""UPDATE associations SET lower_a = '{mult_act[0]}',
+				upper_a = '{mult_act[1]}' WHERE asc_name = '{asc_name}' AND
+				class_name_a = '{act_class}' AND class_name_b = '{pass_class}'"""))
 
-				f"""{self.__sql_ins_op} ('{op_name}','{act_class}',
-				'{pass_class}')"""))
 		return sql_queue
 
 	def transform_nl_sql (self,output=[],lines_attr=[],lines_gen=[],lines_comp=[],
@@ -688,6 +735,18 @@ class SQL_NL_Transformer():
 			attr_sentences.append((f"{inf.a(subj)} has {inf.a(obj)}.").capitalize())
 		return attr_sentences
 
+	def gen_to_nl(self,gen_df):
+		gen_sent = []
+		for index, row in gen_df.iterrows():
+			subj = row[0]
+			obj = row[1]
+			if subj.isupper() is False:
+				subj = self.__separate_noun(subj)
+			if obj.isupper() is False:
+				obj = self.__separate_noun(obj)
+			gen_sent.append((f"{inf.a(subj)} is {inf.a(obj)}.").capitalize())
+		return gen_sent
+
 	def asc_to_nl(self,asc_df):
 		"""
 		Creates sentences from the association table.
@@ -710,7 +769,6 @@ class SQL_NL_Transformer():
 				[1] = Passive sentence
 		"""
 
-		gen_sent = []
 		comp_sent = []
 		asc_sent = []
 		for index, row in asc_df.iterrows():
@@ -724,14 +782,15 @@ class SQL_NL_Transformer():
 				subj = self.__separate_noun(subj)
 			if obj.isupper() is False:
 				obj = self.__separate_noun(obj)
-			# Generalization
-			if asc_type == "generalization":
-				gen_sent.append((f"{inf.a(subj)} is {inf.a(obj)}.").capitalize())
 			# Composition
-			if asc_type == "composition":
-				comp_sent.append((f"{inf.a(subj)} is part of {inf.a(obj)}.").capitalize())
+			if asc_type == "composite":
+				comp_sent.append((f"{inf.a(obj)} is part of {inf.a(subj)}.").capitalize())
+				modal_comp = "can"
+				if mult_subj == "1":
+					modal_comp = "must"
+				comp_sent.append((f"{inf.a(subj)} {modal_comp} have {inf.a(obj)}.").capitalize())
 			# Active/Passive Association
-			if asc_type == "association":
+			if asc_type == "none":
 				if mult_subj == "0":
 					modal_act = "can"
 				if mult_subj == "1":
@@ -743,7 +802,7 @@ class SQL_NL_Transformer():
 				verb_pass = getInflection(verb,tag="VBD")
 				asc_sent.append([(f"""{inf.a(subj)} {modal_act} {verb} {inf.a(obj)}.""").capitalize(),
 								(f"""{inf.a(obj)} {modal_pass} be {verb_pass[0]} by {inf.a(subj)}.""").capitalize()])
-		return gen_sent, comp_sent, asc_sent
+		return comp_sent, asc_sent
 
 	def transform_sql_nl(self,dataframes):
 		"""
@@ -756,7 +815,7 @@ class SQL_NL_Transformer():
 			be in the following order:
 				0 = classes table
 				1 = attributes table
-				2 = operations table
+				2 = generalization table
 				3 = associations table
 
 		Returns
@@ -766,10 +825,11 @@ class SQL_NL_Transformer():
 		"""
 		df_class = dataframes[0]
 		df_attr = dataframes[1]
-		df_op = dataframes[2]
+		df_gen = dataframes[2]
 		df_asc = dataframes[3]
 		attr_sentences = self.attr_to_nl(df_attr)
-		gen_sent, comp_sent, asc_sent = self.asc_to_nl(df_asc)
+		comp_sent, asc_sent = self.asc_to_nl(df_asc)
+		gen_sent = self.gen_to_nl(df_gen)
 		sentences = []
 		for sen in attr_sentences:
 			sentences.append(sen)

@@ -1,11 +1,11 @@
 @startuml
-class DailyStatistics{
+class DailyStatistic{
 }
 
-class WeeklyStatistics{
+class WeeklyStatistic{
 }
 
-class SalesStatistics{
+class SalesStatistic{
 + sales
 + turnover
 + margin
@@ -90,8 +90,8 @@ class SuV {
 + DriveType
 }
 
-SalesStatistics <|-- DailyStatistics
-SalesStatistics <|-- WeeklyStatistics
+SalesStatistic <|-- DailyStatistic
+SalesStatistic <|-- WeeklyStatistic
 VehiclePurchase <|-- Leasing 
 VehiclePurchase <|-- Financing
 VehiclePurchase <|-- CashPurchase
@@ -104,11 +104,11 @@ PassengerVehicle <|-- Convertible
 PassengerVehicle <|-- Sedan 
 PassengerVehicle <|-- SuV 
 
-WeeklyStatistics "1..*" *-- "0..*" DailyStatistics
-SalesStatistics "1..*" *-- "0..*" VehiclePurchase 
+WeeklyStatistic "1..*" *-- "0..*" DailyStatistic
+SalesStatistic "1..*" *-- "0..*" VehiclePurchase 
 
 
-Employee "1..1" -- "0..*" VehiclePurchase: advises
-Customer "1..*" -- "1..*" VehiclePurchase: makes
-VehiclePurchase "0..*" -- "1..*" Vehicle: sells
+Employee "1..*" -- "0..*" VehiclePurchase: advise
+Customer "1..*" -- "1..*" VehiclePurchase: make
+VehiclePurchase "0..*" -- "1..*" Vehicle: sell
 @enduml

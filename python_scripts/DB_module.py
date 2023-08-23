@@ -96,32 +96,31 @@ class DB_Handler:
 		# Create DB-structure:
 		curs.execute("""CREATE TABLE classes
 						(class_name VARCHAR NOT NULL PRIMARY KEY)""")
+		curs.execute("""CREATE TABLE generalizations
+						(super_class VARCHAR NOT NULL, 
+						sub_class VARCHAR NOT NULL,
+						PRIMARY KEY(super_class,sub_class),
+						FOREIGN KEY(super_class) REFERENCES classes(class_name),
+						FOREIGN KEY(sub_class) REFERENCES classes(class_name))
+						""")
 		curs.execute("""CREATE TABLE attributes
 						(attr_name VARCHAR NOT NULL, 
 						class_name VARCHAR NOT NULL,
 						PRIMARY KEY(attr_name,class_name),
 						FOREIGN KEY(class_name) REFERENCES classes(class_name))
 						""")
-		curs.execute("""CREATE TABLE operations
-						(op_name VARCHAR NOT NULL,
-						class_name VARCHAR NOT NULL,
-						class_b VARCHAR,
-						PRIMARY KEY(op_name,class_name),
-						FOREIGN KEY(class_name) REFERENCES classes(class_name),
-						FOREIGN KEY(class_b) REFERENCES classes(class_name))
-						""")
 		curs.execute("""CREATE TABLE associations
 						(asc_name VARCHAR NOT NULL,
-						asc_type VARCHAR,
-						class_a VARCHAR NOT NULL,
-						class_b VARCHAR NOT NULL,
-						mult_a_1 VARCHAR,
-						mult_a_2 VARCHAR,
-						mult_b_1 VARCHAR,
-						mult_b_2 VARCHAR,
-						PRIMARY KEY(asc_name,class_a,class_b)
-						FOREIGN KEY(class_a) REFERENCES classes(class_name),
-						FOREIGN KEY(class_b) REFERENCES classes(class_name))
+						agg_kind VARCHAR,
+						class_name_a VARCHAR NOT NULL,
+						class_name_b VARCHAR NOT NULL,
+						lower_a VARCHAR,
+						upper_a VARCHAR,
+						lower_b VARCHAR,
+						upper_b VARCHAR,
+						PRIMARY KEY(asc_name,class_name_a,class_name_b)
+						FOREIGN KEY(class_name_a) REFERENCES classes(class_name),
+						FOREIGN KEY(class_name_b) REFERENCES classes(class_name))
 						""")
 		conn.commit()
 		conn.close()
@@ -186,10 +185,10 @@ class DB_Handler:
 		-------
 		df_class : pandas.DataFrame
 			The classes table
+		df_gen : pandas.Dataframe
+			The generalizations table
 		df_attr : pandas.DataFrame
 			The attribute table
-		df_op : pandas.DataFrame
-			The operations table
 		df_asc : pandas.DataFrame
 			The associations table
 
@@ -203,6 +202,15 @@ class DB_Handler:
 			SELECT * FROM classes
 			""")
 		df_class = pd.DataFrame(curs.fetchall(),columns=["class_name"])
+
+		# Read generalizations table:------------------------------------------
+		curs.execute("""
+			SELECT * FROM generalizations
+			""")
+		df_gen = pd.DataFrame(
+							curs.fetchall(),
+							columns=["class_name_a","class_name_b"])
+
 		# Read attributes table:-------------------------------------------
 		curs.execute("""
 			SELECT * FROM attributes
@@ -210,24 +218,18 @@ class DB_Handler:
 		df_attr = pd.DataFrame(
 							curs.fetchall(),
 							columns=["attr_name","class_name"])
-		# Read operations table:------------------------------------------
-		curs.execute("""
-			SELECT * FROM operations
-			""")
-		df_op = pd.DataFrame(
-							curs.fetchall(),
-							columns=["op_name","class_name","class_b"])
+
 		# Read associations table:-----------------------------------------
 		curs.execute("""
 			SELECT * FROM associations
 			""")
 		df_asc = pd.DataFrame(
 							curs.fetchall(),
-							columns=["asc_name", "asc_type","class_a", 
-							"class_b", "mult_a_1","mult_a_2", "mult_b_1", 
-							"mult_b_2"])
+							columns=["asc_name", "agg_kind","class_name_a", 
+							"class_name_b", "lower_a","upper_a", "lower_b", 
+							"upper_b"])
 		conn.close()
-		output = [df_class,df_attr,df_op,df_asc]
+		output = [df_class,df_attr,df_gen,df_asc]
 		return output
 
 	def delete_db_file(self, project_name):
@@ -267,9 +269,9 @@ class DB_Handler:
 		curs.execute("""
 			DELETE from attributes;
 			""")
-		# Truncate operations table:
+		# Truncate generalizations table:
 		curs.execute("""
-			DELETE from operations;
+			DELETE from generalizations;
 			""")
 		# Truncate associations table:
 		curs.execute("""
