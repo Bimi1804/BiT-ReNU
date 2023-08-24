@@ -72,13 +72,29 @@ class SQL_UML_Transformer():
 
 		plant_asc = ""
 		for i in generalization:
-			plant_asc = plant_asc + f"{i[1]} <|-- {i[0]}\n"
+			plant_asc = plant_asc + f"{i[0]} <|-- {i[1]}\n"
+
 
 		for i in composition:
-			plant_asc = plant_asc + f"{i[1]} \"{i[3]}..{i[4]}\" *-- \"{i[5]}..{i[6]}\" {i[2]}\n"
+			if str(i[3]) == "None" and str(i[4]) == "None" and str(i[5]) == "None" and str(i[6]) == "None":
+				plant_asc = plant_asc + f"{i[1]} *-- {i[2]}\n"
+			elif str(i[3]) == "None" and str(i[4]) == "None":
+				plant_asc = plant_asc + f"{i[1]} *-- \"{i[5]}..{i[6]}\" {i[2]}\n"
+			elif str(i[5]) == "None" and str(i[6]) == "None":
+				plant_asc = plant_asc + f"{i[1]} \"{i[3]}..{i[4]}\" *-- {i[2]}\n"
+			else:
+				plant_asc = plant_asc + f"{i[1]} \"{i[3]}..{i[4]}\" *-- \"{i[5]}..{i[6]}\" {i[2]}\n"
 
 		for i in associations:
-			plant_asc = plant_asc + f"{i[1]} \"{i[3]}..{i[4]}\" -- \"{i[5]}..{i[6]}\" {i[2]}: {i[0]}\n"
+			if str(i[3]) == "None" and str(i[4]) == "None" and str(i[5]) == "None" and str(i[6]) == "None":
+				plant_asc = plant_asc + f"{i[1]} -- {i[2]}\n"
+
+			if str(i[3]) == "None" and str(i[4]) == "None":
+				plant_asc = plant_asc + f"{i[1]} -- \"{i[5]}..{i[6]}\" {i[2]}: {i[0]}\n"
+			elif str(i[5]) == "None" and str(i[6]) == "None":
+				plant_asc = plant_asc + f"{i[1]} \"{i[3]}..{i[4]}\" -- {i[2]}: {i[0]}\n"
+			else:
+				plant_asc = plant_asc + f"{i[1]} \"{i[3]}..{i[4]}\" -- \"{i[5]}..{i[6]}\" {i[2]}: {i[0]}\n"
 
 		plantuml = f"@startuml\n\n{plant_class}{plant_asc}\n@enduml"
 		return plantuml
@@ -121,7 +137,6 @@ class UML_SQL_Transformer():
 			class_content = plant_txt[class_content_start+1:class_content_end].replace("\n","")
 			plant_txt = plant_txt[class_content_end+1:]
 			class_attr = []
-			class_op = []
 			while "+" in class_content:
 				plus_index = []
 				for i in range(len(class_content)):
@@ -135,8 +150,6 @@ class UML_SQL_Transformer():
 				elif len(plus_index) == 1:
 					item = class_content[plus_index[0]+1:]
 					class_content = ""
-				if "()" in item:
-					class_op.append(item)
 				if "()" not in item:
 					class_attr.append(item)
 			sql_statements.append(f"""INSERT OR IGNORE INTO classes(class_name) VALUES ('{class_name.replace(" ","")}')""")
@@ -162,23 +175,36 @@ class UML_SQL_Transformer():
 			sql_statements.append(f"""INSERT OR IGNORE INTO generalizations(super_class,sub_class) 
 													VALUES ('{gen[:arrow]}','{gen[arrow+4:]}')""")
 		for line in composition:
-			pointer = line.find('"')
-			class_a = line[:pointer]
-			line = line[pointer:]
-			pointer = line.find("..")
-			low_a = line[:pointer].replace('"',"")
-			line = line[pointer+2:]
-			pointer = line.find('"')
-			up_a = line[:pointer].replace('"',"")
-			line = line[pointer+1:]
-			line = line[line.find('"')+1:]
-			pointer = line.find("..")
-			low_b = line[:pointer]
-			line = line[pointer:]
-			pointer = line.find('"')
-			up_b = line[:pointer].replace("..","")
-			line = line[pointer+1:]
-			class_b = line
+			mid_point = line.find("*--")
+			# first part (before *--)
+			first_half = line[:mid_point]
+			if first_half.find('"') >= 0:
+				pointer = first_half.find('"')
+				class_a = first_half[:pointer]
+				low_a = "1"
+				up_a = "*"
+			first_half = line[:mid_point]
+			if first_half.find('"') < 0:
+				class_a = first_half
+				low_a = "1"
+				up_a = "*"
+			# second part (after *--)
+			second_half = line[mid_point+3:]
+			if second_half.find('"') >= 0:
+				pointer = second_half.find('"')
+				second_half = second_half[pointer:]
+				pointer = second_half.find("..")
+				low_b = second_half[:pointer].replace('"',"")
+				second_half = second_half[pointer+2:]
+				pointer = second_half.find('"')
+				up_b = second_half[:pointer].replace('"',"")
+				second_half = second_half[pointer+1:]
+				class_b = second_half
+			second_half = line[mid_point+3:]
+			if second_half.find('"') < 0:
+				class_b = second_half
+				low_b = None
+				up_b = None 
 			sql_statements.append(f"""INSERT OR IGNORE INTO associations(asc_name,agg_kind,
 									class_name_a,class_name_b,lower_a,upper_a,lower_b,upper_b) 
 									VALUES ('is part of','composite','{class_a}','{class_b}','{low_a}','{up_a}','{low_b}','{up_b}')""")
@@ -188,27 +214,46 @@ class UML_SQL_Transformer():
 			if line != "" and line != "@enduml":
 				associations.append(line)
 		for line in associations:
-			pointer = line.find('"')
-			class_a = line[:pointer]
-			line = line[pointer:]
-			pointer = line.find("..")
-			lower_a = line[:pointer].replace('"',"")
-			line = line[pointer+2:]
-			pointer = line.find('"')
-			upper_a = line[:pointer].replace('"',"")
-			line = line[pointer+1:]
-			line = line[line.find('"')+1:]
-			pointer = line.find("..")
-			lower_b = line[:pointer]
-			line = line[pointer:]
-			pointer = line.find('"')
-			upper_b = line[:pointer].replace("..","")
-			line = line[pointer+1:]
-			pointer = line.find(":")
-			class_b = line[:pointer]
-			asc_name = line[pointer+1:]
+			mid_point = line.find("--")
+			# first part (before --)
+			first_half = line[:mid_point]
+			if first_half.find('"') >= 0:
+				pointer = first_half.find('"')
+				class_a = first_half[:pointer]
+				first_half = first_half[pointer:]
+				pointer = first_half.find("..")
+				low_a = first_half[:pointer].replace('"',"")
+				first_half = first_half[pointer+2:]
+				pointer = first_half.find('"')
+				up_a = first_half[:pointer].replace('"',"")
+			first_half = line[:mid_point]
+			if first_half.find('"') < 0:
+				class_a = first_half
+				low_a = None
+				up_a = None
+			# second part (after --)
+			second_half = line[mid_point+2:]
+			if second_half.find('"') >= 0:
+				pointer = second_half.find('"')
+				second_half = second_half[pointer:]
+				pointer = second_half.find("..")
+				low_b = second_half[:pointer].replace('"',"")
+				second_half = second_half[pointer+2:]
+				pointer = second_half.find('"')
+				up_b = second_half[:pointer].replace('"',"")
+				second_half = second_half[pointer+1:]
+				pointer = second_half.find(":")
+				class_b = second_half[:pointer]
+				asc_name = second_half[pointer+1:]
+			second_half = line[mid_point+2:]
+			if second_half.find('"') < 0:
+				pointer = second_half.find(":")
+				class_b = second_half[:pointer]
+				asc_name = second_half[pointer+1:]
+				low_b = None
+				up_b = None 			
 			sql_statements.append(f"""INSERT OR IGNORE INTO associations
 									(agg_kind,asc_name,class_name_a,class_name_b,lower_a,upper_a,lower_b,upper_b) 
-									VALUES ('none','{asc_name}','{class_a}','{class_b}','{lower_a}','{upper_a}','{lower_b}','{upper_b}')""")
+									VALUES ('none','{asc_name}','{class_a}','{class_b}','{low_a}','{up_a}','{low_b}','{up_b}')""")
 		return sql_statements
 

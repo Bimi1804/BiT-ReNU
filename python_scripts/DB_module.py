@@ -209,7 +209,7 @@ class DB_Handler:
 			""")
 		df_gen = pd.DataFrame(
 							curs.fetchall(),
-							columns=["class_name_a","class_name_b"])
+							columns=["super_class","sub_class"])
 
 		# Read attributes table:-------------------------------------------
 		curs.execute("""

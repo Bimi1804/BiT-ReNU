@@ -1,114 +1,113 @@
 @startuml
-class DailyStatistic{
-}
 
-class WeeklyStatistic{
-}
-
-class SalesStatistic{
-+ sales
+class SaleStatistic {
++ sale
 + turnover
 + margin
 }
 
-class CashPurchase{
-+ Amount
+class CashPurchase {
++ amount
 }
 
 class Leasing {
-+ Contract
-+ LeasingAmount
-+ Month
-+ ResidualValue
++ contractNumber
++ leasingAmount
++ month
++ value
 }
 
-class Financing{
-+ Contract
-+ CreditAmount
-+ Instalments
-+ Month
-+ ResidualAmount
+class Financing {
++ contractNumber
++ creditAmount
++ instalment
++ month
++ amount
 }
 
 class VehiclePurchase {
-+ Purchase
-+ Contract
-+ Price
-+ Date
-+ Margin
++ purchase
++ contractNumber
++ purchasePrice
++ date
++ margin
 }
 
-class Employee{
-+ PersonnelID
+class Employee {
++ employeeNumber
 }
 
 class Customer {
-+ CustomerID
-+ Name
-+ Street
-+ ZIPCode
-+ City
++ customerNumber
++ name
++ street
++ zipCode
++ city
 }
 
-class CorporateCustomer{
-+ Name
-+ CompanyType
-+ PaymentTarget
+class Corporatecustomer {
++ name
++ company
++ paymentTarget
 }
 
-class PrivateCustomer{
-+ PaymentType
+class Privatecustomer {
++ paymentType
 }
 
 class Vehicle {
-+ VehicleID
-+ ManufacturingYear
++ vehicleNumber
++ manufacture
 }
 
-class PassengerVehicle{
-+ Seats
+class PassengerVehicle {
++ seat
 }
 
-class Truck{
-+ Payload
-+ Type
+class Truck {
++ payload
++ type
 }
 
 class Motorcycle {
-+ Seats
++ seat
 }
 
 class Convertible {
-+ HoodType
++ hood
 }
 
 class Sedan {
-+ RearEndType
++ end
 }
 
-class SuV {
-+ DriveType
+class Suv {
++ drive
 }
 
-SalesStatistic <|-- DailyStatistic
-SalesStatistic <|-- WeeklyStatistic
-VehiclePurchase <|-- Leasing 
+class DayStatistic {
+}
+
+class WeekStatistic {
+}
+
+SaleStatistic <|-- DayStatistic
+SaleStatistic <|-- WeekStatistic
+VehiclePurchase <|-- Leasing
 VehiclePurchase <|-- Financing
 VehiclePurchase <|-- CashPurchase
-Customer <|-- CorporateCustomer
-Customer <|-- PrivateCustomer
+Customer <|-- Corporatecustomer
+Customer <|-- Privatecustomer
 Vehicle <|-- PassengerVehicle
 Vehicle <|-- Truck
 Vehicle <|-- Motorcycle
-PassengerVehicle <|-- Convertible 
-PassengerVehicle <|-- Sedan 
-PassengerVehicle <|-- SuV 
-
-WeeklyStatistic "1..*" *-- "0..*" DailyStatistic
-SalesStatistic "1..*" *-- "0..*" VehiclePurchase 
-
-
-Employee "1..*" -- "0..*" VehiclePurchase: advise
+PassengerVehicle <|-- Convertible
+PassengerVehicle <|-- Sedan
+PassengerVehicle <|-- Suv
+WeekStatistic "1..*" *-- "0..*" DayStatistic
+SaleStatistic "1..*" *-- VehiclePurchase
 Customer "1..*" -- "1..*" VehiclePurchase: make
 VehiclePurchase "0..*" -- "1..*" Vehicle: sell
+Employee "1..*" -- VehiclePurchase: advise
+
 @enduml

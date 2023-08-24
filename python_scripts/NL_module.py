@@ -383,21 +383,21 @@ class NL_SQL_Transformer():
 		"""
 		sql_queue = []
 		for line in lines_gen:
-			parent = ""
-			child = ""
+			super_class = ""
+			sub_class = ""
 			for token in line:
 				if token.dep_ == "compound":
 					if "subj" in token.head.dep_:
-						parent = self.__get_compound_class_name(token)
+						sub_class = self.__get_compound_class_name(token)
 					if "attr" in token.head.dep_:
-						child = self.__get_compound_class_name(token)
+						super_class = self.__get_compound_class_name(token)
 				if "subj" in token.dep_:
-					parent = self.__get_class_name(token,parent)
+					sub_class = self.__get_class_name(token,sub_class)
 				if "attr" in token.dep_:
-					child = self.__get_class_name(token,child)
+					super_class = self.__get_class_name(token,super_class)
 			sql_queue.extend((
-				f"{self.__sql_ins_class} ('{child}'),('{parent}')",
-				f"{self.__sql_ins_gen}('{parent}','{child}')"))
+				f"{self.__sql_ins_class} ('{super_class}'),('{sub_class}')",
+				f"{self.__sql_ins_gen}('{super_class}','{sub_class}')"))
 		return sql_queue
 
 	def comp_to_sql (self,lines_comp):
@@ -418,60 +418,51 @@ class NL_SQL_Transformer():
 		"""
 
 		sql_queue = []
-		lines_comp_act = []
 		lines_comp_pass = []
+		lines_comp_act = []
 		for line in lines_comp:
-			for token in line:
-				if token.dep_ == "aux":
-					lines_comp_pass.append(line)
-					break
-				lines_comp_act.append(line)
-				
+		    if any(token.dep_ == "aux" for token in line):
+		        lines_comp_pass.append(line)
+		    else:
+		        lines_comp_act.append(line)
+
 		for line in lines_comp_act:
 			class_name_a = ""
 			class_name_b = ""
-
 			for token in line:
 				if token.dep_ == "compound":
 					if "subj" in token.head.dep_:
-						class_name_a = self.__get_compound_class_name(token)
-					if "obj" in token.head.dep_:
 						class_name_b = self.__get_compound_class_name(token)
+					if "obj" in token.head.dep_:
+						class_name_a = self.__get_compound_class_name(token)
 				if "subj" in token.dep_:
-					class_name_a = self.__get_class_name(token,class_name_a)
-				if "obj" in token.dep_:
 					class_name_b = self.__get_class_name(token,class_name_b)
+				if "obj" in token.dep_:
+					class_name_a = self.__get_class_name(token,class_name_a)
 			sql_queue.extend((
 				f"{self.__sql_ins_class} ('{class_name_a}'),('{class_name_b}')",
 
-				f"{self.__sql_ins_comp}'{class_name_a}','{class_name_b}')",
-
-				f"""UPDATE associations SET lower_b = '{mult_comp[0]}',
-				upper_b = '{mult_comp[1]}' WHERE asc_name = 'is part of' AND
-				class_name_a = '{class_name_a}' AND class_name_b = '{class_name_b}'"""))
-
-###############################################################################################################
-# Problem: Multiplicity leer lassen, wenn kein "can|must have" Satz vorhanden ist!
-# Dieses Konzept dann überall durchführen -> Auch eine Möglichkeit finden, dass man bei Association keine Multi haben kann wenn ein Satz fehlt.
-
+				f"{self.__sql_ins_comp}'{class_name_a}','{class_name_b}')"))
+			
 		for line in lines_comp_pass:
 			class_name_a = ""
 			class_name_b = ""
-			mult_comp = ["0","*"]
 			for token in line:
 				if token.dep_ == "compound":
 					if "subj" in token.head.dep_:
-						class_name_b = self.__get_compound_class_name(token)
-					if "obj" in token.head.dep_:
 						class_name_a = self.__get_compound_class_name(token)
+					if "obj" in token.head.dep_:
+						class_name_b = self.__get_compound_class_name(token)
 				if "subj" in token.dep_:
-					class_name_b = self.__get_class_name(token,class_name_b)
-				if "obj" in token.dep_:
 					class_name_a = self.__get_class_name(token,class_name_a)
-				
-				if token.dep_ == "aux":						
+				if "obj" in token.dep_:
+					class_name_b = self.__get_class_name(token,class_name_b)
+				if token.dep_ == "aux":
+					if token.lemma_ =="can":
+						mult_comp = ["0","*"]						
 					if token.lemma_ == "must":
 						mult_comp = ["1","*"]
+
 			sql_queue.extend((
 				f"{self.__sql_ins_class} ('{class_name_a}'),('{class_name_b}')",
 
@@ -480,7 +471,6 @@ class NL_SQL_Transformer():
 				f"""UPDATE associations SET lower_b = '{mult_comp[0]}',
 				upper_b = '{mult_comp[1]}' WHERE asc_name = 'is part of' AND
 				class_name_a = '{class_name_a}' AND class_name_b = '{class_name_b}'"""))
-
 		return sql_queue
 
 ###############################################################################################################
@@ -575,7 +565,7 @@ class NL_SQL_Transformer():
 					if token.lemma_ == "can":
 						mult_act = ["0","*"]
 					if token.lemma_ == "must":
-						mult_act = ["1","1"]
+						mult_act = ["1","*"]
 			sql_queue.extend((
 				f"{self.__sql_ins_class} ('{act_class}'),('{pass_class}')",
 
@@ -738,8 +728,8 @@ class SQL_NL_Transformer():
 	def gen_to_nl(self,gen_df):
 		gen_sent = []
 		for index, row in gen_df.iterrows():
-			subj = row[0]
-			obj = row[1]
+			obj = row[0]
+			subj = row[1]
 			if subj.isupper() is False:
 				subj = self.__separate_noun(subj)
 			if obj.isupper() is False:
@@ -785,23 +775,30 @@ class SQL_NL_Transformer():
 			# Composition
 			if asc_type == "composite":
 				comp_sent.append((f"{inf.a(obj)} is part of {inf.a(subj)}.").capitalize())
-				modal_comp = "can"
-				if mult_subj == "1":
-					modal_comp = "must"
-				comp_sent.append((f"{inf.a(subj)} {modal_comp} have {inf.a(obj)}.").capitalize())
+				if mult_subj != "None":
+					if mult_subj == "0":
+						modal_comp = "can"
+					if mult_subj == "1":
+						modal_comp = "must"
+					comp_sent.append((f"{inf.a(subj)} {modal_comp} have {inf.a(obj)}.").capitalize())
 			# Active/Passive Association
 			if asc_type == "none":
-				if mult_subj == "0":
-					modal_act = "can"
-				if mult_subj == "1":
-					modal_act = "must"
-				if mult_obj == "0":
-					modal_pass = "can"
-				if mult_obj == "1":
-					modal_pass = "must"
-				verb_pass = getInflection(verb,tag="VBD")
-				asc_sent.append([(f"""{inf.a(subj)} {modal_act} {verb} {inf.a(obj)}.""").capitalize(),
-								(f"""{inf.a(obj)} {modal_pass} be {verb_pass[0]} by {inf.a(subj)}.""").capitalize()])
+				act_sentence = ""
+				pass_sentence = ""
+				if mult_subj != "None":
+					if mult_subj == "0":
+						modal_act = "can"
+					if mult_subj == "1":
+						modal_act = "must"
+					act_sentence = (f"""{inf.a(subj)} {modal_act} {verb} {inf.a(obj)}.""").capitalize()
+				if mult_obj != "None":
+					if mult_obj == "0":
+						modal_pass = "can"
+					if mult_obj == "1":
+						modal_pass = "must"
+					verb_pass = getInflection(verb,tag="VBD")
+					pass_sentence = (f"""{inf.a(obj)} {modal_pass} be {verb_pass[0]} by {inf.a(subj)}.""").capitalize()
+				asc_sent.append([act_sentence,pass_sentence])
 		return comp_sent, asc_sent
 
 	def transform_sql_nl(self,dataframes):
@@ -839,5 +836,6 @@ class SQL_NL_Transformer():
 			sentences.append(sen)
 		for sen_pair in asc_sent:
 			for sen in sen_pair:
-				sentences.append(sen)
+				if sen != "":
+					sentences.append(sen)
 		return sentences

@@ -1,56 +1,56 @@
-A sales statistic has a Number of sales.
-A sales statistic has a total turnover.
-A sales statistic has a total margin.
+A sale statistic has a sale.
+A sale statistic has a turnover.
+A sale statistic has a margin.
 A cash purchase has an amount.
 A leasing has a contract number.
 A leasing has a leasing amount.
 A leasing has a month.
-A leasing has a residual value.
+A leasing has a value.
 A financing has a contract number.
 A financing has a credit amount.
 A financing has an instalment.
 A financing has a month.
-A financing has a residual amount.
+A financing has an amount.
 A vehicle purchase has a purchase.
 A vehicle purchase has a contract number.
 A vehicle purchase has a purchase price.
 A vehicle purchase has a date.
 A vehicle purchase has a margin.
-An employee has a personnel ID.
-A customer has a customer ID.
+An employee has a employee number.
+A customer has a customer number.
 A customer has a name.
 A customer has a street.
 A customer has a zip code.
 A customer has a city.
-A corporate customer has a name.
-A corporate customer has a type of company.
-A corporate customer has a payment target.
-A private customer has a payment type.
-A vehicle has a vehicle ID
-A vehicle has a year of manufacture.
-A passenger vehicle has a number of seats.
+A corporatecustomer has a name.
+A corporatecustomer has a company.
+A corporatecustomer has a payment target.
+A privatecustomer has a payment type.
+A vehicle has a vehicle Number.
+A vehicle has a manufacture.
+A passenger vehicle has a seat.
 A truck has a payload.
 A truck has a type.
-A motorcycle has a number of seats.
-A convertible has a type of hood.
-A sedan has a type of rear end.
-A su v has a type of drive.
-A day statistic is a sales statistic.
-A week statistic is a sales statistic.
-A Leasing is a vehicle purchase.
-A Financing is a vehicle purchase.
+A motorcycle has a seat.
+A convertible has a hood.
+A sedan has an end.
+A suv has a drive.
+A day statistic is a sale statistic.
+A week statistic is a sale statistic.
+A leasing is a vehicle purchase.
+A financing is a vehicle purchase.
 A cash purchase is a vehicle purchase.
-A corporate customer is a customer.
-A private customer is a customer.
+A corporatecustomer is a customer.
+A privatecustomer is a customer.
 A passenger vehicle is a vehicle.
 A truck is a vehicle.
 A motorcycle is a vehicle.
 A convertible is a passenger vehicle.
 A sedan is a passenger vehicle.
-An SUV is a passenger vehicle.
+A suv is a passenger vehicle.
 A day statistic is part of a week statistic.
-A vehicle purchase is part of a sales statistic.
-An employee can advise a vehicle purchase.
+A week statistic can have a day statistic.
+A vehicle purchase is part of a sale statistic.
 A vehicle purchase must be advised by an employee.
 A customer must make a vehicle purchase.
 A vehicle purchase must be made by a customer.
