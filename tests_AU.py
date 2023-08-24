@@ -1,0 +1,1 @@
+# Tests for altering in UML class model

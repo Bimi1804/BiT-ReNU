@@ -54,15 +54,15 @@ plant_uml = original_uml
 db_mod.create_new_project(project_name)
 db_mod.set_curr_project(project_name)
 # UML -> DB:
-sql_statements = uml_sql.plantuml_to_sql(plant_uml)
-db_mod.write_to_db(sql_statements)
+"""sql_statements = uml_sql.plantuml_to_sql(plant_uml)
+db_mod.write_to_db(sql_statements)"""
 
 # NL -> DB:
 # Filter NL:	
-"""filtered_nl = nl_filter.filter_nl(original_nl)
+filtered_nl = nl_filter.filter_nl(original_nl)
 sql_queues = nl_sql.transform_nl_sql(filtered_nl)
 db_mod.truncate_tables()
-db_mod.write_to_db(sql_queues)"""
+db_mod.write_to_db(sql_queues)
 
 
 #################

@@ -45,23 +45,23 @@ class Customer {
 + city
 }
 
-class Corporatecustomer {
+class Corporate {
 + name
 + company
 + paymentTarget
 }
 
-class Privatecustomer {
+class Private {
 + paymentType
 }
 
 class Vehicle {
 + vehicleNumber
-+ manufacture
++ manufactureYear
 }
 
 class PassengerVehicle {
-+ seat
++ seatNumber
 }
 
 class Truck {
@@ -70,7 +70,7 @@ class Truck {
 }
 
 class Motorcycle {
-+ seat
++ seatNumber
 }
 
 class Convertible {
@@ -78,7 +78,7 @@ class Convertible {
 }
 
 class Sedan {
-+ end
++ rear
 }
 
 class Suv {
@@ -96,18 +96,18 @@ SaleStatistic <|-- WeekStatistic
 VehiclePurchase <|-- Leasing
 VehiclePurchase <|-- Financing
 VehiclePurchase <|-- CashPurchase
-Customer <|-- Corporatecustomer
-Customer <|-- Privatecustomer
+Customer <|-- Corporate
+Customer <|-- Private
 Vehicle <|-- PassengerVehicle
 Vehicle <|-- Truck
 Vehicle <|-- Motorcycle
 PassengerVehicle <|-- Convertible
 PassengerVehicle <|-- Sedan
 PassengerVehicle <|-- Suv
-WeekStatistic "1..*" *-- "0..*" DayStatistic
-SaleStatistic "1..*" *-- VehiclePurchase
+WeekStatistic "1..*" *-- "1..*" DayStatistic
+SaleStatistic "1..*" *-- "0..*" VehiclePurchase
 Customer "1..*" -- "1..*" VehiclePurchase: make
 VehiclePurchase "0..*" -- "1..*" Vehicle: sell
-Employee "1..*" -- VehiclePurchase: advise
+Employee "1..*" -- "0..*" VehiclePurchase: advise
 
 @enduml
