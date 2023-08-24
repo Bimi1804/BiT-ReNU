@@ -54,8 +54,8 @@ plant_uml = original_uml
 db_mod.create_new_project(project_name)
 db_mod.set_curr_project(project_name)
 # UML -> DB:
-"""sql_statements = uml_sql.plantuml_to_sql(plant_uml)
-db_mod.write_to_db(sql_statements)"""
+sql_statements = uml_sql.plantuml_to_sql(plant_uml)
+db_mod.write_to_db(sql_statements)
 
 # NL -> DB:
 # Filter NL:	
@@ -75,9 +75,7 @@ print(uml_new)
 
 
 # SQL -> NL:
-
-nl_new = sql_nl.transform_sql_nl(df)
-						
+nl_new = sql_nl.transform_sql_nl(df)					
 """for line in nl_new:
 	print(line)"""
 
