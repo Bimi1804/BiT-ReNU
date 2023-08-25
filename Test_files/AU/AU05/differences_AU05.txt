@@ -1,0 +1,5 @@
+Sentences only in Original NL:
+An employee has an employee number.
+
+Sentences only in new NL:
+An employee has a name.

@@ -1,0 +1,5 @@
+Sentences only in Original NL:
+A day statistic is a sale statistic.
+
+Sentences only in new NL:
+A day statistic is a week statistic.

@@ -1,0 +1,4 @@
+Sentences only in Original NL:
+A week statistic must have a day statistic.
+
+Sentences only in new NL:

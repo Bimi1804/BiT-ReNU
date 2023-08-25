@@ -1,0 +1,5 @@
+Sentences only in Original NL:
+An employee can advise a vehicle purchase.
+
+Sentences only in new NL:
+An employee must advise a vehicle purchase.

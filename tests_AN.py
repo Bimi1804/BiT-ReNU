@@ -325,7 +325,6 @@ an_18(input_UML_path,
 	"An employee can advise a vehicle purchase.",
 	"An employee can advise a competitor.")
 
-##################TO CHECK##########################
 # ---- AN.19: Passive Association: Edit Subject – new subject exists ---- #
 an_19(input_UML_path,
 	"A vehicle purchase must be advised by an employee.",

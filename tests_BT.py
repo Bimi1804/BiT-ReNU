@@ -58,7 +58,7 @@ def bt_01(uml_input_path):
 
 
 def bt_02(nl_input_path):
-	# get input UML:
+	# get input NL:
 	with open(nl_input_path) as file:
 		lines = file.readlines()
 		nl_input = []

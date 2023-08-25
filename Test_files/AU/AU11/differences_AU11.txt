@@ -1,0 +1,5 @@
+Sentences only in Original NL:
+A vehicle purchase must sell a vehicle.
+A vehicle can be sold by a vehicle purchase.
+
+Sentences only in new NL:

@@ -1,0 +1,5 @@
+Sentences only in Original NL:
+
+Sentences only in new NL:
+A vehicle purchase must have a week statistic.
+A week statistic is part of a vehicle purchase.
