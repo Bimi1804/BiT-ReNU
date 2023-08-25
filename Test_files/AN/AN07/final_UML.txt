@@ -1,0 +1,114 @@
+@startuml
+
+class SaleStatistic {
++ sale
++ turnover
++ margin
+}
+
+class CashPurchase {
++ amount
+}
+
+class Leasing {
++ contractNumber
++ leasingAmount
++ month
++ value
+}
+
+class Financing {
++ contractNumber
++ creditAmount
++ instalment
++ month
++ amount
+}
+
+class VehiclePurchase {
++ purchase
++ contractNumber
++ purchasePrice
++ date
++ margin
+}
+
+class Employee {
++ employeeNumber
+}
+
+class Customer {
++ customerNumber
++ name
++ street
++ zipCode
++ city
+}
+
+class Corporate {
++ name
++ company
++ paymentTarget
+}
+
+class Private {
++ paymentType
+}
+
+class Vehicle {
++ vehicleNumber
++ manufactureYear
+}
+
+class PassengerVehicle {
++ seatNumber
+}
+
+class Truck {
++ payload
++ type
+}
+
+class Motorcycle {
++ seatNumber
+}
+
+class Convertible {
++ hood
+}
+
+class Sedan {
++ rear
+}
+
+class Suv {
++ drive
+}
+
+class DayStatistic {
+}
+
+class WeekStatistic {
+}
+
+SaleStatistic <|-- DayStatistic
+SaleStatistic <|-- WeekStatistic
+VehiclePurchase <|-- Leasing
+VehiclePurchase <|-- Financing
+VehiclePurchase <|-- CashPurchase
+Customer <|-- Corporate
+Customer <|-- Private
+Vehicle <|-- PassengerVehicle
+Vehicle <|-- Truck
+Vehicle <|-- Motorcycle
+PassengerVehicle <|-- Convertible
+PassengerVehicle <|-- Sedan
+PassengerVehicle <|-- Suv
+Customer <|-- Employee
+WeekStatistic "1..*" *-- "1..*" DayStatistic
+SaleStatistic "1..*" *-- "0..*" VehiclePurchase
+Customer "1..*" -- "1..*" VehiclePurchase: make
+VehiclePurchase "0..*" -- "1..*" Vehicle: sell
+Employee "1..*" -- "0..*" VehiclePurchase: advise
+
+@enduml

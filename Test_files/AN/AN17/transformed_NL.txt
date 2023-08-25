@@ -1,0 +1,60 @@
+A sale statistic has a sale.
+A sale statistic has a turnover.
+A sale statistic has a margin.
+A cash purchase has an amount.
+A leasing has a contract number.
+A leasing has a leasing amount.
+A leasing has a month.
+A leasing has a value.
+A financing has a contract number.
+A financing has a credit amount.
+A financing has an instalment.
+A financing has a month.
+A financing has an amount.
+A vehicle purchase has a purchase.
+A vehicle purchase has a contract number.
+A vehicle purchase has a purchase price.
+A vehicle purchase has a date.
+A vehicle purchase has a margin.
+An employee has an employee number.
+A customer has a customer number.
+A customer has a name.
+A customer has a street.
+A customer has a zip code.
+A customer has a city.
+A corporate has a name.
+A corporate has a company.
+A corporate has a payment target.
+A private has a payment type.
+A vehicle has a vehicle number.
+A vehicle has a manufacture year.
+A passenger vehicle has a seat number.
+A truck has a payload.
+A truck has a type.
+A motorcycle has a seat number.
+A convertible has a hood.
+A sedan has a rear.
+A suv has a drive.
+A day statistic is a sale statistic.
+A week statistic is a sale statistic.
+A leasing is a vehicle purchase.
+A financing is a vehicle purchase.
+A cash purchase is a vehicle purchase.
+A corporate is a customer.
+A private is a customer.
+A passenger vehicle is a vehicle.
+A truck is a vehicle.
+A motorcycle is a vehicle.
+A convertible is a passenger vehicle.
+A sedan is a passenger vehicle.
+A suv is a passenger vehicle.
+A day statistic is part of a week statistic.
+A week statistic must have a day statistic.
+A vehicle purchase is part of a sale statistic.
+A sale statistic can have a vehicle purchase.
+A customer must make a vehicle purchase.
+A vehicle purchase must be made by a customer.
+A vehicle purchase must sell a vehicle.
+A vehicle can be sold by a vehicle purchase.
+An employee can advise a vehicle.
+A vehicle purchase must be advised by an employee.

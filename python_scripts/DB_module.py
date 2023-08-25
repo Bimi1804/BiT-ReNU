@@ -87,7 +87,6 @@ class DB_Handler:
 		# Check if project already exists:
 		db_path = self.root_folder +"\\project_databases\\"+ project_name +".db"
 		if os.path.isfile(db_path) is True:
-			print("Project already exists!")
 			return False
 
 		# Connect to DB:
