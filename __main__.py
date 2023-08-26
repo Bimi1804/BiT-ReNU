@@ -1,24 +1,67 @@
-import time
-from memory_profiler import memory_usage
+# BiT-ReNU
 
-def test_function():
-    # Just an example function that creates a list of squares
-    return [i * i for i in range(100000)]
+#------------------------------ Folder Paths ----------------------------------#
+import os
+script_path = os.path.abspath(__file__)
+main_folder = os.path.dirname(script_path)
 
-def measure_function(func):
-    start_time = time.time()
-    # Measure memory usage. The returned result is a list of memory consumption 
-    # values in MiB every 'interval' seconds (here 0.1 seconds)
-    mem_usage = memory_usage((func, ), interval=0.1)
-    end_time = time.time()
-    exec_time = end_time - start_time
-    # We'll return the maximum memory usage during the function execution and 
-    # the total execution time. 
-    # Note: mem_usage might contain only a single value if your function is very fast.
-    return max(mem_usage), exec_time
+#------------------------------ Import Modules --------------------------------#
+from python_scripts.DB_module import *
+from python_scripts.NL_module import *
+from python_scripts.UML_module import *
 
-if __name__ == '__main__':
-    # Assuming that the existing script's main code starts from this point
-    memory, duration = measure_function(test_function)
-    print(f"Memory used: {memory:.2f} MiB")
-    print(f"Execution time: {duration:.2f} seconds")
+#------------------------------ Initiate Modules ------------------------------#
+# DB-Module:
+db_mod = DB_Handler()
+# NL-Module:
+nl_filter = NL_Filter()
+nl_sql = NL_SQL_Transformer()
+sql_nl = SQL_NL_Transformer()
+# UML-Module:
+sql_uml = SQL_UML_Transformer()
+uml_sql = UML_SQL_Transformer()
+
+#------------------------------ define basic functions ------------------------#
+def uml_to_nl(uml_input, project_name="UML_project"):
+    # Set up new project:
+    db_mod.create_new_project(project_name)
+    db_mod.set_curr_project(project_name)
+    # UML -> SQL:
+    sql_statements = uml_sql.plantuml_to_sql(uml_input)
+    db_mod.write_to_db(sql_statements)
+    # SQL-> NL:
+    df = db_mod.read_all_db()
+    final_NL = sql_nl.transform_sql_nl(df)
+    # Delete project DB:
+    db_mod.delete_db_file(project_name)
+    return final_NL
+
+
+def nl_to_uml(nl_input, project_name="NL_project"):
+    # Set up new project:
+    db_mod.create_new_project(project_name)
+    db_mod.set_curr_project(project_name)
+    # NL -> SQL:
+    filtered_nl = nl_filter.filter_nl(nl_input)
+    sql_queues = nl_sql.transform_nl_sql(filtered_nl)
+    db_mod.write_to_db(sql_queues)
+    # SQL -> UML:
+    df = db_mod.read_all_db()
+    final_UML = sql_uml.sql_to_plantuml(df)
+    # Delete project DB:
+    db_mod.delete_db_file(project_name)
+    return final_UML
+
+#------------------------------------------------------------------------------#
+
+
+with open(main_folder + "\\Test_files\\NL_Testing.txt") as file:
+    lines = file.readlines()
+    nl_input = []
+    for l in lines:
+        l = l.replace("\n","")
+        nl_input.append(l)
+
+
+transformed_UML = nl_to_uml(nl_input)
+print(transformed_UML)
