@@ -17,7 +17,7 @@ Tool description:
 --------------------------------------------------------------------------------------
 This tool can import requirements in natural language (NL) or as a UML class model in the plantuml notation. The tool is then able to transform the imported requirements into a db-schema that functinos as an intermediate model. The tool can also transform the intermediate model into NL/UML, enabling the transformation from NL/UML into UML/NL.
 
-NOTE: The tool has limitations that are described in the master thesis "Bidirectional transformation of natural-language requirements to and from UML class models for Model-Driven Development" by Markus Bimassl-
+NOTE: The tool has limitations that are described in the master thesis "Bidirectional transformation of natural-language requirements to and from UML class models for Model-Driven Development" by Markus Bimassl.
 
 
 
@@ -25,9 +25,16 @@ NOTE: The tool has limitations that are described in the master thesis "Bidirect
 File descriptions:
 --------------------------------------------------------------------------------------
 
-CODE:
-----
-The tool for the tool is located in "python_scripts"
+BiT-ReNU example script:
+------------------------
+bitrenu.py:
+File to try out BiT-ReNU.
+
+
+
+BiT-ReNU Modules:
+-----------------
+The code for the tool is located in "python_scripts"
 
 DB_module.py:
 Holds all functions that are needed to connect to the database, as well as read and write to it.
@@ -39,20 +46,70 @@ UML_module.py:
 Holds all functions that are needed to transform requirements from a UML class model into the intermediate model representation, as well as the reverse transformations from the intermediate model into a UML class model.
 
 
+
+Additional BiT-ReNU files:
+--------------------------
+project_databases:
+The folder where BiT-ReNU stores the project databases.
+
+
+Test scripts:
+-------------
+The scripts that were used to perform several validation and performance tests.
+
+test_AN.py:
+"AN" -> "Alterations in NL"
+All tests were UML is tranformed into NL, then NL is changed, and then NL is
+transformed back to UML.
+
+test_AU.py:
+"AU" -> "Alterations in UML"
+All tests were NL is transformed into UML, then UML is changed, and then UML is
+transformed back to NL.
+
+test_BT.py:
+"BT" -> "Bidirectional Transformation"
+Tests were the roundtripping (UML -> NL -> UML, NL -> UML -> NL) is tested.
+
+test_PT.py:
+"PT" -> "Performance Tests"
+Tests that measure execution time and memory usage of one-way (NL -> UML or 
+UML -> NL) transformations.
+
+
+Test files and documentation:
+-----------------------------
+Additional files for testing. Input/Output files and documentation. Can be found
+in the "Test_files" folder.
+
+AN:
+All files used/created during the "Alterations in NL" tests.
+
+AU:
+All files used/created during the "Alterations in UML" tests.
+
+BT:
+All files used/created during the "Bidirectional Transformation" tests.
+
+PT:
+All files used/created during the "Performance Tests" tests.
+
+test_documentation.xlsx:
+Simple documentation of the performed tests.
+
+
+
 Additional files/folder:
 -----------------------
+requirements.txt:
+The used python modules.
 
-Manually_transformed_Tests:
-Holds the files that were manually created for the Validation tests that were conducted as part of the master thesis.
+IREB_modeling_practice_exam:
+The IREB CPRE-AL Modeling practice exam. The sample class model/requirements for
+the performed tests was derived from one of the exam models. 
 
 SLR:
 Holds the documentation of the systematic literature search that was conducted as part of the master thesis.
-
-Validation_Tests:
-Holds all files that were created during the validation tests that were conducted as part of the master thesis.
-
-eval_tests.py:
-The python script that was used to conduct the validation tests.
 
 
 
@@ -72,25 +129,6 @@ pip install -U spacy
 python -m spacy download en_core_web_sm
 
 
-----------
-
-The functions from the python files can simply be imported and used. However, some libraries are needed for each script:
-
-DB_module.py:
-- sqlite3
-- os
-- pandas
-
-NL_module.py:
-- re
-- lemminflect
-- inflect
-- spacy
-
-UML_module.py:
-- os
-- pandas
-
 
 
 
@@ -98,6 +136,6 @@ How to use the tool:
 --------------------------------------------------------------------------------------
 The master thesis "Bidirectional transformation of natural-language requirements to and from UML class models for Model-Driven Development" explains the general dataflow between the modules, the user, the database, and a plantuml-file.
 
-Additionally, the file eval_test.py can be used as an example of how to use the individual functions of the tool.
+Additionally, the file bitrenu.py can be used as an example of how to use the individual functions of the tool.
 
 

@@ -82,7 +82,9 @@ def nl_to_uml(nl_input, project_name="NL_project"):
     db_mod.delete_db_file(project_name)
     return final_UML
 
-#------------------------------------------------------------------------------#
+
+
+#----------------------------- Use BiT-ReNU ------------------------------------#
 
 # Import a NL file:
 with open(main_folder+"\\Test_files\\PT\\PT06\\input_NL_PT04.txt") as file:

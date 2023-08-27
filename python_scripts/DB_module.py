@@ -72,6 +72,11 @@ class DB_Handler:
 	def create_new_project(self, project_name):
 		"""
 		Create a new database file and create the database structure.
+		Tables created:
+			- classes
+			- generalizations
+			- attributes
+			- associations
 
 		Parameters
 		---------
@@ -190,7 +195,6 @@ class DB_Handler:
 			The attribute table
 		df_asc : pandas.DataFrame
 			The associations table
-
 		"""
 		if self.curr_project is None:
 			print("No active project selected!")

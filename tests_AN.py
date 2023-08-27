@@ -27,9 +27,9 @@ uml_sql = UML_SQL_Transformer()
 
 # ---- General functions to add/delete whole sentences ----#
 def change_sentence(uml_input_path,change_type,sentence,project_name,edited_sentence=""):
-    """
-    1. Transform a UML into NL.
-    2. Change a sentence in the transformed NL. Change can be:
+	"""
+	1. Transform a UML into NL.
+	2. Change a sentence in the transformed NL. Change can be:
 		- Add a sentence
 		- Delete a sentence
 		- Edit a sentence
@@ -39,8 +39,8 @@ def change_sentence(uml_input_path,change_type,sentence,project_name,edited_sent
 		- changed_NL.txt : The transformed NL with changes.
 		- final_UML.txt : The UML, transformed from the changed NL.
 
-    Parameters
-    ----------
+	Parameters
+	----------
 	uml_input_path : str
 		The path to the UML input file.
 
@@ -60,16 +60,15 @@ def change_sentence(uml_input_path,change_type,sentence,project_name,edited_sent
 	edited_sentence : str
 		If a sentence should be edited. This is the new version of the sentence.
 
-
 	Created Files
-    -------------
-    transformed_NL.txt
-    	The transformed NL without changes.
+	-------------
+	transformed_NL.txt
+		The transformed NL without changes.
 	changed_NL.txt
 		The transformed NL with changes.
 	final_UML.txt
 		The UML, transformed from the changed NL.
-    """
+	"""
 
 	# get input UML:
 	with open(uml_input_path) as file:

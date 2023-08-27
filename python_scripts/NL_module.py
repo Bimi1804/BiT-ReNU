@@ -219,9 +219,6 @@ class NL_SQL_Transformer():
 		Static part of the sql statement to insert compositions.
 	__sql_ins_act_asc : str
 		Static part of the sql statement to insert active associations.
-	__sql_ins_op : str
-		Static part of the sql statement to insert operations.
-
 
 	Methods
 	-------
@@ -416,7 +413,6 @@ class NL_SQL_Transformer():
 			A list of sql statements for the given sentences.
 
 		"""
-
 		sql_queue = []
 		lines_comp_pass = []
 		lines_comp_act = []
@@ -425,7 +421,6 @@ class NL_SQL_Transformer():
 		        lines_comp_pass.append(line)
 		    else:
 		        lines_comp_act.append(line)
-
 		for line in lines_comp_act:
 			class_name_a = ""
 			class_name_b = ""
@@ -443,7 +438,6 @@ class NL_SQL_Transformer():
 				f"{self.__sql_ins_class} ('{class_name_a}'),('{class_name_b}')",
 
 				f"{self.__sql_ins_comp}'{class_name_a}','{class_name_b}')"))
-			
 		for line in lines_comp_pass:
 			class_name_a = ""
 			class_name_b = ""
@@ -462,7 +456,6 @@ class NL_SQL_Transformer():
 						mult_comp = ["0","*"]						
 					if token.lemma_ == "must":
 						mult_comp = ["1","*"]
-
 			sql_queue.extend((
 				f"{self.__sql_ins_class} ('{class_name_a}'),('{class_name_b}')",
 
@@ -472,8 +465,6 @@ class NL_SQL_Transformer():
 				upper_b = '{mult_comp[1]}' WHERE asc_name = 'is part of' AND
 				class_name_a = '{class_name_a}' AND class_name_b = '{class_name_b}'"""))
 		return sql_queue
-
-###############################################################################################################
  
 	def act_asc_to_sql (self,lines_act):
 		"""
@@ -492,7 +483,6 @@ class NL_SQL_Transformer():
 			A list of sql statements for the given sentences.
 
 		"""
-
 		sql_queue = []
 		for line in lines_act:
 			act_class = ""
@@ -514,7 +504,6 @@ class NL_SQL_Transformer():
 						mult_pass = ["0","*"]
 					if token.lemma_ == "must":
 						mult_pass = ["1","*"]
-
 			sql_queue.extend((
 				f"{self.__sql_ins_class} ('{act_class}'),('{pass_class}')",
 
@@ -543,7 +532,6 @@ class NL_SQL_Transformer():
 			A list of sql statements for the given sentences.
 
 		"""
-
 		sql_queue = []
 		for line in lines_pass:
 			act_class = ""
@@ -568,14 +556,11 @@ class NL_SQL_Transformer():
 						mult_act = ["1","*"]
 			sql_queue.extend((
 				f"{self.__sql_ins_class} ('{act_class}'),('{pass_class}')",
-
 				f"""{self.__sql_ins_act_asc} '{asc_name}','{act_class}',
 				'{pass_class}')""",
-
 				f"""UPDATE associations SET lower_a = '{mult_act[0]}',
 				upper_a = '{mult_act[1]}' WHERE asc_name = '{asc_name}' AND
 				class_name_a = '{act_class}' AND class_name_b = '{pass_class}'"""))
-
 		return sql_queue
 
 	def transform_nl_sql (self,output=[],lines_attr=[],lines_gen=[],lines_comp=[],
@@ -636,6 +621,8 @@ class SQL_NL_Transformer():
 		Separates concatenated class or attribute names.
 	attr_to_nl(pandas.DataFrame) : list(str)
 		Creates sentences from the attributes table.
+	gen_to_nl(pandas.DataFrame) : list(str)
+		Creates sentences from the generalizations table.
 	asc_to_nl(pandas.DataFrame) : list(str),list(str),list(str)
 		Creates sentences from the association table.
 	transform_sql_nl(list(pandas.Dataframe)) : list(str)
@@ -726,6 +713,19 @@ class SQL_NL_Transformer():
 		return attr_sentences
 
 	def gen_to_nl(self,gen_df):
+		"""
+		Creates sentences from the generalizations table.
+
+		Parameters
+		----------
+		gen_df : pandas.DataFrame
+			The generalizations table from the sql database as a pandas Dataframe.
+
+		Returns
+		-------
+		gen_sent : list(str)
+			A list of the generated sentences.
+		"""
 		gen_sent = []
 		for index, row in gen_df.iterrows():
 			obj = row[0]
@@ -758,7 +758,6 @@ class SQL_NL_Transformer():
 				[0] = Active sentence
 				[1] = Passive sentence
 		"""
-
 		comp_sent = []
 		asc_sent = []
 		for index, row in asc_df.iterrows():

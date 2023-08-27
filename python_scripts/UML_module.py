@@ -1,14 +1,12 @@
 # UML Module
 
 ################################## Import #################################
-
 import pandas as pd
 import os
 
 ################################## Classes #################################
 
 class SQL_UML_Transformer():
-
 	"""
 	Transform SQL into UML.
 
@@ -17,8 +15,6 @@ class SQL_UML_Transformer():
 	sql_to_plantuml(list(pandas.Dataframe)) : str
 		Transform dataframes into a string for plantuml. 
 	"""
-
-
 	def __init__(self):
 		pass 
 
@@ -157,8 +153,6 @@ class UML_SQL_Transformer():
 				if attr != "":
 					sql_statements.append(f"""INSERT OR IGNORE INTO attributes(attr_name,class_name) VALUES ('{attr.replace(" ","")}','{class_name.replace(" ","")}')""")
 
-
-		#-----------------------------------------------------
 		generalization = []
 		composition = []
 		plant_asc_lines = plant_txt.splitlines()

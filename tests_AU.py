@@ -27,23 +27,23 @@ uml_sql = UML_SQL_Transformer()
 #--------------------------- Define Test-Functions ----------------------------#
 
 def check_NL_difference(original_NL,changed_NL):
-    """
-    Check the difference between two sets of requirements in NL.
+	"""
+	Check the difference between two sets of requirements in NL.
 
-    Parameters
-    ----------
-    original_NL : list[str]
-        The original list of requirements.
-    changed_NL : list[str]
-        The changed list of requirements.
+	Parameters
+	----------
+	original_NL : list[str]
+	    The original list of requirements.
+	changed_NL : list[str]
+	    The changed list of requirements.
 
-    Returns
-    -------
-    only_original : list[str]
-        A list of sentences, that appear only in the original NL.
-    only_changed : list[str]
-        A list of sentences, that appear only in the changed NL.
-    """
+	Returns
+	-------
+	only_original : list[str]
+	    A list of sentences, that appear only in the original NL.
+	only_changed : list[str]
+	    A list of sentences, that appear only in the changed NL.
+	"""
 	original_set = set(original_NL)
 	changed_set = set(changed_NL)
 	only_original = list(original_set - changed_set)
@@ -51,27 +51,27 @@ def check_NL_difference(original_NL,changed_NL):
 	return only_original,only_changed
 
 def transform_UML_to_NL(original_NL_path,project_name):
-    """
-    Transform a changed UML class model into NL and compare the resulting NL
-    with the original NL.
+	"""
+	Transform a changed UML class model into NL and compare the resulting NL
+	with the original NL.
 
-    Parameters
-    ----------
-    original_NL_path : str
-        The path to the original set of requirements.
+	Parameters
+	----------
+	original_NL_path : str
+	    The path to the original set of requirements.
 
-    project_name : str
-        A name for the proejct. Used for naming the database and for finding the
-        folder of the used and created files.
+	project_name : str
+	    A name for the proejct. Used for naming the database and for finding the
+	    folder of the used and created files.
 
- 	Created Files
-    -------------
-    final_NL_{project_name}.txt
-    	The final transformed NL.   
+	Created Files
+	-------------
+	final_NL_{project_name}.txt
+		The final transformed NL.   
 
 	differences_{project_name}.txt
 		The differences between the original NL and the final NL.		
-    """
+	"""
 	# get original NL:
 	with open(original_NL_path) as file:
 		lines = file.readlines()
