@@ -7,7 +7,6 @@ main_folder = os.path.dirname(script_path)
 PT_folder = main_folder + "\\Test_files\\PT"
 
 #------------------------------ Import Modules --------------------------------#
-
 import time
 from memory_profiler import memory_usage
 import csv
@@ -35,6 +34,24 @@ uml_sql = UML_SQL_Transformer()
 
 # ---- Simple Transformation functions ---- #
 def nl_to_uml(input_NL):
+    """
+    Check the difference between two sets of requirements in NL.
+
+    Parameters
+    ----------
+    original_NL : list[str]
+        The original list of requirements.
+    changed_NL : list[str]
+        The changed list of requirements.
+
+    Returns
+    -------
+    only_original : list[str]
+        A list of sentences, that appear only in the original NL.
+    only_changed : list[str]
+        A list of sentences, that appear only in the changed NL.
+    """
+
 	# NL -> SQL:
 	filtered_nl = nl_filter.filter_nl(input_NL)
 	sql_queues = nl_sql.transform_nl_sql(filtered_nl)
@@ -158,17 +175,19 @@ if __name__ == '__main__':
 	#performance_test_UML_to_NL("PT01")
 
 	# ---- PT02: UML to NL, size: X*2 ---- #
-	performance_test_UML_to_NL("PT02")
+	#performance_test_UML_to_NL("PT02")
 
-	# ---- PT03: UML to NL, size: X*4 ---- #
+	# ---- PT03: UML to NL, size: X*3 ---- #
+	#performance_test_UML_to_NL("PT03")
 
 	# ---- PT04: NL to UML, size: Y ---- #
 	#performance_test_NL_to_UML("PT04")
 
 	# ---- PT05: NL to UML, size: Y*2 ---- #
-	performance_test_NL_to_UML("PT05")
+	#performance_test_NL_to_UML("PT05")
 
-	# ---- PT06: NL to UML, size: Y*4 ---- #
+	# ---- PT06: NL to UML, size: Y*3 ---- #
+	#performance_test_NL_to_UML("PT06")
 
 
 		

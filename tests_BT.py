@@ -26,6 +26,23 @@ uml_sql = UML_SQL_Transformer()
 #--------------------------- Define Test-Functions ----------------------------#
 
 def bt_01(uml_input_path):
+    """
+    Transform a UML into NL and then back into UML. Created files are stored
+    in the BT_01 folder.
+
+    Parameters
+    ----------
+    uml_input_path : str
+        The path to the UML class model as plantuml.
+
+ 	Created Files
+    -------------
+	intermediary_NL.txt    	
+		The intermediary NL.   
+
+	final_UML.txt
+			The final UML class model as plantuml.		
+    """
 	# get input UML:
 	with open(uml_input_path) as file:
 		uml_input = file.read()
@@ -58,6 +75,23 @@ def bt_01(uml_input_path):
 
 
 def bt_02(nl_input_path):
+    """
+    Transform a NL into UML and then back into NL. Created files are stored
+    in the BT_02 folder.
+
+    Parameters
+    ----------
+    nl_input_path : str
+        The path to the set of requirements in NL.
+
+ 	Created Files
+    -------------
+   	intermediary_UML.txt
+			The intermediary UML class model as plantuml.		
+
+	final_NL.txt    	
+		The final set of requirements in NL.   
+    """
 	# get input NL:
 	with open(nl_input_path) as file:
 		lines = file.readlines()
@@ -95,10 +129,10 @@ def bt_02(nl_input_path):
 #--------------------------- Perform Tests ------------------------------------#
 
 # ----  BT.01 ---- #
-bt_01(BT_folder+"\\BT_01\\input_BT01.txt")
+#bt_01(BT_folder+"\\BT_01\\input_BT01.txt")
 
 # ----  BT.02 ---- #
-bt_02(BT_folder+"\\BT_02\\input_BT02.txt")
+#bt_02(BT_folder+"\\BT_02\\input_BT02.txt")
 
 
 

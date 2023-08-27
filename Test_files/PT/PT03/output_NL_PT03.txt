@@ -1,0 +1,178 @@
+A sale statistic has a sale.
+A sale statistic has a turnover.
+A sale statistic has a margin.
+A cash purchase has an amount.
+A leasing has a contract number.
+A leasing has a leasing amount.
+A leasing has a month.
+A leasing has a value.
+A financing has a contract number.
+A financing has a credit amount.
+A financing has an instalment.
+A financing has a month.
+A financing has an amount.
+A vehicle purchase has a purchase.
+A vehicle purchase has a contract number.
+A vehicle purchase has a purchase price.
+A vehicle purchase has a date.
+A vehicle purchase has a margin.
+An employee has an employee number.
+A customer has a customer number.
+A customer has a name.
+A customer has a street.
+A customer has a zip code.
+A customer has a city.
+A corporate has a name.
+A corporate has a company.
+A corporate has a payment target.
+A private has a payment type.
+A vehicle has a vehicle number.
+A vehicle has a manufacture year.
+A passenger vehicle has a seat number.
+A truck has a payload.
+A truck has a type.
+A motorcycle has a seat number.
+A convertible has a hood.
+A sedan has a rear.
+A suv has a drive.
+A sale test has a sale.
+A sale test has a turnover.
+A sale test has a margin.
+A cash test has an amount.
+A leasing test has a contract number.
+A leasing test has a leasing amount.
+A leasing test has a month.
+A leasing test has a value.
+A financing test has a contract number.
+A financing test has a credit amount.
+A financing test has an instalment.
+A financing test has a month.
+A financing test has an amount.
+A purchase test has a purchase.
+A purchase test has a contract number.
+A purchase test has a purchase price.
+A purchase test has a date.
+A purchase test has a margin.
+An employee test has an employee number.
+A customer test has a customer number.
+A customer test has a name.
+A customer test has a street.
+A customer test has a zip code.
+A customer test has a city.
+A company has a name.
+A company has a company.
+A company has a payment target.
+A car test has a hood.
+A person has a payment type.
+A vehicle test has a vehicle number.
+A vehicle test has a manufacture year.
+A passenger test has a seat number.
+A truck test has a payload.
+A truck test has a type.
+A motorcycle test has a seat number.
+A sedan test has a rear.
+A suv test has a drive.
+A sale record has a sale.
+A sale record has a turnover.
+A sale record has a margin.
+A cash record has an amount.
+A leasing record has a contract number.
+A leasing record has a leasing amount.
+A leasing record has a month.
+A leasing record has a value.
+A financing record has a contract number.
+A financing record has a credit amount.
+A financing record has an instalment.
+A financing record has a month.
+A financing record has an amount.
+A purchase record has a purchase.
+A purchase record has a contract number.
+A purchase record has a purchase price.
+A purchase record has a date.
+A purchase record has a margin.
+An employee record has an employee number.
+A customer record has a customer number.
+A customer record has a name.
+A customer record has a street.
+A customer record has a zip code.
+A customer record has a city.
+An organization has a name.
+An organization has a company.
+An organization has a payment target.
+A car record has a hood.
+A human has a payment type.
+A vehicle record has a vehicle number.
+A vehicle record has a manufacture year.
+A passenger record has a seat number.
+A truck record has a payload.
+A truck record has a type.
+A motorcycle record has a seat number.
+A sedan record has a rear.
+A suv record has a drive.
+A day statistic is a sale statistic.
+A week statistic is a sale statistic.
+A leasing is a vehicle purchase.
+A financing is a vehicle purchase.
+A cash purchase is a vehicle purchase.
+A corporate is a customer.
+A private is a customer.
+A passenger vehicle is a vehicle.
+A truck is a vehicle.
+A motorcycle is a vehicle.
+A convertible is a passenger vehicle.
+A sedan is a passenger vehicle.
+A suv is a passenger vehicle.
+A day test is a sale test.
+A week test is a sale test.
+A leasing test is a purchase test.
+A financing test is a purchase test.
+A cash test is a purchase test.
+A person is a customer test.
+A company is a customer test.
+A passenger test is a vehicle test.
+A truck test is a vehicle test.
+A motorcycle test is a vehicle test.
+A car test is a passenger test.
+A sedan test is a passenger test.
+A suv test is a passenger test.
+A day record is a sale record.
+A week record is a sale record.
+A leasing record is a purchase record.
+A financing record is a purchase record.
+A cash record is a purchase record.
+A human is a customer record.
+An organization is a customer record.
+A passenger record is a vehicle record.
+A truck record is a vehicle record.
+A motorcycle record is a vehicle record.
+A car record is a passenger record.
+A sedan record is a passenger record.
+A suv record is a passenger record.
+A day statistic is part of a week statistic.
+A week statistic must have a day statistic.
+A vehicle purchase is part of a sale statistic.
+A sale statistic can have a vehicle purchase.
+A day test is part of a week test.
+A purchase test is part of a sale test.
+A sale test can have a purchase test.
+A day record is part of a week record.
+A purchase record is part of a sale record.
+A sale record can have a purchase record.
+A customer must make a vehicle purchase.
+A vehicle purchase must be made by a customer.
+A vehicle purchase must sell a vehicle.
+A vehicle can be sold by a vehicle purchase.
+An employee can advise a vehicle purchase.
+A vehicle purchase must be advised by an employee.
+A customer test must make a purchase test.
+A purchase test must be made by a customer test.
+A purchase test must sell a vehicle test.
+A vehicle test can be sold by a purchase test.
+An employee test can advise a purchase test.
+A purchase test must be advised by an employee test.
+A customer record must make a purchase record.
+A purchase record must be made by a customer record.
+A purchase record must sell a vehicle record.
+A vehicle record can be sold by a purchase record.
+An employee record can advise a purchase record.
+A purchase record must be advised by an employee record.

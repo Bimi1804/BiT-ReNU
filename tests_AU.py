@@ -27,6 +27,23 @@ uml_sql = UML_SQL_Transformer()
 #--------------------------- Define Test-Functions ----------------------------#
 
 def check_NL_difference(original_NL,changed_NL):
+    """
+    Check the difference between two sets of requirements in NL.
+
+    Parameters
+    ----------
+    original_NL : list[str]
+        The original list of requirements.
+    changed_NL : list[str]
+        The changed list of requirements.
+
+    Returns
+    -------
+    only_original : list[str]
+        A list of sentences, that appear only in the original NL.
+    only_changed : list[str]
+        A list of sentences, that appear only in the changed NL.
+    """
 	original_set = set(original_NL)
 	changed_set = set(changed_NL)
 	only_original = list(original_set - changed_set)
@@ -34,6 +51,27 @@ def check_NL_difference(original_NL,changed_NL):
 	return only_original,only_changed
 
 def transform_UML_to_NL(original_NL_path,project_name):
+    """
+    Transform a changed UML class model into NL and compare the resulting NL
+    with the original NL.
+
+    Parameters
+    ----------
+    original_NL_path : str
+        The path to the original set of requirements.
+
+    project_name : str
+        A name for the proejct. Used for naming the database and for finding the
+        folder of the used and created files.
+
+ 	Created Files
+    -------------
+    final_NL_{project_name}.txt
+    	The final transformed NL.   
+
+	differences_{project_name}.txt
+		The differences between the original NL and the final NL.		
+    """
 	# get original NL:
 	with open(original_NL_path) as file:
 		lines = file.readlines()
@@ -41,10 +79,8 @@ def transform_UML_to_NL(original_NL_path,project_name):
 		for l in lines:
 			l = l.replace("\n","")
 			original_NL.append(l)
-
 	# get changed UML:
 	input_UML_path = AU_folder+f"\\{project_name}\\changed_UML_{project_name}.txt"
-
 	with open(input_UML_path) as file:
 		changed_UML = file.read()
 	# Set up new project:
@@ -58,8 +94,7 @@ def transform_UML_to_NL(original_NL_path,project_name):
 	final_NL = sql_nl.transform_sql_nl(df)
 	# Compare original NL and new NL:
 	only_original,only_new = check_NL_difference(original_NL,final_NL)
-
-	# Save final NL in .txt file:
+	# Save final_NL in .txt file:
 	with open(AU_folder+f"\\{project_name}\\final_NL_{project_name}.txt", "w") as file:
 		for line in final_NL:
 			file.write(f"{line}\n")
@@ -81,64 +116,64 @@ def transform_UML_to_NL(original_NL_path,project_name):
 original_NL_path = AU_folder+"\\input_AU.txt"
 
 # ---- AU.01: Add Class ---- #
-transform_UML_to_NL(original_NL_path,"AU01")
+#transform_UML_to_NL(original_NL_path,"AU01")
 
 # ---- AU.02: Edit Class name ---- #
-transform_UML_to_NL(original_NL_path,"AU02")
+#transform_UML_to_NL(original_NL_path,"AU02")
 
 # ---- AU.03: Delete Class ---- #
-transform_UML_to_NL(original_NL_path,"AU03")
+#transform_UML_to_NL(original_NL_path,"AU03")
 
 # ---- AU.04: Add Attribute ---- #
-transform_UML_to_NL(original_NL_path,"AU04")
+#transform_UML_to_NL(original_NL_path,"AU04")
 
 # ---- AU.05: Edit Attribute name ---- #
-transform_UML_to_NL(original_NL_path,"AU05")
+#transform_UML_to_NL(original_NL_path,"AU05")
 
 # ---- AU.06: Delete Attribute ---- #
-transform_UML_to_NL(original_NL_path,"AU06")
+#transform_UML_to_NL(original_NL_path,"AU06")
 
 # ---- AU.07: Add Association ---- #
-transform_UML_to_NL(original_NL_path,"AU07")
+#transform_UML_to_NL(original_NL_path,"AU07")
 
 # ---- AU.08: Edit Association Name ---- #
-transform_UML_to_NL(original_NL_path,"AU08")
+#transform_UML_to_NL(original_NL_path,"AU08")
 
 # ---- AU.09: Edit Association End  ---- #
-transform_UML_to_NL(original_NL_path,"AU09")
+#transform_UML_to_NL(original_NL_path,"AU09")
 
 # ---- AU.10: Edit Association End Multiplicity ---- #
-transform_UML_to_NL(original_NL_path,"AU10")
+#transform_UML_to_NL(original_NL_path,"AU10")
 
 # ---- AU.11: Delete Association ---- #
-transform_UML_to_NL(original_NL_path,"AU11")
+#transform_UML_to_NL(original_NL_path,"AU11")
 
 # ---- AU.12: Delete Association End Multiplicity ---- #
-transform_UML_to_NL(original_NL_path,"AU12")
+#transform_UML_to_NL(original_NL_path,"AU12")
 
 # ---- AU.13: Add Composition ---- #
-transform_UML_to_NL(original_NL_path,"AU13")
+#transform_UML_to_NL(original_NL_path,"AU13")
 
 # ---- AU.14: Edit Composition End ---- #
-transform_UML_to_NL(original_NL_path,"AU14")
+#transform_UML_to_NL(original_NL_path,"AU14")
 
 # ---- AU.15: Edit Composition End Multiplicity ---- #
-transform_UML_to_NL(original_NL_path,"AU15")
+#transform_UML_to_NL(original_NL_path,"AU15")
 
 # ---- AU.16: Delete Composition ---- #
-transform_UML_to_NL(original_NL_path,"AU16")
+#transform_UML_to_NL(original_NL_path,"AU16")
 
 # ---- AU.17: Delete Composition End Multiplicity ---- #
-transform_UML_to_NL(original_NL_path,"AU17")
+#transform_UML_to_NL(original_NL_path,"AU17")
 
 # ---- AU.18: Add Generalization ---- #
-transform_UML_to_NL(original_NL_path,"AU18")
+#transform_UML_to_NL(original_NL_path,"AU18")
 
 # ---- AU.19: Edit Generalization End ---- #
-transform_UML_to_NL(original_NL_path,"AU19")
+#transform_UML_to_NL(original_NL_path,"AU19")
 
 # ---- AU.20: Delete Generalization ---- #
-transform_UML_to_NL(original_NL_path,"AU20")
+#transform_UML_to_NL(original_NL_path,"AU20")
 
 
 

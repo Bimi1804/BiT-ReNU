@@ -26,23 +26,51 @@ uml_sql = UML_SQL_Transformer()
 #--------------------------- Define Test-Functions ----------------------------#
 
 # ---- General functions to add/delete whole sentences ----#
-def add_sentence(transformed_NL,sentence):
-	changed_NL = transformed_NL
-	changed_NL.append(sentence)
-	return changed_NL
-
-def delete_sentence(transformed_NL,sentence):
-	changed_NL = transformed_NL
-	changed_NL.remove(sentence)
-	return changed_NL
-
-def edit_sentence(transformed_NL,sentence,edited_sentence):
-	changed_NL = transformed_NL
-	index = changed_NL.index(sentence)
-	changed_NL[index] = edited_sentence
-	return changed_NL
-
 def change_sentence(uml_input_path,change_type,sentence,project_name,edited_sentence=""):
+    """
+    1. Transform a UML into NL.
+    2. Change a sentence in the transformed NL. Change can be:
+		- Add a sentence
+		- Delete a sentence
+		- Edit a sentence
+	3. Transformed the change NL back into UML.
+	4. Save files to the test-folder with the project_name:
+		- transformed_NL.txt : The transformed NL without changes.
+		- changed_NL.txt : The transformed NL with changes.
+		- final_UML.txt : The UML, transformed from the changed NL.
+
+    Parameters
+    ----------
+	uml_input_path : str
+		The path to the UML input file.
+
+	change_type : str
+		The type of change that should be done. Can have one of three values:
+			- "add" : To add a sentence
+			- "delete" : To delete a sentence
+			- "edit" : To edit a sentence (requires edited_sentence)
+
+	sentence : str
+		The sentence that should be changed.
+
+	project_name : str
+		The name of the test. Used to find the right folder and to create the 
+		database.
+
+	edited_sentence : str
+		If a sentence should be edited. This is the new version of the sentence.
+
+
+	Created Files
+    -------------
+    transformed_NL.txt
+    	The transformed NL without changes.
+	changed_NL.txt
+		The transformed NL with changes.
+	final_UML.txt
+		The UML, transformed from the changed NL.
+    """
+
 	# get input UML:
 	with open(uml_input_path) as file:
 		uml_input = file.read()
@@ -57,13 +85,14 @@ def change_sentence(uml_input_path,change_type,sentence,project_name,edited_sent
 	transformed_NL = sql_nl.transform_sql_nl(df)
 	# Add sentence:
 	if change_type == "add":
-		changed_NL = add_sentence(transformed_NL,sentence)
+		changed_NL.append(sentence)
 	# Delete sentence:
 	if change_type == "delete":
-		changed_NL = delete_sentence(transformed_NL,sentence)
+		changed_NL.remove(sentence)
 	# Edit sentence:
 	if change_type == "edit":
-		changed_NL = edit_sentence(transformed_NL,sentence,edited_sentence)
+		index = changed_NL.index(sentence)
+		changed_NL[index] = edited_sentence
 	# changed_NL -> SQL:
 	filtered_nl = nl_filter.filter_nl(changed_NL)
 	sql_queues = nl_sql.transform_nl_sql(filtered_nl)
@@ -73,7 +102,7 @@ def change_sentence(uml_input_path,change_type,sentence,project_name,edited_sent
 	df = db_mod.read_all_db()
 	final_UML = sql_uml.sql_to_plantuml(df)
 	db_mod.delete_db_file(project_name)
-	# Save intermediary NL and final UML class model in .txt files:
+	# Save files to right Test-folder:
 	with open(AN_folder+ f"\\{project_name}\\transformed_NL.txt", "w") as file:
 		for line in transformed_NL:
 			file.write(f"{line}\n")
@@ -296,144 +325,144 @@ input_UML_path = AN_folder+"\\input_AN.txt"
 
 
 # ---- AN.13: Active Association: Edit Subject – new subject exists ---- #
-an_13(input_UML_path,
-	"An employee can advise a vehicle purchase.",
-	"A customer can advise a vehicle purchase.")
+#an_13(input_UML_path,
+#	"An employee can advise a vehicle purchase.",
+#	"A customer can advise a vehicle purchase.")
 
 # ---- AN.14: Active Association: Edit Subject – new subject does not exist ---- #
-an_14(input_UML_path,
-	"An employee can advise a vehicle purchase.",
-	"A boss can advise a vehicle purchase.")
+#an_14(input_UML_path,
+#	"An employee can advise a vehicle purchase.",
+#	"A boss can advise a vehicle purchase.")
 
 # ---- AN.15: Active Association: Switch modal verb ---- #
-an_15(input_UML_path,
-	"An employee can advise a vehicle purchase.",
-	"An employee must advise a vehicle purchase.")
+#an_15(input_UML_path,
+#	"An employee can advise a vehicle purchase.",
+#	"An employee must advise a vehicle purchase.")
 
 # ---- AN.16: Active Association: Edit Action ---- #
-an_16(input_UML_path,
-	"An employee can advise a vehicle purchase.",
-	"An employee can support a vehicle purchase.")
+#an_16(input_UML_path,
+#	"An employee can advise a vehicle purchase.",
+#	"An employee can support a vehicle purchase.")
 
 # ---- AN.17: Active Association: Edit Object – new object exists ---- #
-an_17(input_UML_path,
-	"An employee can advise a vehicle purchase.",
-	"An employee can advise a vehicle.")
+#an_17(input_UML_path,
+#	"An employee can advise a vehicle purchase.",
+#	"An employee can advise a vehicle.")
 
 # ---- AN.18: Active Association: Edit Object– new object does not exist ---- #
-an_18(input_UML_path,
-	"An employee can advise a vehicle purchase.",
-	"An employee can advise a competitor.")
+#an_18(input_UML_path,
+#	"An employee can advise a vehicle purchase.",
+#	"An employee can advise a competitor.")
 
 # ---- AN.19: Passive Association: Edit Subject – new subject exists ---- #
-an_19(input_UML_path,
-	"A vehicle purchase must be advised by an employee.",
-	"A vehicle must be advised by an employee.")
+#an_19(input_UML_path,
+#	"A vehicle purchase must be advised by an employee.",
+#	"A vehicle must be advised by an employee.")
 
 # ---- AN.20: Passive Association: Edit Subject– new subject does not exist ---- #
-an_20(input_UML_path,
-	"A vehicle purchase must be advised by an employee.",
-	"A competitor must be advised by an employee.")
+#an_20(input_UML_path,
+#	"A vehicle purchase must be advised by an employee.",
+#	"A competitor must be advised by an employee.")
 
 # ---- AN.21: Passive Association: Switch modal verb ---- #
-an_21(input_UML_path,
-	"A vehicle purchase must be advised by an employee.",
-	"A vehicle purchase can be advised by an employee.")
+#an_21(input_UML_path,
+#	"A vehicle purchase must be advised by an employee.",
+#	"A vehicle purchase can be advised by an employee.")
 
 # ---- AN.22: Passive Association: Edit Action ---- #
-an_22(input_UML_path,
-	"A vehicle purchase must be advised by an employee.",
-	"A vehicle purchase must be supported by an employee.")
+#an_22(input_UML_path,
+#	"A vehicle purchase must be advised by an employee.",
+#	"A vehicle purchase must be supported by an employee.")
 
 # ---- AN.23: Passive Association: Edit Object – new object exists ---- #
-an_23(input_UML_path,
-	"A vehicle purchase must be advised by an employee.",
-	"A vehicle purchase must be advised by a customer.")
+#an_23(input_UML_path,
+#	"A vehicle purchase must be advised by an employee.",
+#	"A vehicle purchase must be advised by a customer.")
 
 # ---- AN.24: Passive Association: Edit Object – new object does not exist ---- #
-an_24(input_UML_path,
-	"A vehicle purchase must be advised by an employee.",
-	"A vehicle purchase must be advised by a boss.")
+#an_24(input_UML_path,
+#	"A vehicle purchase must be advised by an employee.",
+#	"A vehicle purchase must be advised by a boss.")
 
 # ---- AN.25: Attribute: Edit Subject – new subject exists ---- #
-an_25(input_UML_path,
-	"A sale statistic has a sale.",
-	"A day statistic has a sale.")
+#an_25(input_UML_path,
+#	"A sale statistic has a sale.",
+#	"A day statistic has a sale.")
 
 # ---- AN.26: Attribute: Edit Subject – new subject does not exist ---- #
-an_26(input_UML_path,
-	"A sale statistic has a sale.",
-	"A sale record has a sale.")
+#an_26(input_UML_path,
+#	"A sale statistic has a sale.",
+#	"A sale record has a sale.")
 
 # ---- AN.27: Attribute: Edit Object ---- #
-an_27(input_UML_path,
-	"A sale statistic has a sale.",
-	"A sale statistic has a date.")
+#an_27(input_UML_path,
+#	"A sale statistic has a sale.",
+#	"A sale statistic has a date.")
 
 # ---- AN.28: Generalization: Edit Subject – new subject exists ---- #
-an_28(input_UML_path,
-	"A motorcycle is a vehicle.",
-	"An Employee is a vehicle.")
+#an_28(input_UML_path,
+#	"A motorcycle is a vehicle.",
+#	"An Employee is a vehicle.")
 
 # ---- AN.29: Generalization: Edit Subject – new subject does not exist ---- #
-an_29(input_UML_path,
-	"A motorcycle is a vehicle.",
-	"A bike is a vehicle.")
+#an_29(input_UML_path,
+#	"A motorcycle is a vehicle.",
+#	"A bike is a vehicle.")
 
 # ---- AN.30: Generalization: Edit Object – new object exists ---- #
-an_30(input_UML_path,
-	"A motorcycle is a vehicle.",
-	"A motorcycle is a passenger vehicle.")
+#an_30(input_UML_path,
+#	"A motorcycle is a vehicle.",
+#	"A motorcycle is a passenger vehicle.")
 
 # ---- AN.31: Generalization: Edit Object – new object does not exist ---- #
-an_31(input_UML_path,
-	"A motorcycle is a vehicle.",
-	"A motorcycle is a bike.")
+#an_31(input_UML_path,
+#	"A motorcycle is a vehicle.",
+#	"A motorcycle is a bike.")
 
 # ---- AN.32: Composition T.5: Edit Subject – new subject exists ---- #
-an_32(input_UML_path,
-	"A day statistic is part of a week statistic.",
-	"A vehicle purchase is part of a week statistic.")
+#an_32(input_UML_path,
+#	"A day statistic is part of a week statistic.",
+#	"A vehicle purchase is part of a week statistic.")
 
 # ---- AN.33: Composition T.5: Edit Subject – new subject does not exist ---- #
-an_33(input_UML_path,
-	"A day statistic is part of a week statistic.",
-	"A week record is part of a week statistic.")
+#an_33(input_UML_path,
+#	"A day statistic is part of a week statistic.",
+#	"A week record is part of a week statistic.")
 
 # ---- AN.34: Composition T.5: Edit Object– new object exists ---- #
-an_34(input_UML_path,
-	"A day statistic is part of a week statistic.",
-	"A day statistic is part of a vehicle purchase.")
+#an_34(input_UML_path,
+#	"A day statistic is part of a week statistic.",
+#	"A day statistic is part of a vehicle purchase.")
 
 # ---- AN.35: Composition T.5: Edit Object – new object does not exist ---- #
-an_35(input_UML_path,
-	"A day statistic is part of a week statistic.",
-	"A day statistic is part of a week record.")
+#an_35(input_UML_path,
+#	"A day statistic is part of a week statistic.",
+#	"A day statistic is part of a week record.")
 
 # ---- AN.36: Composition T.6: Edit Subject – new subject exists ---- #
-an_36(input_UML_path,
-	"A week statistic must have a day statistic.",
-	"A vehicle purchase must have a day statistic.")
+#an_36(input_UML_path,
+#	"A week statistic must have a day statistic.",
+#	"A vehicle purchase must have a day statistic.")
 
 # ---- AN.37: Composition T.6: Edit Subject – new subject does not exist ---- #
-an_37(input_UML_path,
-	"A week statistic must have a day statistic.",
-	"A week record must have a day statistic.")
+#an_37(input_UML_path,
+#	"A week statistic must have a day statistic.",
+#	"A week record must have a day statistic.")
 
 # ---- AN.38: Composition T.6: Edit Object– new object exists ---- #
-an_38(input_UML_path,
-	"A week statistic must have a day statistic.",
-	"A week statistic must have a vehicle purchase.")
+#an_38(input_UML_path,
+#	"A week statistic must have a day statistic.",
+#	"A week statistic must have a vehicle purchase.")
 
 # ---- AN.39: Composition T.6: Edit Object – new object does not exist ---- #
-an_39(input_UML_path,
-	"A week statistic must have a day statistic.",
-	"A week statistic must have a week record.")
+#an_39(input_UML_path,
+#	"A week statistic must have a day statistic.",
+#	"A week statistic must have a week record.")
 
 # ---- AN.40: Composition T.6: Switch modal verb ---- #
-an_40(input_UML_path,
-	"A week statistic must have a day statistic.",
-	"A week statistic can have a day statistic.")
+#an_40(input_UML_path,
+#	"A week statistic must have a day statistic.",
+#	"A week statistic can have a day statistic.")
 
 
 

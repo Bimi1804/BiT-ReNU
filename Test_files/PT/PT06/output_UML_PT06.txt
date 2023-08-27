@@ -1,0 +1,331 @@
+@startuml
+
+class SaleStatistic {
++ sale
++ turnover
++ margin
+}
+
+class CashPurchase {
++ amount
+}
+
+class Leasing {
++ contractNumber
++ leasingAmount
++ month
++ value
+}
+
+class Financing {
++ contractNumber
++ creditAmount
++ instalment
++ month
++ amount
+}
+
+class VehiclePurchase {
++ purchase
++ contractNumber
++ purchasePrice
++ date
++ margin
+}
+
+class Employee {
++ employeeNumber
+}
+
+class Customer {
++ customerNumber
++ name
++ street
++ zipCode
++ city
+}
+
+class Corporate {
++ name
++ company
++ paymentTarget
+}
+
+class Private {
++ paymentType
+}
+
+class Vehicle {
++ vehicleNumber
++ manufactureYear
+}
+
+class PassengerVehicle {
++ seatNumber
+}
+
+class Truck {
++ payload
++ type
+}
+
+class Motorcycle {
++ seatNumber
+}
+
+class Convertible {
++ hood
+}
+
+class Sedan {
++ rear
+}
+
+class Suv {
++ drive
+}
+
+class SaleTest {
++ sale
++ turnover
++ margin
+}
+
+class CashTest {
++ amount
+}
+
+class LeasingTest {
++ contractNumber
++ leasingAmount
++ month
++ value
+}
+
+class FinancingTest {
++ contractNumber
++ creditAmount
++ instalment
++ month
++ amount
+}
+
+class PurchaseTest {
++ purchase
++ contractNumber
++ purchasePrice
++ date
++ margin
+}
+
+class EmployeeTest {
++ employeeNumber
+}
+
+class CustomerTest {
++ customerNumber
++ name
++ street
++ zipCode
++ city
+}
+
+class Company {
++ name
++ company
++ paymentTarget
+}
+
+class CarTest {
++ hood
+}
+
+class Person {
++ paymentType
+}
+
+class VehicleTest {
++ vehicleNumber
++ manufactureYear
+}
+
+class PassengerTest {
++ seatNumber
+}
+
+class TruckTest {
++ payload
++ type
+}
+
+class MotorcycleTest {
++ seatNumber
+}
+
+class SedanTest {
++ rear
+}
+
+class SuvTest {
++ drive
+}
+
+class SaleRecord {
++ sale
++ turnover
++ margin
+}
+
+class CashRecord {
++ amount
+}
+
+class LeasingRecord {
++ contractNumber
++ leasingAmount
++ month
++ value
+}
+
+class FinancingRecord {
++ contractNumber
++ creditAmount
++ instalment
++ month
++ amount
+}
+
+class PurchaseRecord {
++ purchase
++ contractNumber
++ purchasePrice
++ date
++ margin
+}
+
+class EmployeeRecord {
++ employeeNumber
+}
+
+class CustomerRecord {
++ customerNumber
++ name
++ street
++ zipCode
++ city
+}
+
+class Organization {
++ name
++ company
++ paymentTarget
+}
+
+class CarRecord {
++ hood
+}
+
+class Human {
++ paymentType
+}
+
+class VehicleRecord {
++ vehicleNumber
++ manufactureYear
+}
+
+class PassengerRecord {
++ seatNumber
+}
+
+class TruckRecord {
++ payload
++ type
+}
+
+class MotorcycleRecord {
++ seatNumber
+}
+
+class SedanRecord {
++ rear
+}
+
+class SuvRecord {
++ drive
+}
+
+class DayStatistic {
+}
+
+class WeekStatistic {
+}
+
+class DayTest {
+}
+
+class WeekTest {
+}
+
+class DayRecord {
+}
+
+class WeekRecord {
+}
+
+SaleStatistic <|-- DayStatistic
+SaleStatistic <|-- WeekStatistic
+VehiclePurchase <|-- Leasing
+VehiclePurchase <|-- Financing
+VehiclePurchase <|-- CashPurchase
+Customer <|-- Corporate
+Customer <|-- Private
+Vehicle <|-- PassengerVehicle
+Vehicle <|-- Truck
+Vehicle <|-- Motorcycle
+PassengerVehicle <|-- Convertible
+PassengerVehicle <|-- Sedan
+PassengerVehicle <|-- Suv
+SaleTest <|-- DayTest
+SaleTest <|-- WeekTest
+PurchaseTest <|-- LeasingTest
+PurchaseTest <|-- FinancingTest
+PurchaseTest <|-- CashTest
+CustomerTest <|-- Person
+CustomerTest <|-- Company
+VehicleTest <|-- PassengerTest
+VehicleTest <|-- TruckTest
+VehicleTest <|-- MotorcycleTest
+PassengerTest <|-- CarTest
+PassengerTest <|-- SedanTest
+PassengerTest <|-- SuvTest
+SaleRecord <|-- DayRecord
+SaleRecord <|-- WeekRecord
+PurchaseRecord <|-- LeasingRecord
+PurchaseRecord <|-- FinancingRecord
+PurchaseRecord <|-- CashRecord
+CustomerRecord <|-- Human
+CustomerRecord <|-- Organization
+VehicleRecord <|-- PassengerRecord
+VehicleRecord <|-- TruckRecord
+VehicleRecord <|-- MotorcycleRecord
+PassengerRecord <|-- CarRecord
+PassengerRecord <|-- SedanRecord
+PassengerRecord <|-- SuvRecord
+WeekStatistic "1..*" *-- "1..*" DayStatistic
+SaleStatistic "1..*" *-- "0..*" VehiclePurchase
+WeekTest "1..*" *-- DayTest
+SaleTest "1..*" *-- "0..*" PurchaseTest
+WeekRecord "1..*" *-- DayRecord
+SaleRecord "1..*" *-- "0..*" PurchaseRecord
+Customer "1..*" -- "1..*" VehiclePurchase: make
+VehiclePurchase "0..*" -- "1..*" Vehicle: sell
+Employee "1..*" -- "0..*" VehiclePurchase: advise
+CustomerTest "1..*" -- "1..*" PurchaseTest: make
+PurchaseTest "0..*" -- "1..*" VehicleTest: sell
+EmployeeTest "1..*" -- "0..*" PurchaseTest: advise
+CustomerRecord "1..*" -- "1..*" PurchaseRecord: make
+PurchaseRecord "0..*" -- "1..*" VehicleRecord: sell
+EmployeeRecord "1..*" -- "0..*" PurchaseRecord: advise
+
+@enduml
