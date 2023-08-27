@@ -1,0 +1,221 @@
+@startuml
+class SaleStatistic {
++ sale
++ turnover
++ margin
+}
+
+class CashPurchase {
++ amount
+}
+
+class Leasing {
++ contractNumber
++ leasingAmount
++ month
++ value
+}
+
+class Financing {
++ contractNumber
++ creditAmount
++ instalment
++ month
++ amount
+}
+
+class VehiclePurchase {
++ purchase
++ contractNumber
++ purchasePrice
++ date
++ margin
+}
+
+class Employee {
++ employeeNumber
+}
+
+class Customer {
++ customerNumber
++ name
++ street
++ zipCode
++ city
+}
+
+class Corporate {
++ name
++ company
++ paymentTarget
+}
+
+class Private {
++ paymentType
+}
+
+class Vehicle {
++ vehicleNumber
++ manufactureYear
+}
+
+class PassengerVehicle {
++ seatNumber
+}
+
+class Truck {
++ payload
++ type
+}
+
+class Motorcycle {
++ seatNumber
+}
+
+class Convertible {
++ hood
+}
+
+class Sedan {
++ rear
+}
+
+class Suv {
++ drive
+}
+
+class DayStatistic {
+}
+
+class WeekStatistic {
+}
+
+class SaleTest {
++ sale
++ turnover
++ margin
+}
+
+class CashTest {
++ amount
+}
+
+class LeasingTest {
++ contractNumber
++ leasingAmount
++ month
++ value
+}
+
+class FinancingTest {
++ contractNumber
++ creditAmount
++ instalment
++ month
++ amount
+}
+
+class PurchaseTest {
++ purchase
++ contractNumber
++ purchasePrice
++ date
++ margin
+}
+
+class EmployeeTest {
++ employeeNumber
+}
+
+class CustomerTest {
++ customerNumber
++ name
++ street
++ zipCode
++ city
+}
+
+class Company{
++ name
++ company
++ paymentTarget
+}
+
+class CarTest {
++ hood
+}
+
+class Person{
++ paymentType
+}
+
+class VehicleTest {
++ vehicleNumber
++ manufactureYear
+}
+
+class PassengerTest {
++ seatNumber
+}
+
+class TruckTest {
++ payload
++ type
+}
+
+class MotorcycleTest {
++ seatNumber
+}
+
+class SedanTest {
++ rear
+}
+
+class SuvTest {
++ drive
+}
+
+class DayTest {
+}
+
+class WeekTest {
+}
+
+SaleStatistic <|-- DayStatistic
+SaleStatistic <|-- WeekStatistic
+VehiclePurchase <|-- Leasing
+VehiclePurchase <|-- Financing
+VehiclePurchase <|-- CashPurchase
+Customer <|-- Corporate
+Customer <|-- Private
+Vehicle <|-- PassengerVehicle
+Vehicle <|-- Truck
+Vehicle <|-- Motorcycle
+PassengerVehicle <|-- Convertible
+PassengerVehicle <|-- Sedan
+PassengerVehicle <|-- Suv
+WeekStatistic "1..*" *-- "1..*" DayStatistic
+SaleStatistic "1..*" *-- "0..*" VehiclePurchase
+Customer "1..*" -- "1..*" VehiclePurchase: make
+VehiclePurchase "0..*" -- "1..*" Vehicle: sell
+Employee "1..*" -- "0..*" VehiclePurchase: advise
+
+SaleTest <|-- DayTest
+SaleTest <|-- WeekTest
+PurchaseTest <|-- LeasingTest
+PurchaseTest <|-- FinancingTest
+PurchaseTest <|-- CashTest
+CustomerTest <|-- Person
+CustomerTest <|-- Company
+VehicleTest <|-- PassengerTest
+VehicleTest <|-- TruckTest
+VehicleTest <|-- MotorcycleTest
+PassengerTest <|-- CarTest
+PassengerTest <|-- SedanTest
+PassengerTest <|-- SuvTest
+WeekTest "1..*" *-- DayTest
+SaleTest "1..*" *-- "0..*" PurchaseTest
+CustomerTest "1..*" -- "1..*" PurchaseTest: make
+PurchaseTest "0..*" -- "1..*" VehicleTest: sell
+EmployeeTest "1..*" -- "0..*" PurchaseTest: advise
+@enduml

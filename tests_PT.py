@@ -158,6 +158,7 @@ if __name__ == '__main__':
 	#performance_test_UML_to_NL("PT01")
 
 	# ---- PT02: UML to NL, size: X*2 ---- #
+	performance_test_UML_to_NL("PT02")
 
 	# ---- PT03: UML to NL, size: X*4 ---- #
 
@@ -165,6 +166,7 @@ if __name__ == '__main__':
 	#performance_test_NL_to_UML("PT04")
 
 	# ---- PT05: NL to UML, size: Y*2 ---- #
+	performance_test_NL_to_UML("PT05")
 
 	# ---- PT06: NL to UML, size: Y*4 ---- #
 

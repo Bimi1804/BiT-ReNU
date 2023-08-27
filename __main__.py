@@ -54,8 +54,9 @@ def nl_to_uml(nl_input, project_name="NL_project"):
 
 #------------------------------------------------------------------------------#
 
+PT_folder = main_folder + "\\Test_files\\PT"
 
-with open(main_folder + "\\Test_files\\NL_Testing.txt") as file:
+with open(f"{PT_folder}\\PT02\\input_NL_PT02.txt") as file:
     lines = file.readlines()
     nl_input = []
     for l in lines:
@@ -65,3 +66,13 @@ with open(main_folder + "\\Test_files\\NL_Testing.txt") as file:
 
 transformed_UML = nl_to_uml(nl_input)
 print(transformed_UML)
+
+
+
+with open(f"{PT_folder}\\PT05\\input_UML_PT05.txt") as file:
+    uml_input = file.read()
+
+transformed_NL = uml_to_nl(uml_input)
+"""for i in transformed_NL:
+    print(i)
+"""
