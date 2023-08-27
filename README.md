@@ -94,8 +94,6 @@ All files used/created during the "Bidirectional Transformation" tests.
 PT:
 All files used/created during the "Performance Tests" tests.
 
-test_documentation.xlsx:
-Simple documentation of the performed tests.
 
 
 
