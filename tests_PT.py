@@ -222,10 +222,10 @@ def performance_test_UML_to_NL(project_name, iterations=50):
 	db_mod.delete_db_file(project_name)
 	# Save results:
 	with open(f"{PT_folder}\\{project_name}\\measures_{project_name}.csv", 'w', newline='') as file:
-		writer = csv.writer(file)
+		writer = csv.writer(file,delimiter=';')
 		writer.writerow(["time", "memory"])
 		for time, memory in zip(time_list, memory_list):
-			writer.writerow([time, memory])
+			writer.writerow([str(time).replace(".",","), str(memory).replace(".",",")])
 	with open(f"{PT_folder}\\{project_name}\\output_NL_{project_name}.txt", "w") as file:
 		for line in output_NL:
 			file.write(f"{line}\n")

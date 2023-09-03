@@ -58,4 +58,4 @@ A vehicle purchase must sell a vehicle.
 A vehicle can be sold by a vehicle purchase.
 An employee can advise a vehicle purchase.
 A vehicle purchase must be advised by an employee.
-An Employee has a name.
+A customer must drive a vehicle.

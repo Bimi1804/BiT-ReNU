@@ -18,6 +18,7 @@ A vehicle purchase has a date.
 A vehicle purchase has a margin.
 An employee has an employee number.
 A customer has a customer number.
+A customer has a name.
 A customer has a street.
 A customer has a zip code.
 A customer has a city.
@@ -57,3 +58,4 @@ A vehicle purchase must sell a vehicle.
 A vehicle can be sold by a vehicle purchase.
 An employee can advise a vehicle purchase.
 A vehicle purchase must be advised by an employee.
+A customer must drive a vehicle.
