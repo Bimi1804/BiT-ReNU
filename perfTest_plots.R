@@ -68,27 +68,6 @@ memory <- data.frame(
 
 
 
-
-#PT01_min_memory = round(min(pt01[,2]),digits = 3)
-#PT01_med_memory = round(median(pt01[,2]),digits = 3)
-#PT01_max_memory = round(max(pt01[,2]),digits = 3)
-#PT02_min_memory = round(min(pt02[,2]),digits = 1)
-#PT02_med_memory = round(median(pt02[,2]),digits = 1)
-#PT02_max_memory = round(max(pt02[,2]),digits = 1)
-#PT03_min_memory = round(min(pt03[,2]),digits = 1)
-#PT03_med_memory = round(median(pt03[,2]),digits = 1)
-#PT03_max_memory = round(max(pt03[,2]),digits = 1)
-#PT04_min_memory = round(min(pt04[,2]),digits = 1)
-#PT04_med_memory = round(median(pt04[,2]),digits = 1)
-#PT04_max_memory = round(max(pt04[,2]),digits = 1)
-#PT05_min_memory = round(min(pt05[,2]),digits = 1)
-#PT05_med_memory = round(median(pt05[,2]),digits = 1)
-#PT05_max_memory = round(max(pt05[,2]),digits = 1)
-#PT06_min_memory = round(min(pt06[,2]),digits = 1)
-#PT06_med_memory = round(median(pt06[,2]),digits = 1)
-#PT06_max_memory = round(max(pt06[,2]),digits = 1)
-
-
 # ---- collect min, median, max memory usage ---- 
 PT01_min_memory = min(pt01[,2])
 PT01_med_memory = median(pt01[,2])
@@ -109,19 +88,15 @@ PT06_min_memory = min(pt06[,2])
 PT06_med_memory = median(pt06[,2])
 PT06_max_memory = max(pt06[,2])
 
-
-
 min_max_memory = c(PT01_min_memory,PT01_max_memory,
                    PT02_min_memory,PT02_max_memory,
                    PT03_min_memory,PT03_max_memory,
                    PT04_min_memory,PT04_max_memory,
                    PT05_min_memory,PT05_max_memory,
                    PT06_min_memory,PT06_max_memory)
-
 median_times = c(PT01_med_memory,PT02_med_memory,
                  PT03_med_memory,PT04_med_memory,
                  PT05_med_memory,PT06_med_memory)
-
 all_memory = c(PT01_min_memory,PT01_med_memory,PT01_max_memory,
               PT02_min_memory,PT02_med_memory,PT02_max_memory,
               PT03_min_memory,PT03_med_memory,PT03_max_memory,
@@ -139,20 +114,15 @@ boxplot(times[,1:3],
         frame = FALSE, col = "lightskyblue",
         ylab="", xlab = "Performed Tests",
         yaxt="n")
-#axis(side=2, at=min_max_times[1:6], las=1)
-#axis(side=2, at=median_times[1:3], las=1)
 axis(side=2, at=all_times[1:9], las=1)
 title(ylab="seconds (min,median,max per Test displayed)", line=3.2)
 mytitle = "Execution times for T2M Transformation in BiT-ReNU"
 mysubtitle = "With increasing input size, the execution times increase."
 mtext(side=3, line=2, at=0.2, adj=0, cex=1.5, mytitle)
 mtext(side=3, line=1, at=0.2, adj=0, cex=1, mysubtitle, col="grey30")
-abline(h=PT01_min_time, col="darkgrey")
-abline(h=PT01_max_time, col="darkgrey")
-abline(h=PT02_min_time, col="darkgrey")
-abline(h=PT02_max_time, col="darkgrey")
-abline(h=PT03_min_time, col="darkgrey")
-abline(h=PT03_max_time, col="darkgrey")
+abline(h=PT01_med_time, col="black", lty = "dashed", lwd = 1)
+abline(h=PT02_med_time, col="black", lty = "dashed", lwd = 1)
+abline(h=PT03_med_time, col="black", lty = "dashed", lwd = 1)
 
 # ---- BOXPLOT: TIMES: PT.04 - PT.06 ----
 boxplot(times[,4:6],
@@ -160,20 +130,15 @@ boxplot(times[,4:6],
         frame = FALSE, col = "lightskyblue",
         ylab="", xlab = "Performed Tests",
         yaxt="n")
-#axis(side=2, at=min_max_times[1:6], las=1)
-#axis(side=2, at=median_times[1:3], las=1)
 axis(side=2, at=all_times[10:18], las=1)
 title(ylab="seconds (min,median,max per Test displayed)", line=3.2)
 mytitle = "Execution times for M2T Transformation in BiT-ReNU"
 mysubtitle = "With increasing input size, the execution times increase."
 mtext(side=3, line=2, at=0.2, adj=0, cex=1.5, mytitle)
 mtext(side=3, line=1, at=0.2, adj=0, cex=1, mysubtitle, col="grey30")
-abline(h=PT04_min_time, col="darkgrey")
-abline(h=PT04_max_time, col="darkgrey")
-abline(h=PT05_min_time, col="darkgrey")
-abline(h=PT05_max_time, col="darkgrey")
-abline(h=PT06_min_time, col="darkgrey")
-abline(h=PT06_max_time, col="darkgrey")
+abline(h=PT04_med_time, col="black", lty = "dashed", lwd = 1)
+abline(h=PT05_med_time, col="black", lty = "dashed", lwd = 1)
+abline(h=PT06_med_time, col="black", lty = "dashed", lwd = 1)
 
 # ---- BOXPLOT: TIMES: PT.01 VS PT.04 ----
 boxplot(times[,c(1,4)],
@@ -189,8 +154,8 @@ mytitle = "Execution times for M2T Transformation in BiT-ReNU"
 mysubtitle = "The M2T Transformation of PT.04 takes longer than T2M of PT.01."
 mtext(side=3, line=2, at=0.3, adj=0, cex=1.5, mytitle)
 mtext(side=3, line=1, at=0.3, adj=0, cex=1, mysubtitle, col="grey30")
-abline(h=PT01_med_time, col="darkgrey")
-abline(h=PT04_med_time, col="darkgrey")
+abline(h=PT01_med_time, col="black", lty = "dashed", lwd = 1)
+abline(h=PT04_med_time, col="black", lty = "dashed", lwd = 1)
 
 
 ################################################## MEMORY BOXPLOTS #####################################################################
