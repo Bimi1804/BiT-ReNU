@@ -231,6 +231,7 @@ def performance_test_UML_to_NL(project_name, iterations=50):
 			file.write(f"{line}\n")
 	return 
 
+
 def performance_test_NL_to_UML(project_name, iterations=50):
 	"""
 	Transform a list of requirements into a UML class model multiple times. Save
@@ -299,7 +300,7 @@ if __name__ == '__main__':
 	print("Starting Tests:")
 	
 	# ---- PT01: UML to NL, size: X ---- #
-	performance_test_UML_to_NL("PT01")
+	#performance_test_UML_to_NL("PT01")
 
 	# ---- PT02: UML to NL, size: X*2 ---- #
 	#performance_test_UML_to_NL("PT02")

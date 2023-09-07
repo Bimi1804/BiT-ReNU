@@ -1,7 +1,7 @@
 Sentences only in Original NL:
-A vehicle purchase is part of a sale statistic.
 A sale statistic can have a vehicle purchase.
+A vehicle purchase is part of a sale statistic.
 
 Sentences only in new NL:
-A vehicle purchase is part of a week statistic.
 A week statistic can have a vehicle purchase.
+A vehicle purchase is part of a week statistic.

@@ -1,5 +1,5 @@
 Sentences only in Original NL:
-A day statistic is part of a week statistic.
 A week statistic must have a day statistic.
+A day statistic is part of a week statistic.
 
 Sentences only in new NL:

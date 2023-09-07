@@ -3,5 +3,5 @@ An employee can advise a vehicle purchase.
 A vehicle purchase must be advised by an employee.
 
 Sentences only in new NL:
-An employee can support a vehicle purchase.
 A vehicle purchase must be supported by an employee.
+An employee can support a vehicle purchase.

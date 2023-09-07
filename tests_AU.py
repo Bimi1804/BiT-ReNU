@@ -107,6 +107,8 @@ def transform_UML_to_NL(original_NL_path,project_name):
 		file.write("Sentences only in new NL:\n")
 		for line in only_new:
 			file.write(f"{line}\n")
+	# Delete DB file:
+	db_mod.delete_db_file(project_name)
 	return
 
 

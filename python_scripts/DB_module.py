@@ -171,6 +171,7 @@ class DB_Handler:
 			return False
 		# Connect to active project
 		curs,conn = self.connect_to_db()
+		self.truncate_tables()
 		for statement in sql_statements:
 			curs.execute(statement)
 		conn.commit()

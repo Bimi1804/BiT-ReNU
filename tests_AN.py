@@ -82,6 +82,7 @@ def change_sentence(uml_input_path,change_type,sentence,project_name,edited_sent
 	# SQL-> NL:
 	df = db_mod.read_all_db()
 	transformed_NL = sql_nl.transform_sql_nl(df)
+	changed_NL = transformed_NL
 	# Add sentence:
 	if change_type == "add":
 		changed_NL.append(sentence)
@@ -95,7 +96,6 @@ def change_sentence(uml_input_path,change_type,sentence,project_name,edited_sent
 	# changed_NL -> SQL:
 	filtered_nl = nl_filter.filter_nl(changed_NL)
 	sql_queues = nl_sql.transform_nl_sql(filtered_nl)
-	db_mod.truncate_tables()
 	db_mod.write_to_db(sql_queues)
 	# SQL -> UML:
 	df = db_mod.read_all_db()
@@ -282,40 +282,40 @@ input_UML_path = AN_folder+"\\input_AN.txt"
 
 #--------------------------- Add/Delete Sentences -----------------------------#
 # ---- AN.01: Add Active Association ---- #
-#an_01(input_UML_path,"A customer must drive a vehicle.")
+an_01(input_UML_path,"A customer must drive a vehicle.")
 
 # ---- AN.02: Delete Active Association ---- #
-#an_02(input_UML_path,"A vehicle purchase must sell a vehicle.")
+an_02(input_UML_path,"A vehicle purchase must sell a vehicle.")
 
 # ---- AN.03: Add Passive Association ---- #
-#an_03(input_UML_path,"A vehicle can be driven by a customer.")
+an_03(input_UML_path,"A vehicle can be driven by a customer.")
 
 # ---- AN.04: Delete Passive Association ---- #
-#an_04(input_UML_path,"A vehicle purchase must be made by a customer.")
+an_04(input_UML_path,"A vehicle purchase must be made by a customer.")
 
 # ---- AN.05: Add Attribute ---- #
-#an_05(input_UML_path,"An Employee has a name.")
+an_05(input_UML_path,"An Employee has a name.")
 
 # ---- AN.06: Delete Attribute ---- #
-#an_06(input_UML_path,"A customer has a name.")
+an_06(input_UML_path,"A customer has a name.")
 
 # ---- AN.07: Add Generalization ---- #
-#an_07(input_UML_path,"An Employee is a Customer.")
+an_07(input_UML_path,"An Employee is a Customer.")
 
 # ---- AN.08: Delete Generalization ---- #
-#an_08(input_UML_path,"A day statistic is a sale statistic.")
+an_08(input_UML_path,"A day statistic is a sale statistic.")
 
 # ---- AN.09: Add Composition – Part of Whole ---- #
-#an_09(input_UML_path,"A vehicle is part of a vehicle purchase.")
+an_09(input_UML_path,"A vehicle is part of a vehicle purchase.")
 
 # ---- AN.10: Delete Composition – Part of Whole ---- #
-#an_10(input_UML_path,"A day statistic is part of a week statistic.")
+an_10(input_UML_path,"A day statistic is part of a week statistic.")
 
 # ---- AN.11: Add Composition – Whole has Part ---- #
-#an_11(input_UML_path,"A vehicle purchase must have a vehicle.")
+an_11(input_UML_path,"A vehicle purchase must have a vehicle.")
 
 # ---- AN.12: Delete Composition – Whole has Part ---- #
-#an_12(input_UML_path,"A week statistic must have a day statistic.")
+an_12(input_UML_path,"A week statistic must have a day statistic.")
 
 
 

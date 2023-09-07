@@ -53,9 +53,7 @@ A week statistic must have a day statistic.
 A vehicle purchase is part of a sale statistic.
 A sale statistic can have a vehicle purchase.
 A customer must make a vehicle purchase.
-A vehicle purchase must be made by a customer.
 A vehicle purchase must sell a vehicle.
 A vehicle can be sold by a vehicle purchase.
 An employee can advise a vehicle purchase.
 A vehicle purchase must be advised by an employee.
-A customer must drive a vehicle.
