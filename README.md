@@ -15,9 +15,11 @@ A tool for transforming requirements in UML/NL into NL/UML with the use of a SQL
 
 Tool description:
 --------------------------------------------------------------------------------------
-This tool can import requirements in natural language (NL) or as a UML class model in the plantuml notation. The tool is then able to transform the imported requirements into a db-schema that functinos as an intermediate model. The tool can also transform the intermediate model into NL/UML, enabling the transformation from NL/UML into UML/NL.
+BiT-ReNU can import requirements in natural language (NL) or as a UML class model in the plantuml notation. The tool is then able to transform the imported requirements into a db-schema that functinos as an intermediate model. The tool can also transform the intermediate model into NL/UML, enabling the transformation from NL/UML into UML/NL.
 
 NOTE: The tool has limitations that are described in the master thesis "Bidirectional transformation of natural-language requirements to and from UML class models for Model-Driven Development" by Markus Bimassl.
+
+To try out the tool, the showcase.py script can be used.
 
 
 
@@ -25,10 +27,10 @@ NOTE: The tool has limitations that are described in the master thesis "Bidirect
 File descriptions:
 --------------------------------------------------------------------------------------
 
-BiT-ReNU example script:
+BiT-ReNU main UI:
 ------------------------
 bitrenu.py:
-File to try out BiT-ReNU.
+Holds the BiTReNU_UI class which can be used to easily use BiT-ReNU's transformation functions.
 
 
 
@@ -99,6 +101,9 @@ All files used/created during the "Performance Tests" tests.
 
 Additional files/folder:
 -----------------------
+showcase.py:
+A script that shows how BiT-ReNU can be used.
+
 requirements.txt:
 The used python modules.
 
@@ -109,6 +114,8 @@ the performed tests was derived from one of the exam models.
 SLR:
 Holds the documentation of the systematic literature search that was conducted as part of the master thesis.
 
+documentation_diagrams:
+Holds three diagrams that document the structure and behaviour of BiT-ReNU.
 
 
 
@@ -134,6 +141,6 @@ How to use the tool:
 --------------------------------------------------------------------------------------
 The master thesis "Bidirectional transformation of natural-language requirements to and from UML class models for Model-Driven Development" explains the general dataflow between the modules, the user, the database, and a plantuml-file.
 
-Additionally, the file bitrenu.py can be used as an example of how to use the individual functions of the tool.
+Additionally, the file showcase.py can be used as an example of how to use BiT-ReNU.
 
 
