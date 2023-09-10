@@ -182,6 +182,9 @@ class DayTest {
 class WeekTest {
 }
 
+class Test {
+}
+
 SaleStatistic <|-- DayStatistic
 SaleStatistic <|-- WeekStatistic
 VehiclePurchase <|-- Leasing
@@ -212,6 +215,7 @@ WeekStatistic "1..*" *-- "1..*" DayStatistic
 SaleStatistic "1..*" *-- "0..*" VehiclePurchase
 WeekTest "1..*" *-- DayTest
 SaleTest "1..*" *-- "0..*" PurchaseTest
+Test "1..*" *-- "1..*" DayTest
 Customer "1..*" -- "1..*" VehiclePurchase: make
 VehiclePurchase "0..*" -- "1..*" Vehicle: sell
 Employee "1..*" -- "0..*" VehiclePurchase: advise

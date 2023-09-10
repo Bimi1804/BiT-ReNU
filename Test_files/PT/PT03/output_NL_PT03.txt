@@ -153,9 +153,11 @@ A week statistic must have a day statistic.
 A vehicle purchase is part of a sale statistic.
 A sale statistic can have a vehicle purchase.
 A day test is part of a week test.
+A week test must have a day test.
 A purchase test is part of a sale test.
 A sale test can have a purchase test.
 A day record is part of a week record.
+A week record must have a day record.
 A purchase record is part of a sale record.
 A sale record can have a purchase record.
 A customer must make a vehicle purchase.

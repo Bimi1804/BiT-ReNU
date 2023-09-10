@@ -26,6 +26,7 @@ def execute_showcase():
     # Transform NL to UML:
     transformed_UML = BiTReNU1.nl_to_uml(nl_input)
     print(transformed_UML)
+    df = BiTReNU1.DB_Handler.read_all_db()
 
     # Transform back to NL:
     transformed_NL = BiTReNU1.uml_to_nl(transformed_UML)

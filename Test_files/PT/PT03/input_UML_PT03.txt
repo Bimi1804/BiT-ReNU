@@ -306,7 +306,7 @@ VehicleTest <|-- MotorcycleTest
 PassengerTest <|-- CarTest
 PassengerTest <|-- SedanTest
 PassengerTest <|-- SuvTest
-WeekTest "1..*" *-- DayTest
+WeekTest "1..*" *-- "1..*" DayTest
 SaleTest "1..*" *-- "0..*" PurchaseTest
 CustomerTest "1..*" -- "1..*" PurchaseTest: make
 PurchaseTest "0..*" -- "1..*" VehicleTest: sell
@@ -325,7 +325,7 @@ VehicleRecord <|-- MotorcycleRecord
 PassengerRecord <|-- CarRecord
 PassengerRecord <|-- SedanRecord
 PassengerRecord <|-- SuvRecord
-WeekRecord "1..*" *-- DayRecord
+WeekRecord "1..*" *-- "1..*" DayRecord
 SaleRecord "1..*" *-- "0..*" PurchaseRecord
 CustomerRecord "1..*" -- "1..*" PurchaseRecord: make
 PurchaseRecord "0..*" -- "1..*" VehicleRecord: sell

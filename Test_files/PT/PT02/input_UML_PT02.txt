@@ -213,7 +213,7 @@ VehicleTest <|-- MotorcycleTest
 PassengerTest <|-- CarTest
 PassengerTest <|-- SedanTest
 PassengerTest <|-- SuvTest
-WeekTest "1..*" *-- DayTest
+WeekTest "1..*" *-- "1..*" DayTest
 SaleTest "1..*" *-- "0..*" PurchaseTest
 CustomerTest "1..*" -- "1..*" PurchaseTest: make
 PurchaseTest "0..*" -- "1..*" VehicleTest: sell
