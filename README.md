@@ -117,6 +117,9 @@ Holds the documentation of the systematic literature search that was conducted a
 documentation_diagrams:
 Holds three diagrams that document the structure and behaviour of BiT-ReNU.
 
+additional_utility:
+Holds additional scripts that were for example used to count the single lines of code of other scripts.
+
 
 
 How to install and run the tool:

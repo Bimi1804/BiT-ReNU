@@ -49,4 +49,23 @@ def execute_showcase():
     # Delete database file:
     BiTReNU2.DB_Handler.delete_db_file(BiTReNU2.project_name)
 
-execute_showcase()
+#execute_showcase()
+
+
+# Import a NL file:
+with open(main_folder+"\\example.txt") as file:
+    lines = file.readlines()
+    nl_input = []
+    for l in lines:
+        l = l.replace("\n","")
+        nl_input.append(l)
+
+# Create new BiTReNU object and use it for T2M transformation:-----------------
+BiTReNU_ex = BiTReNU_UI("Example")
+# Transform NL to UML:
+transformed_UML = BiTReNU_ex.nl_to_uml(nl_input)
+print(transformed_UML)
+# Delete database file:
+BiTReNU_ex.DB_Handler.delete_db_file(BiTReNU_ex.project_name)
+
+
