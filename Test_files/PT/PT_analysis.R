@@ -170,9 +170,12 @@ boxplot(times[,c(1,4)],
         names = c("PT.01", "PT.04"),
         frame = FALSE, col = "lightskyblue",
         ylab="", xlab = "Performed Tests",
-        yaxt="n")
-axis(side=2, at=all_times[c(2,11)], las=1)
-title(ylab="seconds (medians displayed)", line=2.5)
+        yaxt="n",
+        cex.axis = 1.2,
+        cex.lab = 1.2)
+axis(side=2, at=all_times[c(2,11)], las=1, cex.axis=1.2)
+#title(ylab="seconds (medians displayed)", line=2.5)
+title(ylab="seconds", line=2.5, cex.lab=1.2)
 mytitle = "Execution time comparison between PT.01(M2T) and PT.04(T2M)"
 mysubtitle = "The T2M Transformation of PT.04 takes longer than M2T of PT.01."
 mtext(side=3, line=2, at=0.3, adj=0, cex=1.5, mytitle)
@@ -215,14 +218,16 @@ abline(h=PT04_med_memory, col="black", lty = "dashed", lwd = 1)
 abline(h=PT05_med_memory, col="black", lty = "dashed", lwd = 1)
 abline(h=PT06_med_memory, col="black", lty = "dashed", lwd = 1)
 
-# ---- BOXPLOT: TIMES: PT.01 VS PT.04 ----
+# ---- BOXPLOT: Memory: PT.01 VS PT.04 ----
 boxplot(memory[,c(1,4)],
         names = c("PT.01", "PT.04"),
         frame = FALSE, col = "lightskyblue",
         ylab="", xlab = "Performed Tests",
-        yaxt="n")
-axis(side=2, at=all_memory[c(2,11)],labels = round(all_memory[c(2,11)],digits=1), las=1)
-title(ylab="MiB (medians displayed)", line=2.5)
+        yaxt="n",
+        cex.axis = 1.2,
+        cex.lab = 1.2)
+axis(side=2, at=all_memory[c(2,11)],labels = round(all_memory[c(2,11)],digits=1), las=1, cex.axis=1.2)
+title(ylab="MiB (medians displayed)", line=2.5,cex.lab = 1.2)
 mytitle = "Memory Usage comparison between PT.01(M2T) and PT.04(T2M)"
 mysubtitle = "M2T Transformation uses more memory than T2M Transformations."
 mtext(side=3, line=2, at=0.3, adj=0, cex=1.5, mytitle)
