@@ -9,7 +9,7 @@ main_folder = os.path.dirname(script_path)
 #----------------------------- Use BiT-ReNU ------------------------------------#
 def execute_showcase():
     # Import a NL file:
-    with open(main_folder+"\\Test_files\\PT\\PT04\\input_NL_PT04.txt") as file:
+    with open(main_folder+"\\Test_files\\PT\\input_NL.txt") as file:
         lines = file.readlines()
         nl_input = []
         for l in lines:
@@ -17,7 +17,7 @@ def execute_showcase():
             nl_input.append(l)
 
     # Import a UML file:
-    with open(main_folder+"\\Test_files\\PT\\PT01\\input_UML_PT01.txt") as file:
+    with open(main_folder+"\\Test_files\\PT\\input_UML.txt") as file:
         uml_input = file.read()
 
 
@@ -56,16 +56,72 @@ def execute_showcase():
 
 # Create new BiTReNU object and use it for T2M transformation:-----------------
 
+
+input("Press any key to create a new BiTReNU Object:---------------")
 BiTReNU_ex = BiTReNU_UI("Example")
+print("")
+print(f"Type of BiTReNU object = {type(BiTReNU_ex)}")
+print("")
 
-nl_input = ["A subject can have an object.", "An object is part of a subject."]
 
+input("Import requirements in NL:-----------------")
+# Import a NL file:
+with open(main_folder+"\\Test_files\\PT\\input_NL.txt") as file:
+    lines = file.readlines()
+    original_NL = []
+    for l in lines:
+        l = l.replace("\n","")
+        original_NL.append(l)
+counter = 0
+for i in original_NL:
+    print(i)
+    counter = counter +1
+print("")
+print(f"{counter} requirements imported")
+print("")
+
+
+input("Transform NL into UML:---------------------")
 # Transform NL to UML:
-transformed_UML = BiTReNU_ex.nl_to_uml(nl_input)
+transformed_UML = BiTReNU_ex.nl_to_uml(original_NL)
+
 print(transformed_UML)
 
 
+input("Show DB-content:--------------------------------------------")
+db_content = BiTReNU_ex.DB_Handler.read_all_db()
+for i in db_content:
+    print(i)
+    print("")
+
+
+input("Transform the UML back into NL:------------------------------")
+final_NL = BiTReNU_ex.uml_to_nl(transformed_UML)
+counter_final = 0
+for i in final_NL:
+    print(i)
+    counter_final = counter_final +1
+print("")
+print(f"{counter} requirements transformed")
+print("")
+
+
+input("Compare difference between original NL and final NL:------------------------------")
+original_set = set(original_NL)
+final_set = set(final_NL)
+only_original = list(original_set - final_set)
+only_final = list(final_set - original_set)
+print("")
+print(f"Sentences only in original NL: {len(only_original)}")
+print(f"Sentences only in final NL: {len(only_final)}")
+
 # Delete database file:
 BiTReNU_ex.DB_Handler.delete_db_file(BiTReNU_ex.project_name)
+
+
+
+
+
+
 
 
